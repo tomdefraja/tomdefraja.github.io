@@ -1,12 +1,27 @@
 # Base image: Ruby with necessary dependencies for Jekyll
 FROM ruby:3.2
 
-# Install dependencies
+# Install Python, pip, and build deps
 RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
     build-essential \
-    nodejs \
-    && rm -rf /var/lib/apt/lists/*
+    jupyter \
+    curl \
+    git \
+ && rm -rf /var/lib/apt/lists/*
 
+# Create virtual environment and install Python packages + Jupyter
+RUN python3 -m venv /venv \
+ && /venv/bin/pip install --upgrade pip setuptools wheel \
+ && /venv/bin/pip install python-frontmatter getorg jupyter
+
+
+ 
+# Make sure the venv Python and pip are used by default
+ENV PATH="/venv/bin:$PATH"
 
 # Create a non-root user with UID 1000
 RUN groupadd -g 1000 vscode && \
@@ -21,16 +36,14 @@ RUN chown -R vscode:vscode /usr/src/app
 # Switch to the non-root user
 USER vscode
 
-# Copy Gemfile into the container (necessary for `bundle install`)
-COPY Gemfile ./
-
-
+# Copy Gemfile and Gemfile.lock into the container
+COPY Gemfile Gemfile.lock ./
 
 # Install bundler and dependencies
 RUN gem install connection_pool:2.5.0
 RUN gem install bundler:2.3.26
 RUN bundle install
 
+
 # Command to serve the Jekyll site
 CMD ["jekyll", "serve", "-H", "0.0.0.0", "-w"]
-

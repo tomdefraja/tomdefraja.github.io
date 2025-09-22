@@ -1,0 +1,19 @@
+{% assign carousel_file = include.file | default: "CWT" %}
+{% assign carousel_id = include.id %}
+
+{% assign images = site.data.carousels[carousel_file][carousel_id] %}
+
+{% if images %}
+  <div class="gallery">
+    {% for image in images %}
+      <figure>
+        <a href="{{ image.url }}" target="_blank">
+          <img src="{{ image.url }}" alt="{{ image.alt }}">
+        </a>
+        <figcaption>{{ image.caption }}</figcaption>
+      </figure>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No images found for carousel '{{ carousel_id }}' in file '{{ carousel_file }}'</p>
+{% endif %}

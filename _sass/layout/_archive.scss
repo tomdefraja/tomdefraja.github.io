@@ -30,7 +30,7 @@
 .archive__subtitle {
   margin: 1.414em 0 0;
   padding-bottom: 0.5em;
-  font-size: $type-size-5;
+  font-size: $type-size-1;
   color: var(--global-text-color-light);
   border-bottom: 1px solid var(--global-border-color);
 
@@ -40,13 +40,103 @@
 }
 
 .archive__item-title {
-  margin-bottom: 0.25em;
+  margin-bottom: -.7em;
   font-family: $sans-serif-narrow;
+  font-size: $type-size-5;
 
   a + a {
     opacity: 0.5;
   }
 }
+
+.archive__item-author-inline {
+  font-size: .9em;
+  // color: var(--global-text-color-light); // or your preferred color
+  margin-left: 0.4em;
+  font-weight: normal;
+}
+
+.archive__item-location-inline {
+  font-size: .9em;
+  // color: var(--global-text-color-light); // or your preferred color
+  margin-left: 0.4em;
+  font-weight: normal;
+}
+
+.archive__item-published {
+  font-size: .9em;
+  // color: var(--global-text-color-light);
+  // margin-left: 0.5em;
+  font-weight: normal;
+}
+
+// .thumbnail_container.bg {
+//   display: block;
+//   position: relative;
+//   background-image: url('/images/CWT/Start.jpg');
+//   background-size: cover;
+//   background-position: center;
+//   height: 320px; /* or whatever */
+//   text-decoration: none;
+//   color: inherit;
+// }
+
+.thumbnail_container.bg {
+  display: block;
+  position: relative;
+  // background-image: url(post.thumbnail);
+  background-size: cover;
+  background-position: center;
+  height: 320px; /* or whatever */
+  text-decoration: none;
+  color: inherit;
+  margin-top: 1em;
+
+  border-radius: 10px;
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(#000, 0.25);
+    cursor: pointer;
+    transform: scale(1.025);
+    transition: transform 0.2s ease;
+  }
+
+}
+
+.thumbnail_overlay1 {
+  position: absolute;
+  bottom: 16px;   /* or top/center */
+  left: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 2em;
+}
+
+.thumbnail_overlay_date {
+    font-size: 0.7em; /* bigger than surrounding text */
+}
+
+.thumbnail_overlay2 {
+  position: absolute;
+  bottom: 16px;   /* or top/center */
+  right: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 0.7em;
+}
+
+.thumbnail_overlay3 {
+  position: absolute;
+  bottom: 32px;   /* or top/center */
+  right: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 1.2em;
+}
+
 
 /* remove border*/
 .page__content {
@@ -54,12 +144,22 @@
   .archive__item-title {
     margin-top: 1em;
     border-bottom: none;
+    font-size: $type-size-1;
+  }
+}
+
+.archive__item-author {
+  margin-top: 0;
+  font-size: $type-size-1;
+
+  & + p {
+    text-indent: 0;
   }
 }
 
 .archive__item-excerpt {
   margin-top: 0;
-  font-size: $type-size-6;
+  font-size: $type-size-2;
 
   & + p {
     text-indent: 0;
@@ -80,7 +180,8 @@
   }
 
   .archive__item-title {
-    text-decoration: underline;
+    // text-decoration: underline;
+    font-size: $type-size-5;
   }
 }
 
@@ -121,7 +222,7 @@
 
   .archive__item-title {
     margin-top: 0.5em;
-    font-size: $type-size-5;
+    font-size: $type-size-1;
   }
 
   .archive__item-excerpt {

@@ -63,7 +63,7 @@ title: "Photography"
       </div>
     </div>
 
-    <!-- Tabs logic -->
+    <!-- Tabs logic with hash support -->
     <script>
     document.addEventListener("DOMContentLoaded", () => {
       const buttons = Array.from(document.querySelectorAll(".tab-button"));
@@ -91,18 +91,19 @@ title: "Photography"
           btn.classList.add("active");
           btn.setAttribute("aria-selected", "true");
         }
+        // Update URL hash without scrolling
+        history.replaceState(null, null, `#${id}`);
       }
 
-      // Init: show first tab
-      if (buttons.length > 0) {
-        showTab(buttons[0].dataset.tab);
-      }
+      // Init: show tab from hash or default to first tab
+      const hashTab = window.location.hash ? window.location.hash.substring(1) : null;
+      const initialTab = hashTab && document.getElementById(hashTab) ? hashTab : buttons[0].dataset.tab;
+      showTab(initialTab);
 
-      // Click events
+      // Click and keyboard events
       buttons.forEach(btn => {
         btn.addEventListener("click", () => showTab(btn.dataset.tab));
 
-        // Keyboard navigation
         btn.addEventListener("keydown", (e) => {
           const idx = buttons.indexOf(btn);
           if (e.key === "ArrowRight") {

@@ -81,6 +81,7 @@
 //   color: inherit;
 // }
 
+// thumbnails for blog posts
 .thumbnail_container.bg {
   display: block;
   position: relative;
@@ -136,6 +137,132 @@
   margin: 0;
   font-size: 1.2em;
 }
+
+// thumbnails for photography
+.custom-wrapper {
+  max-width: 100%;       /* adjust as needed */
+  margin: 2em auto;           /* center the content */
+  padding-left: 2em;        /* breathing room on sides */
+  padding-right: 2em;
+}
+
+/* Responsive photo grid */
+.photo_grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
+  gap: 1em;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .photo_grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 on tablets */
+  }
+}
+@media (max-width: 600px) {
+  .photo_grid {
+    grid-template-columns: 1fr; /* 1 on mobile */
+  }
+}
+
+
+.photo_container.bg {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.photo_container.bg:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  transform: scale(1.03);
+}
+
+
+.photo_overlay1 {
+  position: absolute;
+  bottom: 16px;   /* or top/center */
+  left: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 1em;
+  transition: color 0.2s ease;
+  color: rgba(255, 255, 255, 0); /* lower opacity on hover */
+}
+
+.photo_container.bg:hover .photo_overlay1 {
+  color: rgba(255, 255, 255, 0.8); /* lower opacity on hover */
+}
+
+.photo_overlay_date {
+    font-size: 0.6em; /* bigger than surrounding text */
+}
+
+.photo_overlay2 {
+  position: absolute;
+  bottom: 16px;   /* or top/center */
+  right: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 0.6em;
+}
+
+.photo_overlay3 {
+  position: absolute;
+  bottom: 32px;   /* or top/center */
+  right: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 1.2em;
+}
+
+
+/* Tabs container */
+.tabs {
+  display: flex;
+  justify-content: space-between; /* spacing between tabs */
+  margin: 0.5em 0 1.5em; /* space below title */
+  // border-bottom: 2px solid #ddd; /* underline like a divider */
+}
+
+/* Tabs as links/headings */
+.tab-button {
+  background: none;
+  white-space: nowrap;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.25em; /* close to your title size */
+  font-weight: 600;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  border-bottom: 3px solid transparent;
+}
+
+/* Active tab highlighted */
+.tab-button.active {
+  color: #000;
+  border-color: #000; /* underline effect */
+  font-weight: 600;
+}
+
+/* Hover effect — only for non-active tabs */
+.tab-button:not(.active):hover {
+  border-color: #8f8f8f; /* underline effect */
+  color: #434343;          /* optional text color change */
+}
+
 
 
 /* remove border*/

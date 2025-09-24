@@ -1,60 +1,85 @@
-day1:
-- url: '/images/CWT/Start.jpg'
-  caption: 'Start point of the hike'
-  alt: 'A shrine-like collection of painted stones marks the start of the trail'
-- url: '/images/CWT/Day1-tree.jpg'
-  caption: 'Chestnut'
-  alt: 'A chestnut tree'
-- url: '/images/CWT/Day1-golden.jpg'
-  caption: 'Sunset light'
-  alt: 'Golden sunlight on the side of the valley'
-- url: '/images/CWT/Day1-camp.jpg'
-  caption: 'Camp at Corrlarach Bothy'
-  alt: 'Camp at Corrlarach Bothy'
-
-day2:
-- url: '/images/CWT/Day2-Cona.jpg'
-  caption: 'Cona Glenn'
-  alt: 'Cona Glenn'
-- url: '/images/CWT/Day2-selfie.jpg'
-  caption: 'Ready to go'
-  alt: 'A selfie of me and Conor'
-- url: '/images/CWT/Day2-Corryhully.jpg'
-  caption: 'Corryhully electric bothy'
-  alt: 'Corryhully electric bothy'
-- url: '/images/CWT/Day2-Glenfinnanpass.jpg'
-  caption: 'Over the pass at Glenfinnan'
-  alt: 'Over the pass at Glenfinnan'
-- url: '/images/CWT/Day2-Glenfinnanpass2.jpg'
-  caption: 'Through the gate'
-  alt: 'Conor passing through the gate'
-- url: '/images/CWT/Day2-Achuil.jpg'
-  caption: 'A busy A''Chuil bothy'
-  alt: 'A busy A''Chuil bothy'
-- url: '/images/CWT/Day2-Glendessarry.jpg'
-  caption: 'Camp at Glendessarry'
-  alt: 'Camp at Glendessarry'
-
-day3:
-- url: '/images/CWT/Day3-whiskey.jpg'
-  caption: 'Scottish Morning'
-  alt: 'Whiskies'
-- url: '/images/CWT/Day3-approach.jpeg'
-  caption: 'Looking up to the pass'
-  alt: ''
-- url: '/images/CWT/Day3-pass2.jpeg'
-  caption: 'Bealach an Lagain Duibh'
-  alt: 
-- url: '/images/CWT/Day3-pass1.jpg'
-  caption: 'Loachan a'' Mhaim'
-  alt: ''
-- url: '/images/CWT/Day3-Deer.jpg'
-  caption: 'Deer cooling off at Sourlies'
-  alt: 'Deer in the estuary'
-- url: '/images/CWT/Day3-inverie.jpg'
-  caption: 'First sighting of Inverie over Knoydart'
-  alt: 'View over Knoydart to Inverie'
-- url: '/images/CWT/Day3-oldforge.jpg'
-  caption: 'Making protein bread at the old forge (midges = protein)'
-  alt: ''''
-
+Day1:
+- url: /images/CWT/Day1/Day1-001.jpg
+  caption: Start of the Cape Wrath Trail
+- url: /images/CWT/Day1/Day1-002.jpg
+  caption: Chestnut
+- url: /images/CWT/Day1/Day1-003.jpg
+  caption: Sunset light
+- url: /images/CWT/Day1/Day1-004.jpg
+  caption: Camp at Corrlarach Bothy
+Day2:
+- url: /images/CWT/Day2/Day2-001.jpg
+  caption: Ready to go
+- url: /images/CWT/Day2/Day2-002.jpg
+  caption: Cona Glenn
+- url: /images/CWT/Day2/Day2-003.jpg
+  caption: Corryhully electric bothy
+- url: /images/CWT/Day2/Day2-004.jpg
+  caption: Through the gate
+- url: /images/CWT/Day2/Day2-005.jpg
+  caption: Over the pass at Glenfinnan
+- url: /images/CWT/Day2/Day2-006.jpg
+  caption: A busy A'Chuil bothy
+- url: /images/CWT/Day2/Day2-007.jpg
+  caption: Camp at Glendessarry
+Day10: []
+Day12: []
+Day13: []
+Day14: []
+Day15: []
+Day16: []
+Day17: []
+Day18: []
+Day19: []
+Day20: []
+Day21: []
+Day22: []
+Day3:
+- url: /images/CWT/Day3/Day3-001.jpg
+  caption: Scottish Morning
+- url: /images/CWT/Day3/Day3-002.jpeg
+  caption: Looking up to the pass
+- url: /images/CWT/Day3/Day3-003.jpeg
+  caption: Bealach an Lagain Duibh
+- url: /images/CWT/Day3/Day3-004.jpg
+  caption: Loachan a' Mhaim
+- url: /images/CWT/Day3/Day3-005.jpg
+  caption: Deer cooling off at Sourlies
+- url: /images/CWT/Day3/Day3-006.jpg
+  caption: First sighting of Inverie over Knoydart
+- url: /images/CWT/Day3/Day3-007.jpg
+  caption: Making protein bread at the old forge (midges = protein)
+Day4:
+- url: /images/CWT/Day4/Day4-001.jpg
+  caption: Approaching Barrisdale Bothy
+- url: /images/CWT/Day4/Day4-002.jpg
+  caption: Ladhar Bheinn from Barrisdale
+- url: /images/CWT/Day4/Day4-003.jpg
+  caption: Loch Hourn coastal path
+- url: /images/CWT/Day4/Day4-004.jpg
+  caption: Loch Hourn coastal path
+- url: /images/CWT/Day4/Day4-005.jpg
+  caption: Loch Hourn
+- url: /images/CWT/Day4/Day4-006.jpg
+  caption: Camp under the Saddle
+Day5:
+- url: /images/CWT/Day5/Day5-001.jpg
+  caption: Kintail
+- url: /images/CWT/Day5/Day5-002.jpg
+  caption: Sunrise
+- url: /images/CWT/Day5/Day5-003.jpg
+  caption: Morning under the Saddle
+- url: /images/CWT/Day5/Day5-004.jpg
+  caption: Descent toward River Shiel
+- url: /images/CWT/Day5/Day5-005.jpg
+  caption: Glen Elchaig
+- url: /images/CWT/Day5/Day5-006.jpg
+  caption: Glen Glomach
+- url: /images/CWT/Day5/Day5-007.jpg
+  caption: Falls of Glomach
+- url: /images/CWT/Day5/Day5-008.jpg
+  caption: Loch Duich
+Day6: []
+Day7: []
+Day8: []
+Day9: []

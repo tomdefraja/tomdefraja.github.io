@@ -22,7 +22,7 @@ repository               : "tomdefraja/tomdefraja.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "profile.png"
+  avatar           : "profile.jpeg"
   name             : "Tom De Fraja"
   pronouns         : "he/him"  
   bio              : "PhD student in Mathematical Physics"

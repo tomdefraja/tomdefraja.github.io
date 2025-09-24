@@ -1,0 +1,8 @@
+<a href="{{ base_path }}{{ include.photo.image }}" 
+   class="photo_container bg" 
+   style="background-image: url('{{ include.photo.image }}');">
+  <h1 class="photo_overlay1">
+    {{ include.photo.title }}
+    <span class="photo_overlay_date"><i>  {{ include.photo.date | date: '%B %Y' }}</i></span>
+  </h1>
+</a>

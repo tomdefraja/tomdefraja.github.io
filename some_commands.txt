@@ -1,5 +1,8 @@
 # run the server locally
 bundle exec jekyll serve --livereload --config _config.yml,_config_dev.yml
 
+# website file path
+Documents/Website/tomdefraja.github.io
+
 # run caption generator
 python3 carousel_script.py CWT

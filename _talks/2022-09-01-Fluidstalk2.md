@@ -6,7 +6,7 @@ permalink: /research/modelling-flows-talk-2
 venue: "PG Colloquium, Edinburgh University"
 date: 2022-09-01
 location: "Edinburgh, UK"
-slidesurl: ''
+slides: "/files/Moment_Equations.pdf"
 
 ---
 

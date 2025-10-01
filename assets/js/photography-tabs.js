@@ -1,50 +1,59 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const buttons = Array.from(document.querySelectorAll(".tab-button"));
-  const tabs = Array.from(document.querySelectorAll(".tab-content"));
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = lightbox.querySelector("#lightbox-img");
+  const caption = lightbox.querySelector("#lightbox-caption");
 
-  function clearAll() {
-    buttons.forEach(b => { 
-      b.classList.remove("active"); 
-      b.setAttribute("aria-selected", "false"); 
+  document.querySelectorAll(".gallery").forEach(gallery => {
+    const imgs = Array.from(gallery.querySelectorAll("img"));
+    let currentIndex = 0;
+
+    const showImage = i => {
+      const img = imgs[i];
+      lightboxImg.src = img.src;
+      caption.textContent = img.nextElementSibling?.textContent || "";
+    };
+
+    const openLightbox = idx => {
+      currentIndex = idx;
+      showImage(currentIndex);
+      lightbox.classList.remove("hidden");
+    };
+
+    imgs.forEach((img, idx) => {
+      img.addEventListener("click", () => openLightbox(idx));
     });
-    tabs.forEach(t => { 
-      t.style.display = "none"; 
-      t.setAttribute("aria-hidden", "true"); 
+
+    // Lightbox controls
+    lightbox.querySelector(".close").addEventListener("click", () => {
+      lightbox.classList.add("hidden");
     });
-  }
 
-  function showTab(id) {
-    const panel = document.getElementById(id);
-    if (!panel) return;
-    clearAll();
-    panel.style.display = "block";
-    panel.setAttribute("aria-hidden", "false");
-    const btn = buttons.find(b => b.dataset.tab === id);
-    if (btn) {
-      btn.classList.add("active");
-      btn.setAttribute("aria-selected", "true");
-    }
-    history.replaceState(null, null, `#${id}`);
-  }
+    lightbox.querySelector(".next").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % imgs.length;
+      showImage(currentIndex);
+    });
 
-  const hashTab = window.location.hash ? window.location.hash.substring(1) : null;
-  const initialTab = hashTab && document.getElementById(hashTab) ? hashTab : buttons[0].dataset.tab;
-  showTab(initialTab);
+    lightbox.querySelector(".prev").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
+      showImage(currentIndex);
+    });
 
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => showTab(btn.dataset.tab));
+    // Swipe support for mobile
+    let startX = 0;
+    lightboxImg.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
 
-    btn.addEventListener("keydown", (e) => {
-      const idx = buttons.indexOf(btn);
-      if (e.key === "ArrowRight") {
-        e.preventDefault();
-        buttons[(idx + 1) % buttons.length].focus();
-      } else if (e.key === "ArrowLeft") {
-        e.preventDefault();
-        buttons[(idx - 1 + buttons.length) % buttons.length].focus();
-      } else if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        showTab(btn.dataset.tab);
+    lightboxImg.addEventListener("touchend", e => {
+      const endX = e.changedTouches[0].clientX;
+      if (endX - startX > 50) {
+        // swipe right
+        currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
+        showImage(currentIndex);
+      } else if (startX - endX > 50) {
+        // swipe left
+        currentIndex = (currentIndex + 1) % imgs.length;
+        showImage(currentIndex);
       }
     });
   });

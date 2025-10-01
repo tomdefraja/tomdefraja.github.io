@@ -57,7 +57,13 @@
     <span class="archive__item-location-inline" itemprop="description"><i>- {{ post.venue | markdownify | remove: '<p>' | remove: '</p>' | remove: '<strong>' | remove: '</strong>' }}, {{ post.location | markdownify | remove: '<p>' | remove: '</p>' | remove: '<strong>' | remove: '</strong>' }}</i></span>
     {% endif %}
     {% if post.slides %}
-    <span class="archive__item-location-inline" itemprop="description"> - <a href="{{ base_path }}{{ post.slides }}"> Slides</a></span>
+    <span class="archive__item-location-inline" itemprop="description"> - <a href="{{ base_path }}{{ post.slides }}">  Slides</a></span>
+    {% endif %}
+    {% if post.notes %}
+    <span class="archive__item-location-inline" itemprop="description"> - <a href="{{ base_path }}{{ post.notes }}">  Notes</a></span>
+    {% endif %}
+    {% if post.poster %}
+    <span class="archive__item-location-inline" itemprop="description"> - <a href="{{ base_path }}{{ post.poster }}">  Poster</a></span>
     {% endif %}
     </h2>
 

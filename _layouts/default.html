@@ -26,6 +26,13 @@ layout: compress
     </div>
 
     {% include scripts.html %}
-
+    <!-- Lightbox goes here, outside main -->
+  <div id="lightbox" class="lightbox hidden">
+    <span class="close">&times;</span>
+    <span class="prev">&#10094;</span>
+    <span class="next">&#10095;</span>
+    <img id="lightbox-img" src="">
+    <p id="lightbox-caption"></p>
+  </div>
   </body>
 </html>

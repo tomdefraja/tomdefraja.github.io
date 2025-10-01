@@ -1,77 +1,61 @@
-day1:
-- url: '/images/Laste/day1-start.jpeg'
-  caption: 'Starting from Moe'
-  alt: ''
-- url: '/images/Laste/day1-fanes.jpeg'
-  caption: 'Gruppo fanes'
-  alt: ''
-- url: '/images/Laste/day1-lunch.jpeg'
-  caption: 'A wet lunch'
-  alt: ''
-- url: '/images/Laste/day1-brunico.jpeg'
-  caption: 'Coming into Brunico'
-  alt: ''
-- url: '/images/Laste/day1-camp.jpeg'
-  caption: 'Camp site by a shelter near Mezzaselva-Mittewald'
-  alt: ''
-
-day2:
-- url: '/images/Laste/day2-brenner1.jpeg'
-  caption: 'Looking toward Austria and the Brenner Pass'
-  alt: ''
-- url: '/images/Laste/day2-lunch.jpeg'
-  caption: 'Lunch in the park'
-  alt: ''
-- url: '/images/Laste/day2-innvalley.jpeg'
-  caption: 'Looking back down the Inn valley'
-  alt: ''
-- url: '/images/Laste/day2-achensee.jpeg'
-  caption: 'Lake Achensee'
-  alt: ''
-- url: '/images/Laste/day2-cooking.jpeg'
-  caption: 'Cooking dinner on the back of the bike, surprisingly stable!'
-  alt: ''
-
-day3:
-- url: '/images/Laste/day3-achensee.jpeg'
-  caption: 'Ready to go in the morning'
-  alt: ''
-- url: '/images/Laste/day3-lunch.jpeg'
-  caption: 'Lunch, looking back on the Alps'
-  alt: ''
-- url: '/images/Laste/day3-forest.jpeg'
-  caption: 'Forest path toward Munich'
-  alt: ''
-- url: '/images/Laste/day3-Isar.jpeg'
-  caption: 'Over the Isar, Munich'
-  alt: ''
-- url: '/images/Laste/day3-path.jpeg'
-  caption: 'A broken path near Freising'
-  alt: ''
-
-lud:
-- url: '/images/Laste/lud-1.jpeg'
-  caption: 'Ludwig'
-  alt: ''
-- url: '/images/Laste/lud-2.jpeg'
-  caption: 'Lana has infinite patience with Ludwig'
-  alt: ''
-- url: '/images/Laste/lud-3.jpeg'
-  caption: 'Playtime for some, sleep for others'
-  alt: ''
-- url: '/images/Laste/lud-4.jpeg'
-  caption: 'Bike ride with Ludwig in tow'
-  alt: ''
-- url: '/images/Laste/lud-5.jpeg'
-  caption: 'Not sure what is going on here...'
-  alt: ''
-- url: '/images/Laste/lud-6.jpeg'
-  caption: 'The boys!'
-  alt: ''
-- url: '/images/Laste/lud-lotter.jpeg'
-  caption: 'The beautiful Lotter family'
-  alt: ''
-
-
-
-
+Day1:
+- url: /images/Laste/Day1/Day1-001.jpeg
+  caption: Starting from Moe
+- url: /images/Laste/Day1/Day1-002.jpeg
+  caption: Gruppo Fanes
+- url: /images/Laste/Day1/Day1-003.jpeg
+  caption: A wet lunch
+- url: /images/Laste/Day1/Day1-004.jpeg
+  caption: Coming into Brunico
+- url: /images/Laste/Day1/Day1-005.jpeg
+  caption: Camp site by a shelter near Mezzaselva-Mittewald
+Day10: []
+Day12: []
+Day13: []
+Day14: []
+Day2:
+- url: /images/Laste/Day2/Day2-001.jpeg
+  caption: Achensee
+- url: /images/Laste/Day2/Day2-002.jpeg
+  caption: Snowey Mountains
+- url: /images/Laste/Day2/Day2-003.jpeg
+  caption: Looking toward Austria and the Brenner Pass
+- url: /images/Laste/Day2/Day2-004.jpeg
+  caption: Cooking dinner on the back of the bike, surprisingly stable!
+- url: /images/Laste/Day2/Day2-005.jpeg
+  caption: The Inn
+- url: /images/Laste/Day2/Day2-006.jpeg
+  caption: Looking back down the Inn valley
+- url: /images/Laste/Day2/Day2-007.jpeg
+  caption: Lunch in the park
+Day3:
+- url: /images/Laste/Day3/Day3-001.jpeg
+  caption: Ready to go in the morning
+- url: /images/Laste/Day3/Day3-002.jpeg
+  caption: Forest path toward Munich
+- url: /images/Laste/Day3/Day3-003.jpeg
+  caption: Over the Isar, Munich
+- url: /images/Laste/Day3/Day3-004.jpeg
+  caption: Lunch, looking back on the Alps
+- url: /images/Laste/Day3/Day3-005.jpeg
+  caption: A broken path near Freising
+Day4:
+- url: /images/Laste/Day4/Day4-001.jpeg
+  caption: Ludwig
+- url: /images/Laste/Day4/Day4-002.jpeg
+  caption: Lana has infinite patience with Ludwig
+- url: /images/Laste/Day4/Day4-003.jpeg
+  caption: Playtime for some, sleep for others
+- url: /images/Laste/Day4/Day4-004.jpeg
+  caption: Bike ride with Ludwig in tow
+- url: /images/Laste/Day4/Day4-005.jpeg
+  caption: Not sure what is going on here...
+- url: /images/Laste/Day4/Day4-006.jpeg
+  caption: The boys!
+- url: /images/Laste/Day4/Day4-007.jpeg
+  caption: The beautiful Lotter family
+Day5: []
+Day6: []
+Day7: []
+Day8: []
+Day9: []

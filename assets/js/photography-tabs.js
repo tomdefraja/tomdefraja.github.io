@@ -1,4 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // --- Tabs functionality ---
+  const tabs = document.querySelectorAll(".tab-button");
+  const panels = document.querySelectorAll(".tab-content");
+
+  if (tabs.length > 0 && panels.length > 0) {
+    const activateTab = tab => {
+      // hide all panels
+      panels.forEach(p => (p.style.display = "none"));
+      // remove active class from all tabs
+      tabs.forEach(t => t.classList.remove("active"));
+      // show the selected panel
+      const panel = document.getElementById(tab.dataset.tab);
+      if (panel) panel.style.display = "block";
+      tab.classList.add("active");
+    };
+
+    // add click listeners
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => activateTab(tab));
+    });
+
+    // activate the first tab by default
+    activateTab(tabs[0]);
+  }
+
+  // --- Lightbox functionality ---
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = lightbox.querySelector("#lightbox-img");
   const caption = lightbox.querySelector("#lightbox-caption");
@@ -28,6 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
       lightbox.classList.add("hidden");
     });
 
+    // Click outside image closes lightbox
+    lightbox.addEventListener("click", e => {
+      if (e.target === lightbox) lightbox.classList.add("hidden");
+    });
+
     lightbox.querySelector(".next").addEventListener("click", () => {
       currentIndex = (currentIndex + 1) % imgs.length;
       showImage(currentIndex);
@@ -47,11 +78,9 @@ document.addEventListener("DOMContentLoaded", () => {
     lightboxImg.addEventListener("touchend", e => {
       const endX = e.changedTouches[0].clientX;
       if (endX - startX > 50) {
-        // swipe right
         currentIndex = (currentIndex - 1 + imgs.length) % imgs.length;
         showImage(currentIndex);
       } else if (startX - endX > 50) {
-        // swipe left
         currentIndex = (currentIndex + 1) % imgs.length;
         showImage(currentIndex);
       }

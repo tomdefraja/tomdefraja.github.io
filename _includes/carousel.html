@@ -5,7 +5,7 @@
     {% for image in images %}
       <figure>
         <img src="{{ image.url }}" data-index="{{ forloop.index0 }}">
-        <figcaption>{{ image.caption }}</figcaption>
+        <caption>{{ image.caption }}</caption>
       </figure>
     {% endfor %}
   </div>

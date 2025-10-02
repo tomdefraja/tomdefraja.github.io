@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/snow/cernera_dad.jpg"
 category: snow
+country: Italy
 ---

@@ -5,4 +5,5 @@ layout: single
 specs: "86 x 1 min exposures, Samyang 135mm at f/3.2, ISO 800"
 image: "/images/photography/astro/california_nebula.jpg"
 category: astro
+country: England
 ---

@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/sea/coral_beach.jpg"
 category: sea
+country: Scotland
 ---

@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/sky/pelmo_rainbow.jpg"
 category: sky
+country: Italy
 ---

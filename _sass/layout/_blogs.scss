@@ -1,0 +1,398 @@
+// Thumbnails for blog posts
+// thumbnails for blog posts
+.blog_container.bg {
+  display: block;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  aspect-ratio: 16 / 6; /* keeps consistent scaling on all screens */  
+  text-decoration: none;
+  color: inherit;
+  margin-top: 1em;
+  border-radius: 10px;
+
+  &:hover {
+    box-shadow: 0 0 10px rgba(#000, 0.25);
+    cursor: pointer;
+    transform: scale(1.025);
+    transition: transform 0.2s ease;
+  }
+}
+
+.blog_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 1rem;
+}
+
+.blog_overlay1 {
+  position: absolute;
+  bottom: 16px;   /* or top/center */
+  left: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.blog_overlay_date {
+  font-size: 0.7em; /* slightly bigger than surrounding text */
+}
+
+.blog_overlay2 {
+  position: absolute;
+  bottom: 16px;   /* or top/center */
+  right: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 0.7em;
+}
+
+.blog_overlay3 {
+  position: absolute;
+  bottom: 32px;   /* or top/center */
+  right: 16px;
+  z-index: 2;
+  color: white;
+  margin: 0;
+  font-size: 1em;
+}
+
+@media (max-width: 600px) {
+  .blog_overlay1 {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    font-size: 1em;
+    bottom: 8px;
+  }
+
+  .blog_overlay2 {
+    font-size: 0.5em;
+    right: 8px;
+    bottom: 8px;
+  }
+
+  .blog_overlay3 {
+    font-size: 0.6em;
+    left: 8px;
+    bottom: 8px;
+  }
+}
+//=============================================================================
+
+.filter-tabs {
+  display: inline-flex;
+  position: relative; /* needed for absolute positioning of underline */
+  gap: 1rem;
+  margin-left: 0.5rem;
+  padding-bottom: 2px; /* reserve space for underline */
+
+  .filter-tab {
+    background: none;
+    border: none;
+    font-size: 0.8em;
+    cursor: pointer;
+    color: inherit;
+    padding: 0.25rem 0;
+    position: relative; /* optional for z-index layering */
+  }
+
+  .tab-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    background: currentColor;
+    transition: all 0.3s ease;
+    width: 0; /* will be updated dynamically via JS */
+  }
+}
+
+
+
+// Carousel
+//=============================================================================
+.carousel {
+  position: relative;
+  max-width: 700px;
+  margin: 2em auto;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.4s ease;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  display: none;
+  text-align: center;
+}
+
+.carousel-slide.active {
+  display: block;
+}
+
+.carousel img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 50%;
+}
+
+.carousel-btn.prev { left: 10px; }
+.carousel-btn.next { right: 10px; }
+
+.caption {
+  margin-top: 0.5em;
+  font-size: 0.9em;
+  // color: #ff0000;
+}
+
+
+// Carousel gallery
+.gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;             /* space between images */
+  overflow-x: auto;      /* enable horizontal scrolling */
+  overflow-y: hidden;    /* prevent vertical scroll */
+  padding-bottom: 10px;  /* avoid scrollbar overlap */
+  scrollbar-width: thin; /* nicer scrollbar (Firefox) */
+}
+
+.gallery::-webkit-scrollbar {
+  height: 8px;
+}
+.gallery::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.gallery figure {
+  margin: 0;
+  flex: 0 0 auto;        /* prevent shrinking, keep in row */
+  text-align: center;
+}
+
+.gallery img {
+  height: 400px;       /* default for desktop */
+  width: auto;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Tablet screens */
+@media (max-width: 1024px) {
+  .gallery img {
+    height: 300px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+  .gallery img {
+    height: 200px;
+  }
+}
+
+
+.gallery img:hover {
+  transform: scale(1.025);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(237, 237, 237, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999 !important; /* force above nav */
+}
+
+.lightbox-active .masthead {
+  background: transparent !important;
+}
+
+
+.lightbox.hidden {
+  display: none;
+}
+
+#lightbox img {
+  max-width: 90%;
+  max-height: 95%;
+  object-fit: contain;  /* keeps aspect ratio and fits screen */
+  padding-top: 2em;
+}
+
+#lightbox-caption {
+  color: #202020;
+  font-size: 1em;
+}
+
+.close, .prev, .next {
+  position: absolute;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.close {
+  top: 20px; right: 30px;
+}
+
+.prev {
+  top: 50%; left: 30px;
+  transform: translateY(-50%);
+}
+
+.next {
+  top: 50%; right: 30px;
+  transform: translateY(-50%);
+}
+
+//=============================================================================
+// dropdown menu for filtering by country
+.country-tabs {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+}
+
+/* Tabs container */
+.tabs {
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  position: relative;
+}
+
+/* Regular inline tabs */
+.tab-button {
+  background: none;
+  border: none;
+  font-size: 1.1em;
+  cursor: pointer;
+  color: #444;
+  padding: 0.25rem 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.tab-button.active {
+  color: #000;
+  font-weight: 600;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+
+/* Underline for sub-tabs */
+.sub-tab-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  transition: all 0.3s ease;
+  width: 0;
+}
+
+/* Dropdown container */
+.dropdown {
+  position: relative;
+}
+
+/* Toggle button for dropdown */
+.dropdown-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #444;
+  padding: 0.25rem 0;
+}
+
+/* Dropdown menu (hidden by default) */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  list-style: none;
+  padding: 0.5em 0;
+  margin: 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 100;
+  min-width: 120px;
+}
+
+/* Dropdown items */
+.dropdown-menu li {
+  padding: 0;
+}
+
+.dropdown-menu .dropdown-item {
+  display: block;
+  padding: 0.4em 1em;
+  text-decoration: none;
+  color: #444;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+/* Show dropdown when JS adds .open to .dropdown */
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
+/* Adjust spacing of dropdown toggle relative to other tabs */
+.tabs .dropdown {
+  margin-left: 0.5em;
+}
+
+/* Responsive: reduce spacing on small screens */
+@media (max-width: 768px) {
+  .tabs {
+    gap: 0.5em;
+  }
+  .tab-button, .dropdown-toggle {
+    font-size: 1em;
+  }
+}

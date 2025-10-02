@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/snow/braeriach.jpg"
 category: snow
+country: Scotland
 ---

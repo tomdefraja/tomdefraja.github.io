@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/sea/sea_stones.jpg"
 category: sea
+country: Scotland
 ---

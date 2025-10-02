@@ -1,11 +1,12 @@
 ---
 title: 'Laste - Dunkirk'
 date: 2025-09-05
-permalink: /posts/Laste/
+permalink: /blogs/Laste/
 thumbnail: '/images/Laste/day1-start.jpeg'
 modified: 2025-09-05
 location: 'Western Europe'
 type: bike
+country: [Italy, Austria, Germany, Netherlands, Belgium, France]
 tags:
   - Italy
   - Austria

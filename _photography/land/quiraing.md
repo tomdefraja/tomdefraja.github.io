@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/land/quiraing.jpg"
 category: land
+country: Scotland
 ---

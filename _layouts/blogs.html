@@ -1,12 +1,11 @@
 ---
 layout: default
-title: "Photography"
+title: "Blogs"
 ---
 
-{% assign featured_countries = "Scotland" | split: "," %}
-{% assign all_countries = site.photography | map: "country" | uniq | sort %}
+{% assign featured_countries = "Scotland,Thailand" | split: "," %}
+{% assign all_countries = site.blogs | map: "country" | uniq | sort %}
 
-<!-- Dropdown countries -->
 {% assign other_countries = "" | split: "" %}
 {% for c in all_countries %}
   {% unless featured_countries contains c %}
@@ -14,11 +13,10 @@ title: "Photography"
   {% endunless %}
 {% endfor %}
 
-<main class="photography-page">
-  <div class="photography-wrapper custom-wrapper">
-
+<main class="blogs-page">
+  <div class="blogs-wrapper custom-wrapper">
     <h1 class="page-title">
-      Photography
+      Blog posts
       <nav class="filter-tabs">
         <button class="filter-tab active" data-filter="all">All</button>
         <button class="filter-tab" data-filter="type">By Type</button>
@@ -27,12 +25,12 @@ title: "Photography"
       </nav>
     </h1>
 
-    <!-- ALL PHOTOS -->
+    <!-- ALL POSTS -->
     <div class="filter-content" id="all">
-      <div class="photo_grid">
-        {% assign all_photos = site.photography | sort: "date" | reverse %}
-        {% for photo in all_photos %}
-          {% include photography-single.html photo=photo %}
+      <div class="blog_grid">
+        {% assign all_blogs = site.blogs | sort: "date" | reverse %}
+        {% for blog in all_blogs %}
+          {% include blog-single.html blog=blog %}
         {% endfor %}
       </div>
     </div>
@@ -40,37 +38,38 @@ title: "Photography"
     <!-- TYPE FILTER -->
     <div class="filter-content" id="type" style="display:none;">
       <div class="tabs" role="tablist">
-        <button class="tab-button active" role="tab" data-tab="astro">Deep Sky</button>
-        <button class="tab-button" role="tab" data-tab="sky">Sky</button>
-        <button class="tab-button" role="tab" data-tab="snow">Snow</button>
-        <button class="tab-button" role="tab" data-tab="land">Land</button>
-        <button class="tab-button" role="tab" data-tab="sea">Sea</button>
+        <button class="tab-button active" role="tab" data-tab="foot">Foot</button>
+        <button class="tab-button" role="tab" data-tab="bike">Bike</button>
         <span class="sub-tab-underline"></span>
       </div>
 
-      {% assign types = "astro,sky,snow,land,sea" | split: "," %}
-      {% for t in types %}
-        <div class="tab-content {% if t == 'astro' %}active{% endif %}" id="{{ t }}">
-          <div class="photo_grid">
-            {% assign photos = site.photography | where: "category", t | sort: "date" | reverse %}
-            {% for photo in photos %}
-              {% include photography-single.html photo=photo %}
-            {% endfor %}
-          </div>
+      <div class="tab-content" id="foot" style="display:block;">
+        <div class="blog_grid">
+          {% assign foot_blogs = site.blogs | where: "type", "foot" | sort: "date" | reverse %}
+          {% for blog in foot_blogs %}
+            {% include blog-single.html blog=blog %}
+          {% endfor %}
         </div>
-      {% endfor %}
+      </div>
+      <div class="tab-content" id="bike" style="display:none;">
+        <div class="blog_grid">
+          {% assign bike_blogs = site.blogs | where: "type", "bike" | sort: "date" | reverse %}
+          {% for blog in bike_blogs %}
+            {% include blog-single.html blog=blog %}
+          {% endfor %}
+        </div>
+      </div>
     </div>
 
     <!-- COUNTRY FILTER -->
     <div class="filter-content" id="country" style="display:none;">
       <div class="tabs country-tabs" role="tablist">
-        <!-- Featured countries inline -->
         {% for c in featured_countries %}
           {% assign is_active = c == "Scotland" %}
           <button class="tab-button {% if is_active %}active{% endif %}" role="tab" data-tab="{{ c | downcase }}">{{ c }}</button>
         {% endfor %}
 
-        <!-- Dropdown for the rest -->
+
         <div class="dropdown">
           <button class="tab-button dropdown-toggle">More ▾</button>
           <ul class="dropdown-menu">
@@ -83,19 +82,17 @@ title: "Photography"
         <span class="sub-tab-underline"></span>
       </div>
 
-      <!-- Country tab contents -->
       {% for c in all_countries %}
         <div class="tab-content {% if c == 'Scotland' %}active{% endif %}" id="{{ c | downcase }}">
-          <div class="photo_grid">
-            {% assign country_photos = site.photography | where: "country", c | sort: "date" | reverse %}
-            {% for photo in country_photos %}
-              {% include photography-single.html photo=photo %}
+          <div class="blog_grid">
+            {% assign country_blogs = site.blogs | where: "country", c | sort: "date" | reverse %}
+            {% for blog in country_blogs %}
+              {% include blog-single.html blog=blog %}
             {% endfor %}
           </div>
         </div>
       {% endfor %}
     </div>
-
   </div>
 </main>
 

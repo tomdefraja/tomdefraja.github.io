@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/astro/cygnus.jpg"
 category: astro
+country: England
 ---

@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/sky/pore_moon.jpg"
 category: sky
+country: Italy
 ---

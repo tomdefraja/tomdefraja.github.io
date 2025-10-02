@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/land/civetta1.jpg"
 category: land
+country: Italy
 ---

@@ -1,0 +1,7 @@
+<a href="{{ include.blog.url | relative_url }}" 
+class="blog_container bg"
+style="background-image: url('{{ include.blog.thumbnail | relative_url }}');">
+  <h1 class="blog_overlay1">{{ include.blog.title }}
+    <span class="blog_overlay_date"><i>{{ include.blog.date | date: '%B %Y' }}</i></span>
+  </h1>
+</a>

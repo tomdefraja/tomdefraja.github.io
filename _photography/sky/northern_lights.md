@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/sky/Aurora_2.jpg"
 category: sky
+country: England
 ---

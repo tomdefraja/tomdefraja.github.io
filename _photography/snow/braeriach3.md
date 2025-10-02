@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/snow/emergent_walker.jpg"
 category: snow
+country: Scotland
 ---

@@ -5,4 +5,5 @@ layout: single
 excerpt: "specs"
 image: "/images/photography/snow/three_walkers2.jpg"
 category: snow
+country: Scotland
 ---

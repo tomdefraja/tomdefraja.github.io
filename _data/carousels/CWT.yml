@@ -64,22 +64,28 @@ Day4:
   caption: Camp under the Saddle
 Day5:
 - url: /images/CWT/Day5/Day5-001.jpg
-  caption: Kintail
-- url: /images/CWT/Day5/Day5-002.jpg
   caption: Sunrise
-- url: /images/CWT/Day5/Day5-003.jpg
+- url: /images/CWT/Day5/Day5-002.jpg
   caption: Morning under the Saddle
-- url: /images/CWT/Day5/Day5-004.jpg
+- url: /images/CWT/Day5/Day5-003.jpg
   caption: Descent toward River Shiel
+- url: /images/CWT/Day5/Day5-004.jpg
+  caption: Loch Duich
 - url: /images/CWT/Day5/Day5-005.jpg
-  caption: Glen Elchaig
+  caption: Kintail
 - url: /images/CWT/Day5/Day5-006.jpg
   caption: Glen Glomach
 - url: /images/CWT/Day5/Day5-007.jpg
-  caption: Falls of Glomach
+  caption: Look down the Falls of Glomach
 - url: /images/CWT/Day5/Day5-008.jpg
-  caption: Loch Duich
-Day6: []
+  caption: Falls of Glomach
+- url: /images/CWT/Day5/Day5-009.jpg
+  caption: Forest above the Falls of Glomach
+- url: /images/CWT/Day5/Day5-010.jpg
+  caption: Glen Elchaig
+Day6:
+- url: /images/CWT/Day6/Day6-001.jpg
+  caption: testing
 Day7: []
 Day8: []
 Day9: []

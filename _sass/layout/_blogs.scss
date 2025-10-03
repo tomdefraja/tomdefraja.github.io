@@ -36,7 +36,7 @@
 }
 
 .blog_overlay_date {
-  font-size: 0.7em; /* slightly bigger than surrounding text */
+  font-size: 0.6em; /* slightly smaller than surrounding text */
 }
 
 .blog_overlay2 {
@@ -51,7 +51,7 @@
 
 .blog_overlay3 {
   position: absolute;
-  bottom: 32px;   /* or top/center */
+  bottom: 16px;   /* or top/center */
   right: 16px;
   z-index: 2;
   color: white;
@@ -214,7 +214,7 @@
 
 
 .gallery img:hover {
-  transform: scale(1.025);
+  transform: scale(1.015);
 }
 
 /* Lightbox */
@@ -229,7 +229,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   z-index: 9999 !important; /* force above nav */
 }
 
@@ -246,12 +246,18 @@
   max-width: 90%;
   max-height: 95%;
   object-fit: contain;  /* keeps aspect ratio and fits screen */
-  padding-top: 2em;
+  padding-top: 0em;
 }
 
 #lightbox-caption {
   color: #202020;
+  opacity: 0;
   font-size: 1em;
+  transition: opacity 0.3s ease;
+}
+
+#lightbox-img:hover + #lightbox-caption {
+  opacity: 1;
 }
 
 .close, .prev, .next {

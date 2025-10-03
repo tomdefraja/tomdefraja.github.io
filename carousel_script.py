@@ -3,8 +3,10 @@ import sys
 import yaml
 import shutil
 import subprocess
+import re
 
 valid_exts = (".jpg", ".jpeg", ".png")
+name_pattern = re.compile(r"^Day\d+-\d{3}\..+$", re.IGNORECASE)
 
 # --- Get trip name from command line ---
 if len(sys.argv) < 2:
@@ -32,46 +34,71 @@ days = sorted([d for d in os.listdir(folder) if os.path.isdir(os.path.join(folde
 for day in days:
     day_path = os.path.join(folder, day)
     files = sorted([f for f in os.listdir(day_path) if f.lower().endswith(valid_exts)])
-    
+
     # Ensure YAML section exists
     data.setdefault(day, [])
 
     # --- Build dict of existing captions using only filenames ---
     existing = {}
     for item in data[day]:
-        existing_name = os.path.basename(item["file"])
+        existing_name = os.path.basename(item["url"])
         existing[existing_name] = item.get("caption", "")
 
     new_entries = []
-    for idx, old_name in enumerate(files, start=1):
+    print(f"\n--- Processing {day} ({len(files)} photos) ---")
+
+    for old_name in files:
         ext = os.path.splitext(old_name)[1].lower()
-        new_name = f"{day}-{idx:03d}{ext}"
         old_path = os.path.join(day_path, old_name)
-        new_path = os.path.join(day_path, new_name)
 
-        # Rename file if needed
-        if old_name != new_name:
-            if not os.path.exists(new_path):
-                shutil.move(old_path, new_path)
-                print(f"Renamed {old_name} -> {new_name}")
-            else:
-                print(f"Skipped renaming {old_name}, {new_name} already exists!")
+        # Skip if already properly named (DayX-00Y.ext)
+        if name_pattern.match(old_name):
+            new_name = old_name
+        else:
+            # Show photo for ordering
+            print(f"\nOpening {old_path} ...")
+            if os.name == 'posix':  # macOS/Linux
+                subprocess.run(["open", old_path])
+            elif os.name == 'nt':   # Windows
+                os.startfile(old_path)
 
-        # Open image if no caption yet
+            # Ask user for position
+            while True:
+                try:
+                    pos = int(input(f"Enter order (1–{len(files)}) for {old_name}: "))
+                    if 1 <= pos <= len(files):
+                        break
+                    else:
+                        print("Out of range.")
+                except ValueError:
+                    print("Invalid number.")
+
+            new_name = f"{day}-{pos:03d}{ext}"
+            new_path = os.path.join(day_path, new_name)
+
+            # Rename if needed
+            if old_name != new_name:
+                if not os.path.exists(new_path):
+                    shutil.move(old_path, new_path)
+                    print(f"Renamed {old_name} -> {new_name}")
+                else:
+                    print(f"Skipped renaming {old_name}, {new_name} already exists!")
+
+        # Caption handling
         caption = existing.get(new_name, "")
         if not caption:
-            print(f"\nOpening {new_path} ...")
+            print(f"\nOpening {os.path.join(day_path, new_name)} ...")
             if os.name == 'posix':  # macOS/Linux
-                subprocess.run(["open", new_path])
+                subprocess.run(["open", os.path.join(day_path, new_name)])
             elif os.name == 'nt':   # Windows
-                os.startfile(new_path)
+                os.startfile(os.path.join(day_path, new_name))
             caption = input(f"Enter caption for {new_name}: ").strip()
 
         rel_path = "/" + os.path.join("images", trip, day, new_name)
         new_entries.append({"url": rel_path.replace("\\", "/"), "caption": caption})
 
-    # Update day in YAML
-    data[day] = new_entries
+    # Ensure unique order (sort by filename after renaming)
+    data[day] = sorted(new_entries, key=lambda x: os.path.basename(x["url"]))
 
 # --- Save YAML back ---
 with open(yaml_file, "w") as f:

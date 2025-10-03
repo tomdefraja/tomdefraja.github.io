@@ -21,8 +21,8 @@ title: "Photography"
       Photography
       <nav class="filter-tabs">
         <button class="filter-tab active" data-filter="all">All</button>
-        <button class="filter-tab" data-filter="type">By Type</button>
-        <button class="filter-tab" data-filter="country">By Country</button>
+        <button class="filter-tab" data-filter="type">By subject</button>
+        <button class="filter-tab" data-filter="country">By country</button>
         <span class="tab-underline"></span>
       </nav>
     </h1>
@@ -32,7 +32,7 @@ title: "Photography"
       <div class="photo_grid">
         {% assign all_photos = site.photography | sort: "date" | reverse %}
         {% for photo in all_photos %}
-          {% include photography-single.html photo=photo %}
+          {% include photography-gallery.html photo=photo %}
         {% endfor %}
       </div>
     </div>
@@ -54,7 +54,7 @@ title: "Photography"
           <div class="photo_grid">
             {% assign photos = site.photography | where: "category", t | sort: "date" | reverse %}
             {% for photo in photos %}
-              {% include photography-single.html photo=photo %}
+              {% include photography-gallery.html photo=photo %}
             {% endfor %}
           </div>
         </div>
@@ -89,7 +89,7 @@ title: "Photography"
           <div class="photo_grid">
             {% assign country_photos = site.photography | where: "country", c | sort: "date" | reverse %}
             {% for photo in country_photos %}
-              {% include photography-single.html photo=photo %}
+              {% include photography-gallery.html photo=photo %}
             {% endfor %}
           </div>
         </div>

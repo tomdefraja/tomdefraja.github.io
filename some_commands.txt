@@ -5,4 +5,4 @@ bundle exec jekyll serve --livereload --config _config.yml,_config_dev.yml
 Documents/Website/tomdefraja.github.io
 
 # run caption generator
-python3 carousel_script.py CWT
+python3 carousel_script.py trip_name

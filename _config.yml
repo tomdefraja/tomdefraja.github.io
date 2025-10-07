@@ -229,6 +229,9 @@ collections:
   talks:
     output: true
     permalink: /:collection/:path/
+  theses:
+    output: true
+    permalink: /:collection/:path/
   photography:
     output: true
     permalink: /:collection/:path/
@@ -245,7 +248,7 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: false
+      author_profile: true
       read_time: true
       comments: true
       share: true
@@ -304,6 +307,14 @@ defaults:
   - scope:
       path: ""
       type: blogs
+    values:
+      layout: single
+      author_profile: false
+      share: true
+  # theses
+  - scope:
+      path: ""
+      type: theses
     values:
       layout: single
       author_profile: false

@@ -25,23 +25,6 @@
           alt="">
       </div>
     {% endif %}
-    
-    {% if post.thumbnail %}
-      <a href="{{ base_path }}{{ post.url }}" class="thumbnail_container bg" style="background-image: url('{{ post.thumbnail }}');">
-      <h1 class="thumbnail_overlay1">{{ post.title }}
-        <span class="thumbnail_overlay_date"><i> - {{ post.date | date:'%B %Y' }}</i></span>
-      </h1>
-      {% if post.read_time and post.location and post.type %}
-      <p class="thumbnail_overlay3" class="page__meta"></i> <strong>{{ post.location }}</strong>
-        {% if post.type == 'hike' %}
-        <i class="fas fa-person-hiking"></i></p>
-        {% elsif post.type == 'bike' %}
-        <i class="fas fa-bicycle"></i></p>
-        {% endif %}
-      <p class="thumbnail_overlay2" class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
-    {% endif %}
-      </a>
-    {% else %}
 
     <h2 class="archive__item-title" itemprop="headline">
       {% if post.link %}
@@ -81,7 +64,6 @@
       <p class="page__meta"><i class="fa fa-clock" aria-hidden="true"></i> {% include read-time.html %}</p>
     {% endif %}
     
-    {% endif %}
 
 
     {% if post.venue == true %}

@@ -308,15 +308,7 @@ defaults:
       path: ""
       type: blogs
     values:
-      layout: single
-      author_profile: false
-      share: true
-  # theses
-  - scope:
-      path: ""
-      type: theses
-    values:
-      layout: single
+      layout: blog-single
       author_profile: false
       share: true
 

@@ -1,0 +1,136 @@
+---
+layout: default
+---
+
+{% include base_path %}
+
+{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
+  {% include page__hero.html %}
+{% endif %}
+
+{% if page.url != "/" and site.breadcrumbs %}
+  {% unless paginator %}
+    {% include breadcrumbs.html %}
+  {% endunless %}
+{% endif %}
+
+<div id="blog_main" role="blog_main">
+
+  <article class="blog_page" itemscope itemtype="http://schema.org/CreativeWork">
+    {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.author_profile %} {% endif %}
+    {% if page.author %}<meta itemprop="description" content="{{ page.author | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.excerpt %}<meta itemprop="description" content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.date %}<meta itemprop="datePublished" content="{{ page.date | date: "%B %d, %Y" }}">{% endif %}
+    {% if page.modified %}<meta itemprop="dateModified" content="{{ page.modified | date: "%B %d, %Y" }}">{% endif %}
+
+      <div class="blog_page__inner-wrap">
+        {% unless page.header.overlay_color or page.header.overlay_image %}
+          <header>
+            <section class="blog_page__hero" style="background-image: url('{{ page.hero_image }}');">
+            {% if page.title %}
+              <div class="blog_page__hero-content">
+                <!-- Title -->
+                 <div class="blog_page__meta-group blog_page__text-box">
+                  <h1 class="blog_page__title" itemprop="headline">
+                    {{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}
+                  </h1>
+                </div>
+
+                <div class="blog_page__meta-group">
+                <!-- Authors -->
+                {% if page.author %}
+                  
+                    <span class="blog_page__author" itemprop="description">
+                      {% for author in page.author %}
+                        <img src="{{ author.pic }}" class="blog_page__author_image" alt="{{ author.name }}">
+                      {% endfor %}
+                      <span style="opacity: 0.8;">by </span>
+                      {% for author in page.author %}
+                        {% if forloop.last and forloop.index > 1 %}
+                          <span style="opacity: 0.8;">and</span> {{ author.name }}
+                        {% elsif forloop.first %}
+                          {{ author.name }}
+                        {% else %}
+                          , {{ author.name }}
+                        {% endif %}
+                      {% endfor %}
+                    </span>
+                {% endif %}
+                |
+                <!-- Photographers -->
+                {% if page.photographers %}
+                    {% for photographer in page.photographers %}
+                      <img src="{{ photographer.pic }}" class="blog_page__author_image" alt="{{ photographer.name }}">
+                    {% endfor %}
+
+                    <span class="blog_page__author" itemprop="description">
+                      <span style="opacity: 0.8;">images by </span>
+                      {% for photographer in page.photographers %}
+                        {% if forloop.last and forloop.index > 1 %}
+                          <span style="opacity: 0.8;">and</span> {{ photographer.name }}
+                        {% elsif forloop.first %}
+                          {{ photographer.name }}
+                        {% else %}
+                          , {{ photographer.name }}
+                        {% endif %}
+                      {% endfor %}
+                    </span>
+                {% endif %}
+
+                {% if page.modified %}
+                  <span class="blog_page__meta-group" style="font-size: 0.6em;">
+                    <time datetime="{{ page.modified | date: "%Y-%m-%d" }}">
+                      <span style="font-size: 1.8em;"> &middot; </span> {{ page.modified | date: "%B %d, %Y" }}
+                    </time>
+                  </span>
+                {% endif %}
+                </div>
+
+                <!-- Date / Meta -->
+                
+
+              </div>
+            {% endif %}
+
+          </header>
+        {% endunless %}
+
+        <section class="blog_page__content" itemprop="text">
+          {{ content }}
+
+          {% if page.link %}<div><a href="{{ page.link }}" class="btn">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
+        </section>
+
+        <footer class="blog_page__meta">
+          {% if site.data.ui-text[site.locale].meta_label %}
+            <h4 class="blog_page__meta-title">{{ site.data.ui-text[site.locale].meta_label }}</h4>
+          {% endif %}
+          {% include blog_page__taxonomy.html %}
+        </footer>
+
+        {% if page.share %}{% include social-share.html %}{% endif %}
+
+        {% include post_pagination.html %}
+      </div>
+      
+
+    {% if site.comments.provider and page.comments %}
+      {% include comments.html %}
+    {% endif %}
+  </article>
+
+  {% comment %}<!-- only show related on a post page when not disabled -->{% endcomment %}
+  {% if page.id and page.related and site.related_posts.size > 0 %}
+    <div class="blog_page__related">
+      {% if site.data.ui-text[site.locale].related_label %}
+        <h4 class="blog_page__related-title">{{ site.data.ui-text[site.locale].related_label | default: "You May Also Enjoy" }}</h4>
+      {% endif %}
+      <div class="grid__wrapper">
+        {% for post in site.related_posts limit:4 %}
+          {% include archive-single.html type="grid" %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>

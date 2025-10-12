@@ -2,9 +2,16 @@
 title: 'A Race to the Viva'
 date: 2025-09-05
 permalink: /blogs/Laste/
-thumbnail: '/images/Laste/day1-start.jpeg'
+thumbnail: '/images/Laste/Day1/Day1-001.jpeg'
+hero_image: '/images/Laste/Day7/Day7-001.jpeg'
 modified: 2025-09-05
 location: 'Western Europe'
+author:
+  - name: Tom De Fraja
+    pic: /images/profile.jpeg
+photographers:
+  - name: Tom De Fraja
+    pic: /images/profile.jpeg
 type: bike
 country: [Italy, Austria, Germany, Netherlands, Belgium, France]
 tags:

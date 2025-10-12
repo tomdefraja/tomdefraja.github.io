@@ -1,0 +1,26 @@
+<a href="{{ include.blog.url | relative_url }}" 
+   class="blog_container bg"
+   style="background-image: url('{{ include.blog.thumbnail | relative_url }}');">
+
+  <div class="blog_overlay_content">
+    <!-- Title and Date -->
+    <h1 class="blog_overlay1">{{ include.blog.title }}
+    <span class="blog_overlay_date">
+      <i> - {{ include.blog.date | date: "%B %Y" }}</i>
+    </span>
+    </h1>
+
+    <!-- Location & Type -->
+    {% if include.blog.location and include.blog.type %}
+      <p class="blog_overlay3 page__meta">
+        <strong>{{ include.blog.location }}</strong>
+        {% if include.blog.type == 'foot' %}
+          <i class="fas fa-person-hiking"></i>
+        {% elsif include.blog.type == 'bike' %}
+          <i class="fas fa-bicycle"></i>
+        {% endif %}
+      </p>
+    {% endif %}
+
+  </div>
+</a>

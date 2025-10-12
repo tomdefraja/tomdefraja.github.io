@@ -22,7 +22,17 @@ Day2:
   caption: A busy A'Chuil bothy
 - url: /images/CWT/Day2/Day2-007.jpg
   caption: Camp at Glendessarry
-Day10: []
+Day10:
+- url: /images/CWT/Day10/Day10-001.jpg
+  caption: Ullapool
+- url: /images/CWT/Day10/Day10-002.jpg
+  caption: Knockdamph
+- url: /images/CWT/Day10/Day10-003.jpg
+  caption: Cooling off
+- url: /images/CWT/Day10/Day10-004.jpg
+  caption: The Schoolhouse
+- url: /images/CWT/Day10/Day10-005.jpg
+  caption: Footwarming on the Schoolhouse
 Day12: []
 Day13: []
 Day14: []
@@ -156,7 +166,23 @@ Day8:
   caption: Colours of Fisherfield Forest
 - url: /images/CWT/Day8/Day8-011.jpg
   caption: Fisherfield Forest
-Day9: []
+Day9:
+- url: /images/CWT/Day9/Day9-001.jpg
+  caption: Lochan Fada and Beinn Eighe
+- url: /images/CWT/Day9/Day9-002.jpg
+  caption: The perfect plunge pool
+- url: /images/CWT/Day9/Day9-003.jpg
+  caption: Plunge pool and waterfall
+- url: /images/CWT/Day9/Day9-004.jpg
+  caption: A Glen near Fisherfield Forest
+- url: /images/CWT/Day9/Day9-005.jpg
+  caption: Loch an Nid
+- url: /images/CWT/Day9/Day9-006.jpg
+  caption: Our best Nevis cake advertisement
+- url: /images/CWT/Day9/Day9-007.jpg
+  caption: Bidein a' Ghlas Thuill
+- url: /images/CWT/Day9/Day9-008.jpg
+  caption: Looking back at Bidein a' Ghlas Thuill
 Day1_backup:
 - url: /images/CWT/Day1_backup/Day1-001.jpg
   caption: Start of the Cape Wrath Trail
@@ -244,3 +270,8 @@ Day6_backup:
   caption: First view of Maol Bhuide bothy
 - url: /images/CWT/Day6_backup/Day6-002.jpg
   caption: Maol Bhuidh
+Day11:
+- url: /images/CWT/Day11/Day11-001.jpg
+  caption: River Oykel
+- url: /images/CWT/Day11/Day11-002.jpg
+  caption: The first CWT sign!

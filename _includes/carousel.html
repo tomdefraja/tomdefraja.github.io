@@ -4,7 +4,7 @@
   <div class="gallery" data-carousel-id="{{ include.carousel_id }}">
     {% for image in images %}
       <figure>
-        <img src="{{ image.url }}" data-index="{{ forloop.index0 }}">
+        <img src="{{ image.url }}" data-index="{{ forloop.index0 }}" data-url="{{ image.url }}">
         <figcaption>{{ image.caption }}</figcaption>
       </figure>
     {% endfor %}

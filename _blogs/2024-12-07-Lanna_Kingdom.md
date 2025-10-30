@@ -1,11 +1,12 @@
 ---
-title: 'Lanna Kingdom'
+title: 'Lanna Kingdom (in pictures)'
 date: 2024-12-07
 permalink: /blogs/Lanna/
 thumbnail: '/images/Lanna/Day6-Sunset-Tom.jpg'
 hero_image: '/images/Lanna/Day6-Sunset-Tom.jpg'
 modified: 2025-09-05
 location: 'Thailand'
+published: true
 country: Thailand
 author:
   - name: Tom De Fraja
@@ -19,7 +20,46 @@ tags:
   - Thailand
 ---
 
-Coming soon...
+
+Day 1
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day1" %}
+
+Day 2
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day2" %}
+
+Day 3
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day3" %}
+
+Day 4
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day4" %}
+
+Day 5
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day5" %}
+
+Day 6 & 7
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day6" %}
+
+Day 8
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day7" %}
+
+Day 9
+-------
+
+{% include carousel.html carousel_file="Lanna" carousel_id="Day8" %}
 
 
 

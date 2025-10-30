@@ -28,7 +28,7 @@ title: "Blogs"
     <!-- ALL POSTS -->
     <div class="filter-content" id="all">
       <div class="blog_grid">
-        {% assign all_blogs = site.blogs | sort: "date" | reverse %}
+        {% assign all_blogs = site.blogs | where: "published", true | sort: "date" | reverse %}
         {% for blog in all_blogs %}
           {% include blog-single.html blog=blog %}
         {% endfor %}

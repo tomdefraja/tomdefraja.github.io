@@ -24,21 +24,101 @@ Day2:
   caption: Camp at Glendessarry
 Day10:
 - url: /images/CWT/Day10/Day10-001.jpg
-  caption: Ullapool
-- url: /images/CWT/Day10/Day10-002.jpg
   caption: Knockdamph
-- url: /images/CWT/Day10/Day10-003.jpg
+- url: /images/CWT/Day10/Day10-002.jpg
   caption: Cooling off
-- url: /images/CWT/Day10/Day10-004.jpg
+- url: /images/CWT/Day10/Day10-003.jpg
   caption: The Schoolhouse
-- url: /images/CWT/Day10/Day10-005.jpg
+- url: /images/CWT/Day10/Day10-004.jpg
   caption: Footwarming on the Schoolhouse
-Day12: []
-Day13: []
-Day14: []
-Day15: []
-Day16: []
-Day17: []
+Day12:
+- url: /images/CWT/Day12/Day12-001.jpg
+  caption: Morning on Ben More
+- url: /images/CWT/Day12/Day12-002.jpg
+  caption: Conival and Loch Assynt
+- url: /images/CWT/Day12/Day12-003.jpg
+  caption: Another pool to cool off in
+- url: /images/CWT/Day12/Day12-004.jpg
+  caption: The rugged landscape of Sutherland
+- url: /images/CWT/Day12/Day12-005.jpg
+  caption: Eas a’ Chuil Alainn, now a trickle
+- url: /images/CWT/Day12/Day12-006.jpg
+  caption: Loch Glencoul
+- url: /images/CWT/Day12/Day12-007.jpg
+  caption: View from Glencoul bothy
+Day13:
+- url: /images/CWT/Day13/Day13-001.jpg
+  caption: Stack, bothy and loch of Glencoul
+- url: /images/CWT/Day13/Day13-002.jpg
+  caption: Bothy and loch of Glendhu
+- url: /images/CWT/Day13/Day13-003.jpg
+  caption: To Glendhu bothy
+- url: /images/CWT/Day13/Day13-004.jpg
+  caption: Loch Glendhu and Quinag
+- url: /images/CWT/Day13/Day13-005.jpg
+  caption: Ben Stack and the north
+- url: /images/CWT/Day13/Day13-006.jpg
+  caption: Pebble dash atop Ben Dreavie
+- url: /images/CWT/Day13/Day13-007.jpg
+  caption: The many lochs of Sutherland
+- url: /images/CWT/Day13/Day13-008.jpg
+  caption: Crossing the Laxford
+- url: /images/CWT/Day13/Day13-009.jpg
+  caption: Camp
+Day14:
+- url: /images/CWT/Day14/Day14-001.jpg
+  caption: Three border collies!
+- url: /images/CWT/Day14/Day14-002.jpg
+  caption: London Stores in Kinlochbervie
+- url: /images/CWT/Day14/Day14-003.jpg
+  caption: A fine dining experience
+- url: /images/CWT/Day14/Day14-004.jpg
+  caption: Sandwood Bay
+- url: /images/CWT/Day14/Day14-005.jpg
+  caption: Sandwood Bay and Am Buachaille stack
+- url: /images/CWT/Day14/Day14-006.jpg
+  caption: Relaxing at Sandwood Bay
+- url: /images/CWT/Day14/Day14-007.jpg
+  caption: Very relaxed
+- url: /images/CWT/Day14/Day14-008.jpg
+  caption: Camp by Sandwood Bay
+Day15:
+- url: /images/CWT/Day15/Day15-001.jpg
+  caption: 2am in the north
+- url: /images/CWT/Day15/Day15-002.jpg
+  caption: Cold water swimming sauna
+- url: /images/CWT/Day15/Day15-003.jpg
+  caption: Well done Jean!
+- url: /images/CWT/Day15/Day15-004.jpg
+  caption: Sandwood Bay and loch
+- url: /images/CWT/Day15/Day15-005.jpg
+  caption: Strathchailleach
+Day16:
+- url: /images/CWT/Day16/Day16-001.jpg
+  caption: Precarious walking in the name of OCD
+- url: /images/CWT/Day16/Day16-002.jpg
+  caption: The lighthouse emerges
+- url: /images/CWT/Day16/Day16-003.jpg
+  caption: Made it north
+- url: /images/CWT/Day16/Day16-004.jpg
+  caption: Ozone Cafe
+- url: /images/CWT/Day16/Day16-005.jpg
+  caption: Kervaig Bay and its stacks
+Day17:
+- url: /images/CWT/Day17/Day17-001.jpg
+  caption: Kervaig
+- url: /images/CWT/Day17/Day17-002.jpg
+  caption: Kyle of Durness
+- url: /images/CWT/Day17/Day17-003.jpg
+  caption: Sand
+- url: /images/CWT/Day17/Day17-004.jpg
+  caption: Wading the kyle
+- url: /images/CWT/Day17/Day17-005.jpg
+  caption: Wading the kyle
+- url: /images/CWT/Day17/Day17-006.jpg
+  caption: The Smoo approaches
+- url: /images/CWT/Day17/Day17-007.jpg
+  caption: The Smoo Cave
 Day18: []
 Day19: []
 Day20: []
@@ -57,8 +137,8 @@ Day3:
   caption: Deer cooling off at Sourlies
 - url: /images/CWT/Day3/Day3-006.jpg
   caption: First sighting of Inverie over Knoydart
-- url: /images/CWT/Day3/Day3-007.jpg
-  caption: Making protein bread at the old forge (midges = protein)
+- url: /images/CWT/Day3/Day3-007.JPG
+  caption: ''
 Day4:
 - url: /images/CWT/Day4/Day4-001.jpg
   caption: Approaching Barrisdale Bothy
@@ -183,6 +263,8 @@ Day9:
   caption: Bidein a' Ghlas Thuill
 - url: /images/CWT/Day9/Day9-008.jpg
   caption: Looking back at Bidein a' Ghlas Thuill
+- url: /images/CWT/Day9/Day9-009.jpg
+  caption: Ullapool
 Day1_backup:
 - url: /images/CWT/Day1_backup/Day1-001.jpg
   caption: Start of the Cape Wrath Trail
@@ -275,3 +357,19 @@ Day11:
   caption: River Oykel
 - url: /images/CWT/Day11/Day11-002.jpg
   caption: The first CWT sign!
+- url: /images/CWT/Day11/Day11-003.jpg
+  caption: Benmore Lodge and Ben More Assynt
+- url: /images/CWT/Day11/Day11-004.jpg
+  caption: Ascending to the ridge
+- url: /images/CWT/Day11/Day11-005.jpg
+  caption: Ben More Assynt
+- url: /images/CWT/Day11/Day11-006.jpg
+  caption: Looking out to Assynt
+- url: /images/CWT/Day11/Day11-007.jpg
+  caption: Walking the ridge
+- url: /images/CWT/Day11/Day11-008.jpg
+  caption: The final stretch
+- url: /images/CWT/Day11/Day11-009.jpg
+  caption: Scrambling
+- url: /images/CWT/Day11/Day11-010.jpg
+  caption: On the summit

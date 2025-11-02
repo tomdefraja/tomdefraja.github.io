@@ -5,7 +5,7 @@ permalink: /blogs/Laste/
 thumbnail: '/images/Laste/Day1/Day1-001.jpeg'
 hero_image: '/images/Laste/Day7/Day7-001.jpeg'
 modified: 2025-09-05
-published: true
+published: false
 location: 'Western Europe'
 author:
   - name: Tom De Fraja

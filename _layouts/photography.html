@@ -41,14 +41,13 @@ title: "Photography"
     <div class="filter-content" id="type" style="display:none;">
       <div class="tabs" role="tablist">
         <button class="tab-button active" role="tab" data-tab="astro">Deep Sky</button>
-        <button class="tab-button" role="tab" data-tab="sky">Sky</button>
-        <button class="tab-button" role="tab" data-tab="snow">Snow</button>
         <button class="tab-button" role="tab" data-tab="land">Land</button>
         <button class="tab-button" role="tab" data-tab="sea">Sea</button>
+        <button class="tab-button" role="tab" data-tab="people">People and Places</button>
         <span class="sub-tab-underline"></span>
       </div>
 
-      {% assign types = "astro,sky,snow,land,sea" | split: "," %}
+      {% assign types = "astro,people,land,sea" | split: "," %}
       {% for t in types %}
         <div class="tab-content {% if t == 'astro' %}active{% endif %}" id="{{ t }}">
           <div class="photo_grid">

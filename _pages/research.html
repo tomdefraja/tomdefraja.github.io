@@ -1,0 +1,58 @@
+---
+layout: archive
+title: "Research"
+subtitle: "Below you can find a collection of my publications, talks, and theses"
+permalink: /research/
+background_image: "/images/research-background.jpg"
+author_profile: true
+---
+
+{% if site.author.googlescholar %}
+  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
+{% endif %}
+
+{% include base_path %}
+
+<!-- New style rendering if publication categories are defined -->
+{% if site.publication_category %}
+  {% for category in site.publication_category  %}
+    {% assign title_shown = false %}
+    {% for post in site.publications reversed %}
+      {% if post.category != category[0] %}
+        {% continue %}
+      {% endif %}
+      {% unless title_shown %}
+        <h2>{{ category[1].title }}</h2><hr />
+        {% assign title_shown = true %}
+      {% endunless %}
+      {% include archive-single.html %}
+    {% endfor %}
+  {% endfor %}
+{% else %}
+  {% for post in site.publications reversed %}
+    {% include archive-single.html %}
+  {% endfor %}
+{% endif %}
+
+<hr /><h2>Talks</h2>
+{% for post in site.talks reversed %}
+  {% include archive-single.html %}
+{% endfor %}
+
+<hr /><h2>Theses</h2>
+{% for post in site.theses reversed %}
+  {% include archive-single.html %}
+{% endfor %}
+
+
+<!-- <a href="{{ base_path }}{{ post.url }}" rel="permalink"><i class="fa fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a> -->
+<!-- 
+<h2>Theses</h2><hr />
+{% for post in site.theses reversed %}
+  {% include archive-single.html %}
+{% endfor %} -->
+
+<!-- <p style="text-decoration:underline;"><a href="/talkmap.html">See a map of all the places I've given a talk!</a></p>
+
+<iframe src="/talkmap/map.html" height="400" width="850" style="border:none;"></iframe> -->
+

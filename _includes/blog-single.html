@@ -1,0 +1,91 @@
+<!-- <article class="blog_card">
+  <a href="{{ include.blog.url | relative_url }}" class="blog_card__image-link">
+    <img 
+      src="{{ include.blog.thumbnail | relative_url }}" 
+      alt="{{ include.blog.title }}"
+      class="blog_card__image"
+    />
+  </a>
+
+  <div class="blog_card__content">
+    <h2 class="blog_card__title">
+      <a href="{{ include.blog.url | relative_url }}">{{ include.blog.title }}</a>
+    </h2>
+
+    <p class="blog_card__meta">
+      {{ include.blog.date | date: "%B %-d, %Y" }}
+    </p>
+
+    {% if include.blog.excerpt %}
+      <p class="blog_card__excerpt">{{ include.blog.excerpt | strip_html | truncatewords: 30 }}</p>
+    {% endif %}
+
+    {% if include.blog.location or include.blog.type %}
+      <p class="blog_card__tags">
+        {% if include.blog.location %}
+          <span class="blog_card__tag">{{ include.blog.location }}</span>
+        {% endif %}
+        {% if include.blog.type %}
+          <span class="blog_card__tag">
+            {% if include.blog.type == 'foot' %}<i class="fas fa-person-hiking"></i> Foot
+            {% elsif include.blog.type == 'bike' %}<i class="fas fa-bicycle"></i> Bike
+            {% endif %}
+          </span>
+        {% endif %}
+      </p>
+    {% endif %}
+
+    <a href="{{ include.blog.url | relative_url }}" class="blog_card__read-more">Read more</a>
+  </div>
+</article> -->
+
+<article class="blog_card">
+  <div class="blog_card__image-wrapper">
+    <a href="{{ include.blog.url | relative_url }}" class="blog_card__image-link">
+      <img 
+        src="{{ include.blog.thumbnail | relative_url }}" 
+        alt="{{ include.blog.title }}"
+        class="blog_card__image"
+      />
+    </a>
+
+    <!-- Tags overlaid on image -->
+    <div class="blog_card__image-tags blog_card__image-tags--top">
+      {% if include.blog.location %}
+        <button class="blog_card__img-tag" data-filter-type="country" data-filter-value="{{ include.blog.country | downcase }}">
+          {{ include.blog.location }}
+        </button>
+      {% endif %}
+      {% if include.blog.type %}
+        <button class="blog_card__img-tag" data-filter-type="type" data-filter-value="{{ include.blog.type }}">
+          {% if include.blog.type == 'foot' %}<i class="fas fa-person-hiking"></i> Foot
+          {% elsif include.blog.type == 'bike' %}<i class="fas fa-bicycle"></i> Bike
+          {% endif %}
+        </button>
+      {% endif %}
+    </div>
+
+    <!-- Likes overlaid on image bottom -->
+    <div class="blog_card__image-tags blog_card__image-tags--bottom">
+      <span class="blog_card__img-tag blog_card__img-tag--likes">
+        <i class="fas fa-heart"></i> 0
+      </span>
+    </div>
+  </div>
+
+  <div class="blog_card__content">
+    <h2 class="blog_card__title">
+      <a href="{{ include.blog.url | relative_url }}">{{ include.blog.title }}</a>
+    </h2>
+
+    <p class="blog_card__meta">
+      {{ include.blog.date | date: "%B %-d, %Y" }}
+    </p>
+
+    {% if include.blog.excerpt %}
+      <p class="blog_card__excerpt">{{ include.blog.excerpt | strip_html | truncatewords: 30 }}</p>
+    {% endif %}
+
+    <a href="{{ include.blog.url | relative_url }}" class="blog_card__read-more">Read more</a>
+  </div>
+</article>

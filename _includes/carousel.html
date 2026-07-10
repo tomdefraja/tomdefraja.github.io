@@ -1,0 +1,24 @@
+{% assign images = site.data.carousels[include.carousel_file][include.carousel_id] %}
+
+{% if images %}
+<div class="image-gallery">
+  {% for image in images %}
+    <figure>
+      <div class="image-frame">
+        <a href="{{ image.url }}" target="_blank">
+          <img src="{{ image.url }}" alt="{{ image.caption }}">
+        </a>
+      </div>
+
+      <!-- {% if image.caption %}
+        <figcaption>{{ image.caption }}</figcaption>
+      {% endif %} -->
+    </figure>
+  {% endfor %}
+</div>
+{% else %}
+  <p>
+    No images found for gallery '{{ include.carousel_id }}' in file '{{ include.carousel_file }}'.
+    Available keys: {{ site.data.carousels[include.carousel_file] | keys | join: ", " }}
+  </p>
+{% endif %}

@@ -1,0 +1,43 @@
+---
+layout: compress
+---
+
+{% include base_path %}
+
+<!doctype html>
+<html lang="{{ site.locale | slice: 0,2 }}" class="no-js"{% if site.site_theme == "dark" %} data-theme="dark"{% endif %}>
+  <head>
+    {% include head.html %}
+    {% include head/custom.html %}
+  </head>
+
+  <!-- <body class="{% if page.background_image %}has-bg-image{% endif %}"{% if page.background_image %} style="background-image: url('{{ page.background_image | relative_url }}'); background-size: cover; background-position: center; background-attachment: fixed; background-repeat: no-repeat;"{% endif %}> -->
+  <body class="{% if page.background_image %}has-bg-image{% endif %}" {% if page.background_image %}data-bg="{{ page.background_image | relative_url }}"{% endif %}></body>
+    {% include browser-upgrade.html %}
+    {% include masthead.html %}
+
+    {{ content }}
+
+    <div class="page__footer">
+      <footer>
+        {% include footer/custom.html %}
+        {% include footer.html %}
+      </footer>
+    </div>
+
+    {% include scripts.html %}
+
+    <div id="lightbox" class="lightbox hidden">
+      <span class="close">&times;</span>
+      <span class="prev">&#10094;</span>
+      <span class="next">&#10095;</span>
+      <img id="lightbox-img" src="">
+      <div id="lightbox-caption"></div>
+    </div>
+    <script>
+      const body = document.body;
+      const bg = body.getAttribute('data-bg');
+      if (bg) body.style.setProperty('--bg-image', `url('${bg}')`);
+    </script>
+  </body>
+</html>

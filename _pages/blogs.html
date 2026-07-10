@@ -1,0 +1,16 @@
+---
+layout: blogs
+permalink: /blogs/
+title: "Writings"
+subtitle: "Below you can find a collection of my writings. They are mostly raw and unedited, but I hope you enjoy that! They may also be accompanied by photos."
+background_image: "/images/writing-background.jpg"
+author_profile: false
+---
+
+{% include base_path %}
+
+<div class="blog_grid">
+  {% for blog in site.blogs %}
+    {% include blog-single.html blog=blog %}
+  {% endfor %}
+</div>

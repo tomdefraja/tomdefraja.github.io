@@ -1,0 +1,34 @@
+---
+layout: default
+---
+
+{% if page.url != "/" and site.breadcrumbs %}
+  {% unless paginator %}
+    {% include breadcrumbs.html %}
+  {% endunless %}
+{% endif %}
+
+{% if page.title %}
+<div class="title-card">
+  <div class="title-wrapper">
+    <h1 class="page__title" itemprop="headline">
+      {{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}
+    </h1>
+    {% if page.subtitle %}
+    <h3 class="page__subtitle">
+      {{ page.subtitle | markdownify | remove: "<p>" | remove: "</p>" }}
+    </h3>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="page-card-wrapper">
+  <div id="main" role="main">
+    <article class="page">
+      <div class="archive">
+        {{ content }}
+      </div>
+    </article>
+  </div>
+</div>

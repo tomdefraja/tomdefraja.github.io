@@ -20,11 +20,10 @@ html, body {
 // ── 2. Background image — rendered in ::before so we can blur it ──
 
 body.has-bg-image {
-  background-image: none !important; // ::before handles the image
+  background-image: none !important;
   background-color: transparent;
   min-height: 100vh;
   margin: 0;
-
   display: flex;
   flex-direction: column;
 }
@@ -33,12 +32,12 @@ body.has-bg-image::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: var(--bg-image); // set via JS in default.html
+  background-image: var(--bg-image);
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
   filter: blur(3px);
-  transform: scale(1.05); // prevents white halo at edges from blur
+  transform: scale(1.05);
   z-index: -1;
   pointer-events: none;
 }
@@ -50,13 +49,13 @@ body.has-bg-image::after {
   content: '';
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.4); // adjust opacity to taste
+  background: rgba(255, 255, 255, 0.4);
   z-index: 0;
   pointer-events: none;
 }
 
 
-// ── 4. Stacking — all content must sit above the ::after overlay ──
+// ── 4. Stacking — all content sits above the ::after overlay ──
 
 body.has-bg-image .title-card,
 body.has-bg-image .page-card-wrapper,
@@ -71,8 +70,8 @@ body.has-bg-image .page__footer {
 
 body.has-bg-image .title-card {
   max-width: 1060px;
-  width: calc(100% - 4rem);
-  margin: 80px auto 1.5rem auto; // 80px clears the fixed masthead
+  width: calc(100% - 8rem);
+  margin: 80px auto 1.5rem auto;
   padding: 1.5rem 0;
   text-align: center;
 
@@ -89,19 +88,21 @@ body.has-bg-image .title-card {
 }
 
 
-// ── 6. Card — single white box wrapping all content ──
+// ── 6. Card — single box wrapping all page content ──
 
 body.has-bg-image .page-card-wrapper {
   max-width: 1060px;
-  width: calc(100% - 4rem);
-  margin: 0 auto 0 auto;
+  width: calc(100% - 8rem);
+  margin: 0 auto 2rem auto;
   background-color: var(--global-bg-color);
   border-radius: 2px;
   box-shadow: 0 8px 48px rgba(0, 0, 0, 0.22);
-  padding: 1em 0;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-// Strip background from all inner elements so they don't double-up
+// Strip backgrounds from inner elements so nothing double-renders
 body.has-bg-image .page-card-wrapper .page__content,
 body.has-bg-image .page-card-wrapper .page__inner-wrap,
 body.has-bg-image .page-card-wrapper article,
@@ -114,6 +115,9 @@ body.has-bg-image .page-card-wrapper .blog_grid {
   box-shadow: none !important;
   border-radius: 0 !important;
   padding: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 
@@ -121,7 +125,7 @@ body.has-bg-image .page-card-wrapper .blog_grid {
 
 body.has-bg-image .page__footer {
   background: transparent !important;
-  margin-top: auto; // flex pushes it to the bottom
+  margin-top: auto;
 
   footer, p, span, div, li, a {
     color: var(--global-bg-color-dark) !important;
@@ -134,77 +138,7 @@ body.has-bg-image .page__footer {
 }
 
 
-// ── 8. Mobile — card fills full width, no rounded corners ──
-
-@media (max-width: 640px) {
-  body.has-bg-image .title-card {
-    width: 100%;
-    margin-top: 70px;
-    padding: 1rem 1.5rem;
-    text-align: center;
-
-    .page__title {
-      font-size: 2rem;
-    }
-
-    .page__subtitle {
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-      // Remove any max-width that might be squashing it
-      max-width: 100%;
-      word-wrap: break-word;
-    }
-  }
-
-  body.has-bg-image .page-card-wrapper {
-    width: 100%;
-    margin: 0;
-    margin-bottom: 0;
-    border-radius: 0;
-    // This is the key fix — text going off screen means no horizontal padding
-    padding: 1.5rem 1.25rem;
-    box-shadow: none;
-    // Prevent any child element overflowing
-    overflow-x: hidden;
-  }
-
-  // Catch any inner elements that might be overflowing
-  body.has-bg-image .page-card-wrapper * {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-}
-
-@media (max-width: 640px) {
-  // Force padding on the card itself
-  body.has-bg-image .page-card-wrapper {
-    padding: 1.5rem 1.25rem !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    overflow-x: hidden !important;
-  }
-
-  // The inner elements were having padding stripped by the !important
-  // zero-out rule — restore enough for text not to clip
-  body.has-bg-image .page-card-wrapper .page__content,
-  body.has-bg-image .page-card-wrapper .page__inner-wrap,
-  body.has-bg-image .page-card-wrapper article,
-  body.has-bg-image .page-card-wrapper .page,
-  body.has-bg-image .page-card-wrapper #main {
-    padding: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    overflow-x: hidden !important;
-  }
-
-  // Catch anything still escaping
-  body.has-bg-image .page-card-wrapper * {
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-}
-
+// ── 8. Map ──
 
 #map {
   height: 600px;
@@ -212,19 +146,55 @@ body.has-bg-image .page__footer {
   border-radius: 4px;
 }
 
-// iPad formatting
+
+// ── 9. Tablet (641px–1024px) ──
+
 @media (min-width: 641px) and (max-width: 1024px) {
   body.has-bg-image .title-card {
-    width: calc(100% - 8rem);
+    width: calc(100% - 4rem);
     margin-top: 60px;
-    padding: 1rem 1.5rem;
   }
 
   body.has-bg-image .page-card-wrapper {
-    width: calc(100% - 8rem);
-    padding: 1.5rem 2rem;
-    margin-top: 0;
-    margin-bottom: 2rem;
+    width: calc(100% - 4rem);
   }
 }
 
+
+// ── 10. Mobile (≤640px) ──
+
+@media (max-width: 640px) {
+  body.has-bg-image .title-card {
+    width: 100%;
+    margin: 60px auto 1rem auto;
+    padding: 1rem 1.25rem;
+
+    .page__title {
+      font-size: 2rem;
+    }
+
+    .page__subtitle {
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      word-wrap: break-word;
+    }
+  }
+
+  body.has-bg-image .page-card-wrapper {
+    width: 100% !important;
+    margin: 0 0 1rem 0 !important;
+    padding: 1.25rem 1.25rem !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  // Ensure all children respect the card boundary
+  body.has-bg-image .page-card-wrapper * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+}

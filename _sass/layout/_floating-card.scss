@@ -150,34 +150,9 @@ body.has-bg-image .page__footer {
 // ── 9. Tablet (641px–1024px) ──
 
 @media (min-width: 641px) and (max-width: 1024px) {
-  body.has-bg-image .title-card {
-    width: calc(100% - 4rem);
-    margin-top: 60px;
-  }
-
+  body.has-bg-image .title-card,
   body.has-bg-image .page-card-wrapper {
     width: calc(100% - 4rem);
-    padding: 1.5rem 2rem !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  body.has-bg-image .page-card-wrapper .page__content,
-  body.has-bg-image .page-card-wrapper .page__inner-wrap,
-  body.has-bg-image .page-card-wrapper article,
-  body.has-bg-image .page-card-wrapper .page,
-  body.has-bg-image .page-card-wrapper #main {
-    padding: 0.5rem !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  body.has-bg-image .page-card-wrapper * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    word-wrap: break-word !important;
   }
 }
 
@@ -187,45 +162,18 @@ body.has-bg-image .page__footer {
 @media (max-width: 640px) {
   body.has-bg-image .title-card {
     width: 100%;
-    margin: 60px auto 1rem auto;
+    margin: 60px 0 1rem 0;
     padding: 1rem 1.25rem;
 
     .page__title { font-size: 2rem; }
-
-    .page__subtitle {
-      font-size: 0.85rem;
-      margin-top: 0.4rem;
-    }
+    .page__subtitle { font-size: 0.85rem; margin-top: 0.4rem; }
   }
 
   body.has-bg-image .page-card-wrapper {
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 1.25rem !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  // On mobile, restore padding to inner elements
-  // The card padding alone handles spacing — inner elements must not be zero
-  body.has-bg-image .page-card-wrapper .page__content,
-  body.has-bg-image .page-card-wrapper .page__inner-wrap,
-  body.has-bg-image .page-card-wrapper article,
-  body.has-bg-image .page-card-wrapper .page,
-  body.has-bg-image .page-card-wrapper #main {
-    padding: 0.5rem !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-  }
-
-  body.has-bg-image .page-card-wrapper * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
+    width: 100%;
+    margin: 0;
+    padding: 1.25rem;
+    border-radius: 0;
+    box-shadow: none;
   }
 }

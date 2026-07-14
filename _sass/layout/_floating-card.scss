@@ -139,22 +139,62 @@ body.has-bg-image .page__footer {
 @media (max-width: 640px) {
   body.has-bg-image .title-card {
     width: 100%;
-    margin-top: 60px;
-    padding: 1rem 1.25rem;
+    margin-top: 70px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+
+    .page__title {
+      font-size: 2rem;
+    }
+
+    .page__subtitle {
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      // Remove any max-width that might be squashing it
+      max-width: 100%;
+      word-wrap: break-word;
+    }
   }
 
   body.has-bg-image .page-card-wrapper {
     width: 100%;
+    margin: 0;
     margin-bottom: 0;
     border-radius: 0;
+    // This is the key fix — text going off screen means no horizontal padding
     padding: 1.5rem 1.25rem;
     box-shadow: none;
+    // Prevent any child element overflowing
+    overflow-x: hidden;
+  }
+
+  // Catch any inner elements that might be overflowing
+  body.has-bg-image .page-card-wrapper * {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
+
 
 #map {
   height: 600px;
   width: 100%;
   border-radius: 4px;
+}
+
+// iPad formatting
+@media (min-width: 641px) and (max-width: 1024px) {
+  body.has-bg-image .title-card {
+    width: calc(100% - 8rem);
+    margin-top: 60px;
+    padding: 1rem 1.5rem;
+  }
+
+  body.has-bg-image .page-card-wrapper {
+    width: calc(100% - 8rem);
+    padding: 1.5rem 2rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
 }
 

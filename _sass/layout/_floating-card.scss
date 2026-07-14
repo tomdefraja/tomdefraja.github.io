@@ -175,6 +175,36 @@ body.has-bg-image .page__footer {
   }
 }
 
+@media (max-width: 640px) {
+  // Force padding on the card itself
+  body.has-bg-image .page-card-wrapper {
+    padding: 1.5rem 1.25rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  // The inner elements were having padding stripped by the !important
+  // zero-out rule — restore enough for text not to clip
+  body.has-bg-image .page-card-wrapper .page__content,
+  body.has-bg-image .page-card-wrapper .page__inner-wrap,
+  body.has-bg-image .page-card-wrapper article,
+  body.has-bg-image .page-card-wrapper .page,
+  body.has-bg-image .page-card-wrapper #main {
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+  }
+
+  // Catch anything still escaping
+  body.has-bg-image .page-card-wrapper * {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 
 #map {
   height: 600px;

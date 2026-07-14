@@ -14,8 +14,6 @@ I recently completed my PhD at Heriot-Watt University working under Richard Szab
 
 More recently I am interested in ecology/mathematical ecology, and persuing a career in this field. I am interested in the concept of rewilding, and how humans interact with surrounding ecosystems.
 
-Before changing careers, I will take some time away from work. From November to April, I cycled around central and southern Africa, around 10,000km, from Cameroon to Cape Town. I hope to <a href="/blogs">write</a> some small pieces about it soon. In July, I will start walking around some of the coast of the UK and Ireland.
+Before changing careers, I will take some time away from work. From November to April, I cycled around central and southern Africa, around 10,000km, from Cameroon to Cape Town. I hope to <a href="/blogs">write</a> some small pieces about it soon. In July, I will start walking around some of the coast of the UK and Ireland. You can track my progress <a href="/map">here</a>
 
 You can email me at thomasdefraja (at) gmail (dot) com.
-
-

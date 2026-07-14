@@ -2,6 +2,10 @@
 layout: default
 ---
 
+<!-- Leaflet CSS must load before the map div -->
+<link rel="stylesheet" href="{{ '/assets/css/leaflet.css' | relative_url }}" />
+
+
 {% if page.title %}
 <div class="title-card">
   <div class="title-wrapper">
@@ -17,22 +21,21 @@ layout: default
   <div id="map"></div>
 </div>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+<!-- Leaflet JS then map initialisation after the div exists -->
+<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 <script>
-  const map = L.map('map').setView([54.5, -3.5], 6); // centred on Britain
+  var map = L.map('map').setView([54.5, -3.5], 6);
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
-  subdomains: 'abcd',
-  maxZoom: 19
-}).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
 
   fetch('{{ "/data/spots.json" | relative_url }}')
-    .then(r => r.json())
-    .then(spots => {
-      spots.forEach(spot => {
+    .then(function(r) { return r.json(); })
+    .then(function(spots) {
+      spots.forEach(function(spot) {
         L.circleMarker([spot.lat, spot.lng], {
           radius: 6,
           fillColor: '#2e7d4f',

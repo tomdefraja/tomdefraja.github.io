@@ -1,0 +1,43 @@
+---
+layout: default
+---
+
+{% if page.title %}
+<div class="title-card">
+  <div class="title-wrapper">
+    <h1 class="page__title">{{ page.title }}</h1>
+    {% if page.subtitle %}
+    <h3 class="page__subtitle">{{ page.subtitle }}</h3>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="page-card-wrapper">
+  <div id="map"></div>
+</div>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+  const map = L.map('map').setView([54.5, -3.5], 6); // centred on Britain
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  fetch('{{ "/data/spots.json" | relative_url }}')
+    .then(r => r.json())
+    .then(spots => {
+      spots.forEach(spot => {
+        L.circleMarker([spot.lat, spot.lng], {
+          radius: 6,
+          fillColor: '#2e7d4f',
+          color: '#fff',
+          weight: 1.5,
+          fillOpacity: 0.9
+        }).addTo(map);
+      });
+    });
+</script>

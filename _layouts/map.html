@@ -1,0 +1,48 @@
+---
+layout: default
+---
+
+<!-- Leaflet CSS must load before the map div -->
+<link rel="stylesheet" href="{{ '/assets/css/leaflet.css' | relative_url }}" />
+
+
+{% if page.title %}
+<div class="title-card">
+  <div class="title-wrapper">
+    <h1 class="page__title">{{ page.title }}</h1>
+    {% if page.subtitle %}
+    <h3 class="page__subtitle">{{ page.subtitle }}</h3>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+<div class="page-card-wrapper">
+  <div id="map"></div>
+</div>
+
+<!-- Leaflet JS then map initialisation after the div exists -->
+<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
+<script>
+  var map = L.map('map').setView([54.5, -3.5], 6);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  fetch('{{ "/data/spots.json" | relative_url }}')
+    .then(function(r) { return r.json(); })
+    .then(function(spots) {
+      spots.forEach(function(spot) {
+        L.circleMarker([spot.lat, spot.lng], {
+          radius: 6,
+          fillColor: '#2e7d4f',
+          color: '#fff',
+          weight: 1.5,
+          fillOpacity: 0.9
+        }).addTo(map);
+      });
+    });
+</script>

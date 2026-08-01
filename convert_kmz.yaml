@@ -1,0 +1,34 @@
+name: Convert KMZ to JSON
+
+on:
+  push:
+    paths:
+      - 'data/camps.kmz'  # only runs when you upload a new kmz
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install lxml
+
+      - name: Convert KMZ to JSON
+        run: python scripts/kmz_to_json.py
+
+      - name: Commit generated JSON
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data/spots.json
+          git diff --staged --quiet || git commit -m "update camp spots from kmz"
+          git push

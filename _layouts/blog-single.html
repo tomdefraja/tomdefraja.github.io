@@ -4,81 +4,51 @@ layout: default
 
 {% include base_path %}
 
-<div class="blogs-wrapper">
-
-  <header>
-    <div class="title-card">
-      <div class="title-wrapper">
-        <h1 class="page__title" itemprop="headline">
-          {{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}
-        </h1>
-
-        <p class="page__subtitle">
-          {% if page.author %}
-            by
-            {% for author in page.author %}
-              {% if forloop.last and forloop.index > 1 %}and {% endif %}
-              {{ author.name }}{% unless forloop.last %}, {% endunless %}
-            {% endfor %}
-          {% endif %}
-
-          {% if page.photographers %}
-            &middot; images by
-            {% for photographer in page.photographers %}
-              {% if forloop.last and forloop.index > 1 %}and {% endif %}
-              {{ photographer.name }}{% unless forloop.last %}, {% endunless %}
-            {% endfor %}
-          {% endif %}
-
-          {% if page.modified %}
-            &middot;
-            <time datetime="{{ page.modified | date: "%Y-%m-%d" }}">
-              {{ page.modified | date: "%B %d, %Y" }}
-            </time>
-          {% endif %}
-        </p>
-      </div>
-    </div>
-  </header>
-
-  <main class="blogs-page">
-    <article class="blog_page" itemscope itemtype="http://schema.org/CreativeWork">
-      {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
-      {% if page.excerpt %}<meta itemprop="description" content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
-      {% if page.date %}<meta itemprop="datePublished" content="{{ page.date | date: "%B %d, %Y" }}">{% endif %}
-      {% if page.modified %}<meta itemprop="dateModified" content="{{ page.modified | date: "%B %d, %Y" }}">{% endif %}
-
-      <div class="blog_page__inner-wrap">
-        <section class="blog_page__content" itemprop="text">
-          {{ content }}
-          {% if page.link %}
-            <div><a href="{{ page.link }}" class="btn">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>
-          {% endif %}
-        </section>
-
-        <footer class="blog_page__meta">
-          {% if site.data.ui-text[site.locale].meta_label %}
-            <h4 class="blog_page__meta-title">{{ site.data.ui-text[site.locale].meta_label }}</h4>
-          {% endif %}
-          {% include blog_page__taxonomy.html %}
-        </footer>
-
-        {% if page.share %}{% include social-share.html %}{% endif %}
-        {% include post_pagination.html %}
-      </div>
-    </article>
-
-    {% if page.id and page.related and site.related_posts.size > 0 %}
-      <div class="blog_page__related">
-        {% if site.data.ui-text[site.locale].related_label %}
-          <h4 class="blog_page__related-title">{{ site.data.ui-text[site.locale].related_label | default: "You May Also Enjoy" }}</h4>
-        {% endif %}
-        <div class="grid__wrapper">
-          {% for post in site.related_posts limit:4 %}
-            {% include archive-single.html type="grid" %}
-          {% endfor %}
-        </div>
-      </div>
+<div class="page-header">
+  {% if page.page_icon %}
+    <img class="page-header__graphic" src="{{ page.page_icon | relative_url }}" alt="">
+  {% endif %}
+  <h1 class="page__title">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</h1>
+  <p class="page__subtitle">
+    {% if page.author %}
+      by
+      {% for author in page.author %}
+        {% if forloop.last and forloop.index > 1 %}and {% endif %}
+        {{ author.name }}{% unless forloop.last %}, {% endunless %}
+      {% endfor %}
     {% endif %}
-  </main>
+    {% if page.photographers %}
+      &middot; images by
+      {% for photographer in page.photographers %}
+        {% if forloop.last and forloop.index > 1 %}and {% endif %}
+        {{ photographer.name }}{% unless forloop.last %}, {% endunless %}
+      {% endfor %}
+    {% endif %}
+    {% if page.modified %}
+      &middot; <time datetime="{{ page.modified | date: "%Y-%m-%d" }}">{{ page.modified | date: "%B %d, %Y" }}</time>
+    {% endif %}
+  </p>
+</div>
+
+<div class="page-content">
+  <article class="blog_page" itemscope itemtype="http://schema.org/CreativeWork">
+    {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.excerpt %}<meta itemprop="description" content="{{ page.excerpt | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
+    {% if page.date %}<meta itemprop="datePublished" content="{{ page.date | date: "%B %d, %Y" }}">{% endif %}
+    {% if page.modified %}<meta itemprop="dateModified" content="{{ page.modified | date: "%B %d, %Y" }}">{% endif %}
+
+    <section class="blog_page__content" itemprop="text">
+      {{ content }}
+      {% if page.link %}
+        <div><a href="{{ page.link }}" class="btn">{{ site.data.ui-text[site.locale].ext_link_label | default: "Direct Link" }}</a></div>
+      {% endif %}
+    </section>
+
+    <footer class="blog_page__meta">
+      {% include blog_page__taxonomy.html %}
+    </footer>
+
+    {% if page.share %}{% include social-share.html %}{% endif %}
+    {% include post_pagination.html %}
+  </article>
 </div>

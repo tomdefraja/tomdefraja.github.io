@@ -11,8 +11,7 @@ layout: compress
     {% include head/custom.html %}
   </head>
 
-  <!-- <body class="{% if page.background_image %}has-bg-image{% endif %}"{% if page.background_image %} style="background-image: url('{{ page.background_image | relative_url }}'); background-size: cover; background-position: center; background-attachment: fixed; background-repeat: no-repeat;"{% endif %}> -->
-  <body class="{% if page.background_image %}has-bg-image{% endif %}" {% if page.background_image %}data-bg="{{ page.background_image | relative_url }}"{% endif %}></body>
+  <body>
     {% include browser-upgrade.html %}
     {% include masthead.html %}
 
@@ -34,10 +33,5 @@ layout: compress
       <img id="lightbox-img" src="">
       <div id="lightbox-caption"></div>
     </div>
-    <script>
-      const body = document.body;
-      const bg = body.getAttribute('data-bg');
-      if (bg) body.style.setProperty('--bg-image', `url('${bg}')`);
-    </script>
   </body>
 </html>

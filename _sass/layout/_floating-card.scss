@@ -1,153 +1,92 @@
-// ═══════════════════════════════════════════════════════
-// FLOATING CARD LAYOUT
-// Active on pages with a background_image in front matter
-// (body gets class "has-bg-image" via default.html)
-// ═══════════════════════════════════════════════════════
-
-
-// ── 1. Reset html/body so no colour bleeds around the image ──
-
-html:has(body.has-bg-image) {
-  background-color: transparent !important;
-}
+// ═══════════════════════════════════════════════════
+// PAGE LAYOUT
+// Simple centred content, no floating card
+// ═══════════════════════════════════════════════════
 
 html, body {
   margin: 0;
   padding: 0;
+  background-color: #fff;
 }
 
+// ── Page header — graphic + title + subtitle ──
 
-// ── 2. Background image — rendered in ::before so we can blur it ──
-
-body.has-bg-image {
-  background-image: none !important; // ::before handles the image
-  background-color: transparent;
-  min-height: 100vh;
-  margin: 0;
-
-  display: flex;
-  flex-direction: column;
-}
-
-body.has-bg-image::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: var(--bg-image); // set via JS in default.html
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
-  filter: blur(3px);
-  transform: scale(1.05); // prevents white halo at edges from blur
-  z-index: -1;
-  pointer-events: none;
-}
-
-
-// ── 3. White wash overlay — sits above blurred image, below content ──
-
-body.has-bg-image::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.4); // adjust opacity to taste
-  z-index: 0;
-  pointer-events: none;
-}
-
-
-// ── 4. Stacking — all content must sit above the ::after overlay ──
-
-body.has-bg-image .title-card,
-body.has-bg-image .page-card-wrapper,
-body.has-bg-image .masthead,
-body.has-bg-image .page__footer {
-  position: relative;
-  z-index: 2;
-}
-
-
-// ── 5. Title card — floats freely over the background image ──
-
-body.has-bg-image .title-card {
-  max-width: 1060px;
-  width: calc(100% - 4rem);
-  margin: 80px auto 1.5rem auto; // 80px clears the fixed masthead
-  padding: 1.5rem 0;
+.page-header {
   text-align: center;
+  margin: 0 auto;
+  max-width: 860px;
+  padding: 3rem 1.5rem 1.5rem;
+
+  .page-header__graphic {
+    max-height: 120px;
+    width: auto;
+    margin-bottom: 1rem;
+  }
+  .page-header__graphic--large {
+    max-height: 220px;
+  }
 
   .page__title {
-    color: var(--global-bg-color-dark);
-    margin-bottom: 0;
+    font-size: 2.2rem;
+    margin: 0 0 0.4rem 0;
   }
 
   .page__subtitle {
-    color: var(--global-bg-color-dark);
-    font-size: 0.95rem;
-    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
   }
 }
 
+// ── Main content area ──
 
-// ── 6. Card — single white box wrapping all content ──
-
-body.has-bg-image .page-card-wrapper {
-  max-width: 1060px;
-  width: calc(100% - 4rem);
-  margin: 0 auto 0 auto;
-  background-color: var(--global-bg-color);
-  border-radius: 2px;
-  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.22);
-  padding: 1em 0;
-}
-
-// Strip background from all inner elements so they don't double-up
-body.has-bg-image .page-card-wrapper .page__content,
-body.has-bg-image .page-card-wrapper .page__inner-wrap,
-body.has-bg-image .page-card-wrapper article,
-body.has-bg-image .page-card-wrapper .page,
-body.has-bg-image .page-card-wrapper #main,
-body.has-bg-image .page-card-wrapper .sidebar,
-body.has-bg-image .page-card-wrapper .archive,
-body.has-bg-image .page-card-wrapper .blog_grid {
+.archive {
   background: transparent !important;
   box-shadow: none !important;
-  border-radius: 0 !important;
+  border: none !important;
   padding: 0 !important;
 }
 
+.page-content {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+}
 
-// ── 7. Footer — transparent, sits below the card ──
+// -- Page footer --
 
-body.has-bg-image .page__footer {
-  background: transparent !important;
-  margin-top: auto; // flex pushes it to the bottom
+body {
+  display: block; // remove the old flex column
+}
 
+.page__footer {
+  margin-top: 0;
+  background: var(--global-bg-color) !important;
+  
   footer, p, span, div, li, a {
-    color: var(--global-bg-color-dark) !important;
+    color: inherit !important;
     background: transparent !important;
-  }
-
-  a:hover {
-    color: #ffffff !important;
+    position: relative !important;
   }
 }
 
-
-// ── 8. Mobile — card fills full width, no rounded corners ──
+// ── Mobile ──
 
 @media (max-width: 640px) {
-  body.has-bg-image .title-card {
-    width: 100%;
-    margin-top: 60px;
-    padding: 1rem 1.25rem;
+  .page-header {
+    padding: 2rem 1.25rem 1rem;
+
+    .page-header__graphic {
+      max-height: 80px;
+    }
+
+    .page__title {
+      font-size: 1.7rem;
+    }
   }
 
-  body.has-bg-image .page-card-wrapper {
-    width: 100%;
-    margin-bottom: 0;
-    border-radius: 0;
-    padding: 1.5rem 1.25rem;
-    box-shadow: none;
+  .page-content {
+    padding: 1.5rem 1.25rem 3rem;
   }
 }
+

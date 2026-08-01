@@ -1,11 +1,9 @@
 ---
 layout: default
-title: "Writings"
 ---
 
 {% assign featured_countries = "Scotland,Thailand" | split: "," %}
 {% assign all_countries = site.blogs | map: "country" | uniq | sort %}
-
 {% assign other_countries = "" | split: "" %}
 {% for c in all_countries %}
   {% unless featured_countries contains c %}
@@ -13,28 +11,26 @@ title: "Writings"
   {% endunless %}
 {% endfor %}
 
-{{/* Title card — sits directly over background image, no white behind it */}}
-<div class="title-card">
-  <div class="title-wrapper">
-    <h1 class="page__title">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</h1>
-    {% if page.subtitle %}
-      <h3 class="page__subtitle">{{ page.subtitle | markdownify | remove: "<p>" | remove: "</p>" }}</h3>
-    {% endif %}
-  </div>
+<div class="page-header">
+  <h1 class="page__title">{{ page.title | markdownify | remove: "<p>" | remove: "</p>" }}</h1>
+  {% if page.page_icon %}
+    <img class="page-header__graphic" src="{{ page.page_icon | relative_url }}" alt="">
+  {% endif %}
+  {% if page.subtitle %}
+    <p class="page__subtitle">{{ page.subtitle }}</p>
+  {% endif %}
 </div>
 
-{{/* White card — contains all the blog content */}}
-<div class="page-card-wrapper">
-  <nav style="text-align: center;">
-    <div class="filter-tabs">
+<div class="page-content">
+  <nav style="text-align: center; margin-bottom: 1.5rem;">
+    <!-- <div class="filter-tabs">
       <button class="filter-tab active" data-filter="all">All</button>
       <button class="filter-tab" data-filter="type">By mode</button>
       <button class="filter-tab" data-filter="country">By country</button>
       <span class="tab-underline"></span>
-    </div>
+    </div> -->
   </nav>
 
-  <!-- ALL POSTS -->
   <div class="filter-content" id="all">
     <div class="blog_grid">
       {% assign all_blogs = site.blogs | where: "published", true | sort: "date" | reverse %}
@@ -44,7 +40,6 @@ title: "Writings"
     </div>
   </div>
 
-  <!-- TYPE FILTER -->
   <div class="filter-content" id="type" style="display:none;">
     <div class="tabs" role="tablist">
       <button class="tab-button active" role="tab" data-tab="foot">Foot</button>
@@ -54,27 +49,21 @@ title: "Writings"
     <div class="tab-content" id="foot" style="display:block;">
       <div class="blog_grid">
         {% assign foot_blogs = site.blogs | where: "type", "foot" | sort: "date" | reverse %}
-        {% for blog in foot_blogs %}
-          {% include blog-single.html blog=blog %}
-        {% endfor %}
+        {% for blog in foot_blogs %}{% include blog-single.html blog=blog %}{% endfor %}
       </div>
     </div>
     <div class="tab-content" id="bike" style="display:none;">
       <div class="blog_grid">
         {% assign bike_blogs = site.blogs | where: "type", "bike" | sort: "date" | reverse %}
-        {% for blog in bike_blogs %}
-          {% include blog-single.html blog=blog %}
-        {% endfor %}
+        {% for blog in bike_blogs %}{% include blog-single.html blog=blog %}{% endfor %}
       </div>
     </div>
   </div>
 
-  <!-- COUNTRY FILTER -->
   <div class="filter-content" id="country" style="display:none;">
     <div class="tabs country-tabs" role="tablist">
       {% for c in featured_countries %}
-        {% assign is_active = c == "Scotland" %}
-        <button class="tab-button {% if is_active %}active{% endif %}" role="tab" data-tab="{{ c | downcase }}">{{ c }}</button>
+        <button class="tab-button {% if c == 'Scotland' %}active{% endif %}" role="tab" data-tab="{{ c | downcase }}">{{ c }}</button>
       {% endfor %}
       <div class="dropdown">
         <button class="tab-button dropdown-toggle">More ▾</button>
@@ -90,9 +79,7 @@ title: "Writings"
       <div class="tab-content {% if c == 'Scotland' %}active{% endif %}" id="{{ c | downcase }}">
         <div class="blog_grid">
           {% assign country_blogs = site.blogs | where: "country", c | sort: "date" | reverse %}
-          {% for blog in country_blogs %}
-            {% include blog-single.html blog=blog %}
-          {% endfor %}
+          {% for blog in country_blogs %}{% include blog-single.html blog=blog %}{% endfor %}
         </div>
       </div>
     {% endfor %}

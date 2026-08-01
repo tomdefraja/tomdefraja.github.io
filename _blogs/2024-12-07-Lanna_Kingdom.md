@@ -7,7 +7,7 @@ hero_image: '/images/Lanna/Day6-Sunset-Tom.jpg'
 modified: 2025-09-05
 excerpt: 'Some pictures from a cycling trip in Northern Thailand'
 location: 'Thailand'
-published: true
+published: false
 country: Thailand
 author:
   - name: Tom De Fraja

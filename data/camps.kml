@@ -116,7 +116,7 @@
   <name>camps</name>
   <visibility>1</visibility>
   <ExtendedData xmlns:mwm="https://maps.me">
-    <mwm:lastModified>2026-08-01T12:46:10.991Z</mwm:lastModified>
+    <mwm:lastModified>2026-08-06T09:51:12.375Z</mwm:lastModified>
     <mwm:isDeleted>0</mwm:isDeleted>
     <mwm:uniqueId></mwm:uniqueId>
   </ExtendedData>
@@ -141,7 +141,7 @@
   </Placemark>
   <Placemark>
     <name>Portloe</name>
-    <description>Hammock night at Amanda’s </description>
+    <description>Hammock night at Amanda’s</description>
     <TimeStamp><when>2026-07-17T20:30:37.481Z</when></TimeStamp>
     <styleUrl>#placemark-red</styleUrl>
     <Point><coordinates>-4.8905879,50.220453</coordinates></Point>
@@ -302,14 +302,14 @@
     </ExtendedData>
   </Placemark>
   <Placemark>
-    <name>Portreath </name>
+    <name>Portreath</name>
     <description>Steve and Alex’s summerhouse</description>
     <TimeStamp><when>2026-07-29T22:48:08.484Z</when></TimeStamp>
     <styleUrl>#placemark-red</styleUrl>
     <Point><coordinates>-5.2202411,50.261137</coordinates></Point>
     <ExtendedData xmlns:mwm="https://maps.me">
       <mwm:name>My Position</mwm:name>
-      <mwm:customName>Portreath </mwm:customName>
+      <mwm:customName>Portreath</mwm:customName>
       <mwm:scale>15</mwm:scale>
       <mwm:visibility>1</mwm:visibility>
       <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>

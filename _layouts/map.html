@@ -100,7 +100,21 @@ layout: default
     });
 </script>
 
-<!-- Leaflet JS then map initialisation after the div exists -->
+
+<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
+
+<script>
+  console.log("Leaflet:", typeof L);
+
+  var map = L.map('map').setView([50.2, -5.1], 9);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+</script>
+
+
+<!-- Leaflet JS then map initialisation after the div exists
 <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 <script>
   var map = L.map('map').setView([50.2, -5.1], 9); // fallback: west Cornwall
@@ -187,4 +201,4 @@ layout: default
     .catch(function (err) {
       console.error('Could not load camp spots:', err);
     });
-</script>
+</script> -->

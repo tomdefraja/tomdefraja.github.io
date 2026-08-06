@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+  <Style id="placemark-red">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-red.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-blue">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-blue.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-purple">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-purple.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-yellow">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-yellow.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-pink">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-pink.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-brown">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-brown.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-green">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-green.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-orange">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-orange.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-deeppurple">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-deeppurple.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-lightblue">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-lightblue.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-cyan">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-cyan.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-teal">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-teal.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-lime">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-lime.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-deeporange">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-deeporange.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-gray">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-gray.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <Style id="placemark-bluegray">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.me/placemarks/placemark-bluegray.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
+  <name>camps</name>
+  <visibility>1</visibility>
+  <ExtendedData xmlns:mwm="https://maps.me">
+    <mwm:lastModified>2026-08-01T12:46:10.991Z</mwm:lastModified>
+    <mwm:isDeleted>0</mwm:isDeleted>
+    <mwm:uniqueId></mwm:uniqueId>
+  </ExtendedData>
+  <Placemark>
+    <name>The Gribbin</name>
+    <description>The Gribbin w/ Kobe</description>
+    <TimeStamp><when>2026-07-16T10:08:54.383Z</when></TimeStamp>
+    <styleUrl>#placemark-orange</styleUrl>
+    <Point><coordinates>-4.6731301,50.316972</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:featureTypes>
+        <mwm:value>tourism-information-board</mwm:value>
+      </mwm:featureTypes>
+      <mwm:name>The Gribbin</mwm:name>
+      <mwm:customName>The Gribbin</mwm:customName>
+      <mwm:scale>18</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Portloe</name>
+    <description>Hammock night at Amanda’s </description>
+    <TimeStamp><when>2026-07-17T20:30:37.481Z</when></TimeStamp>
+    <styleUrl>#placemark-red</styleUrl>
+    <Point><coordinates>-4.8905879,50.220453</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>Portloe</mwm:name>
+      <mwm:customName>Portloe</mwm:customName>
+      <mwm:scale>15</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Callum’s</name>
+    <TimeStamp><when>2026-07-18T23:43:36.050Z</when></TimeStamp>
+    <styleUrl>#placemark-red</styleUrl>
+    <Point><coordinates>-5.0949662,50.155856</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>My Position</mwm:name>
+      <mwm:customName>Callum’s</mwm:customName>
+      <mwm:scale>12</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Bosahan Cove</name>
+    <TimeStamp><when>2026-07-20T18:35:18.397Z</when></TimeStamp>
+    <styleUrl>#placemark-orange</styleUrl>
+    <Point><coordinates>-5.1143025,50.094684</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>My Position</mwm:name>
+      <mwm:customName>Bosahan Cove</mwm:customName>
+      <mwm:scale>9</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Sculpture Park</name>
+    <TimeStamp><when>2026-07-21T19:46:25.646Z</when></TimeStamp>
+    <styleUrl>#placemark-orange</styleUrl>
+    <Point><coordinates>-5.0994401,50.015889</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:featureTypes>
+        <mwm:value>tourism-attraction</mwm:value>
+        <mwm:value>leisure-park</mwm:value>
+      </mwm:featureTypes>
+      <mwm:name>Sculpture Park</mwm:name>
+      <mwm:customName>Sculpture Park</mwm:customName>
+      <mwm:scale>18</mwm:scale>
+      <mwm:icon>Sights</mwm:icon>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Trevedden</name>
+    <description>Airbnb from Ellie</description>
+    <TimeStamp><when>2026-07-22T06:42:55.807Z</when></TimeStamp>
+    <styleUrl>#placemark-red</styleUrl>
+    <Point><coordinates>-5.1929,49.999285</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:featureTypes>
+        <mwm:value>place-isolated_dwelling</mwm:value>
+      </mwm:featureTypes>
+      <mwm:name>Trevedden</mwm:name>
+      <mwm:customName>Trevedden</mwm:customName>
+      <mwm:scale>18</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Porthleven</name>
+    <TimeStamp><when>2026-07-23T22:44:59.946Z</when></TimeStamp>
+    <styleUrl>#placemark-orange</styleUrl>
+    <Point><coordinates>-5.3316916,50.090356</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>Porthleven</mwm:name>
+      <mwm:customName>Porthleven</mwm:customName>
+      <mwm:scale>11</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Penzance</name>
+    <TimeStamp><when>2026-07-24T21:06:18.212Z</when></TimeStamp>
+    <styleUrl>#placemark-red</styleUrl>
+    <Point><coordinates>-5.5556731,50.108057</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>My Position</mwm:name>
+      <mwm:customName>Penzance</mwm:customName>
+      <mwm:scale>18</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Pendower</name>
+    <description>With Lydia</description>
+    <TimeStamp><when>2026-07-25T23:25:32.338Z</when></TimeStamp>
+    <styleUrl>#placemark-orange</styleUrl>
+    <Point><coordinates>-5.6740477,50.035704</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>My Position</mwm:name>
+      <mwm:customName>Pendower</mwm:customName>
+      <mwm:scale>17</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Portheras</name>
+    <TimeStamp><when>2026-07-26T18:23:33.043Z</when></TimeStamp>
+    <styleUrl>#placemark-orange</styleUrl>
+    <Point><coordinates>-5.6589415,50.163481</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>My Position</mwm:name>
+      <mwm:customName>Portheras</mwm:customName>
+      <mwm:scale>17</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>St Ives</name>
+    <description>At Rob and Alice’s with Ruphus, Woodie, Heathie, Birdie</description>
+    <TimeStamp><when>2026-07-27T22:34:17.319Z</when></TimeStamp>
+    <styleUrl>#placemark-red</styleUrl>
+    <Point><coordinates>-5.4795483,50.207245</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>My Position</mwm:name>
+      <mwm:customName>St Ives</mwm:customName>
+      <mwm:scale>13</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+  <Placemark>
+    <name>Portreath </name>
+    <description>Steve and Alex’s summerhouse</description>
+    <TimeStamp><when>2026-07-29T22:48:08.484Z</when></TimeStamp>
+    <styleUrl>#placemark-red</styleUrl>
+    <Point><coordinates>-5.2202411,50.261137</coordinates></Point>
+    <ExtendedData xmlns:mwm="https://maps.me">
+      <mwm:name>My Position</mwm:name>
+      <mwm:customName>Portreath </mwm:customName>
+      <mwm:scale>15</mwm:scale>
+      <mwm:visibility>1</mwm:visibility>
+      <mwm:lastModified>1970-01-01T00:00:00.000Z</mwm:lastModified>
+      <mwm:isDeleted>0</mwm:isDeleted>
+      <mwm:uniqueId></mwm:uniqueId>
+    </ExtendedData>
+  </Placemark>
+</Document>
+</kml>

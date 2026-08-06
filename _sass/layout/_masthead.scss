@@ -1,14 +1,18 @@
-// Static white masthead
 .masthead {
   position: static;
   background: #fff;
-  border-bottom: 1px solid #e0e0e0;
   box-shadow: none;
+
+  &__inner-wrap {
+    // max-width: 1200px;   // or whatever your content width is elsewhere
+    margin: 0 auto;
+    padding: 0 1rem;     // breathing room on both sides
+  }
 
   a,
   .masthead__menu-item a,
   .masthead__menu-item--lg a {
-    color: #222 !important;
+    color: var(--global-background-color-dark);
     text-shadow: none;
   }
 
@@ -18,7 +22,4 @@
     background: #222 !important;
   }
 
-  #theme-icon {
-    color: #222 !important;
-  }
 }

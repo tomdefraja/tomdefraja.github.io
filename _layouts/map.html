@@ -5,9 +5,8 @@ layout: default
 <!-- Leaflet CSS must load before the map div -->
 <link rel="stylesheet" href="{{ '/assets/css/leaflet.css' | relative_url }}" />
 
-
 {% if page.title %}
-<div class="title-card">
+<div class="title-card title-card--compact">
   <div class="title-wrapper">
     <h1 class="page__title">{{ page.title }}</h1>
     {% if page.subtitle %}
@@ -21,28 +20,171 @@ layout: default
   <div id="map"></div>
 </div>
 
+<div class="page-card-wrapper stats-section">
+  <h2 class="stats-section__title">Trip stats</h2>
+
+  <section class="stats-category">
+    <h3 class="stats-category__title">Distance</h3>
+    <div class="stats-category__stats" data-category="distance"></div>
+    <div class="stats-charts">
+      <img src="{{ '/images/stats/distance_over_time.png' | relative_url }}" alt="Distance walked per day, with 7-day average" loading="lazy">
+      <img src="{{ '/images/stats/cumulative_distance.png' | relative_url }}" alt="Cumulative distance walked over the trip" loading="lazy">
+      <img src="{{ '/images/stats/distance_histogram.png' | relative_url }}" alt="Distribution of daily distances walked" loading="lazy">
+    </div>
+  </section>
+
+  <section class="stats-category">
+    <h3 class="stats-category__title">Spend</h3>
+    <div class="stats-category__stats" data-category="spend"></div>
+    <div class="stats-charts">
+      <img src="{{ '/images/stats/spend_breakdown.png' | relative_url }}" alt="Spend by category" loading="lazy">
+      <img src="{{ '/images/stats/cumulative_spend.png' | relative_url }}" alt="Cumulative spend over the trip" loading="lazy">
+    </div>
+  </section>
+
+  <section class="stats-category">
+    <h3 class="stats-category__title">Swims</h3>
+    <div class="stats-category__stats" data-category="swims"></div>
+    <div class="stats-charts">
+      <img src="{{ '/images/stats/swims_over_time.png' | relative_url }}" alt="Swims per day, with 7-day average" loading="lazy">
+      <img src="{{ '/images/stats/cumulative_swims.png' | relative_url }}" alt="Cumulative swims over the trip" loading="lazy">
+      <img src="{{ '/images/stats/water_temp.png' | relative_url }}" alt="Water temperature over the trip" loading="lazy">
+    </div>
+  </section>
+
+  <p class="stats-section__footnote">
+    Generated automatically from the trip log.
+    <!-- <a href="{{ '/assets/reports/walk_stats.html' | relative_url }}">See the full R report &rarr;</a> -->
+  </p>
+</div>
+
+<script>
+  // Each category section above has a data-category attribute; this maps
+  // that to which fields to pull out of walk_stats_summary.json and how
+  // to label/format them. Add a new category on the page and a matching
+  // entry here -- no other JS changes needed.
+  var CATEGORY_STATS = {
+    distance: [
+      { label: 'Total distance', key: 'total_km', suffix: ' km' },
+      { label: 'Avg. per day', key: 'avg_km_per_day', suffix: ' km' }
+    ],
+    spend: [
+      { label: 'Total spend', key: 'total_gbp', prefix: '£' },
+      { label: 'Avg. per day', key: 'avg_gbp_per_day', prefix: '£' }
+    ],
+    swims: [
+      { label: 'Total swims', key: 'total' },
+      { label: 'Avg. per day', key: 'avg_per_day' }
+    ]
+  };
+
+  fetch('{{ "/data/walk_stats_summary.json" | relative_url }}')
+    .then(function (r) { return r.json(); })
+    .then(function (s) {
+      document.querySelectorAll('[data-category]').forEach(function (el) {
+        var categoryName = el.getAttribute('data-category');
+        var categoryData = s.categories && s.categories[categoryName];
+        var fields = CATEGORY_STATS[categoryName];
+        if (!categoryData || !fields) return;
+
+        el.innerHTML = fields.map(function (f) {
+          var value = categoryData[f.key];
+          if (value === undefined) return '';
+          var display = (f.prefix || '') + value + (f.suffix || '');
+          return '<p class="stat-line"><span class="stat-line__label">' + f.label + ':</span> ' + display + '</p>';
+        }).join('');
+      });
+    })
+    .catch(function (err) {
+      console.error('Could not load walk stats summary:', err);
+    });
+</script>
+
 <!-- Leaflet JS then map initialisation after the div exists -->
 <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 <script>
-  var map = L.map('map').setView([54.5, -3.5], 6);
+  var map = L.map('map').setView([50.2, -5.1], 9); // fallback: west Cornwall
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
 
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function formatDate(isoDate) {
+    if (!isoDate) return '';
+    var d = new Date(isoDate + 'T00:00:00');
+    if (isNaN(d)) return '';
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
   fetch('{{ "/data/spots.json" | relative_url }}')
-    .then(function(r) { return r.json(); })
-    .then(function(spots) {
-      spots.forEach(function(spot) {
-        L.circleMarker([spot.lat, spot.lng], {
-          radius: 6,
-          fillColor: '#2e7d4f',
+    .then(function (r) { return r.json(); })
+    .then(function (spots) {
+      if (!spots || !spots.length) return;
+
+      var markers = [];
+      var categoriesSeen = new Map(); // label -> hex, in first-seen order
+
+      spots.forEach(function (spot) {
+        var marker = L.circleMarker([spot.lat, spot.lng], {
+          radius: 7,
+          fillColor: spot.categoryHex,
           color: '#fff',
-          weight: 1.5,
-          fillOpacity: 0.9
-        }).addTo(map);
+          weight: 2,
+          fillOpacity: 0.95
+        });
+
+        var dateLabel = formatDate(spot.date);
+
+        var popupHtml =
+          '<div class="camp-popup">' +
+            '<span class="camp-popup__category" style="--category-color:' + spot.categoryHex + '">' +
+              escapeHtml(spot.category) +
+            '</span>' +
+            '<h4>' + escapeHtml(spot.name) + '</h4>' +
+            (dateLabel ? '<p class="camp-popup__date">' + dateLabel + '</p>' : '') +
+            (spot.description ? '<p class="camp-popup__desc">' + escapeHtml(spot.description) + '</p>' : '') +
+          '</div>';
+
+        marker.bindPopup(popupHtml);
+        marker.addTo(map);
+        markers.push(marker);
+
+        if (!categoriesSeen.has(spot.category)) {
+          categoriesSeen.set(spot.category, spot.categoryHex);
+        }
       });
+
+      // Frame all the spots rather than staying on the fallback view
+      var group = L.featureGroup(markers);
+      map.fitBounds(group.getBounds().pad(0.2));
+
+      // Legend, built from whatever categories are actually in the data
+      var legend = L.control({ position: 'bottomright' });
+      legend.onAdd = function () {
+        var div = L.DomUtil.create('div', 'map-legend');
+        var rows = '';
+        categoriesSeen.forEach(function (hex, label) {
+          rows +=
+            '<div class="map-legend__row">' +
+              '<span class="map-legend__swatch" style="background:' + hex + '"></span>' +
+              escapeHtml(label) +
+            '</div>';
+        });
+        div.innerHTML = rows;
+        return div;
+      };
+      legend.addTo(map);
+    })
+    .catch(function (err) {
+      console.error('Could not load camp spots:', err);
     });
 </script>

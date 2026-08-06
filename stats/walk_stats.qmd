@@ -1,0 +1,357 @@
+---
+title: "Cornwall Coast Walk — Stats"
+subtitle: "Auto-generated from the daily trip log"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    embed-resources: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(jsonlite)
+library(scales)
+
+# This document is executed with its own folder (stats/) as the working
+# directory, which is Quarto/knitr's default -- hence the "../" prefixes.
+CSV_PATH   <- "../data/walk_stats.csv"
+IMG_DIR    <- "../images/stats"
+JSON_PATH  <- "../data/walk_stats_summary.json"
+
+dir.create(IMG_DIR, showWarnings = FALSE, recursive = TRUE)
+```
+
+## Reading the log
+
+`walk_stats.csv` is whatever comes straight out of an "export sheet as CSV" from
+the trip spreadsheet — title row, formula columns, the lot. This document only
+trusts the *raw* input columns (date, swims, spend by category, distance) and
+recomputes everything else itself, so nothing here depends on a spreadsheet
+formula being right.
+
+```{r read-data}
+raw_lines <- read_lines(CSV_PATH)
+header_row <- which(startsWith(raw_lines, "Date,"))[1]
+if (is.na(header_row)) {
+  stop("Could not find a header row starting with 'Date' in ", CSV_PATH)
+}
+
+df_raw <- read_csv(CSV_PATH, skip = header_row - 1, show_col_types = FALSE)
+
+# Matched by pattern rather than a literal "£" character: R's source
+# parser can mis-handle a non-ASCII literal under some locales, so this
+# keeps column-matching correct regardless of the runtime environment.
+find_col <- function(names_vec, pattern) {
+  hits <- names_vec[grepl(pattern, names_vec)]
+  if (length(hits) != 1) {
+    stop("Expected exactly one column matching '", pattern, "', found ",
+         length(hits), ": ", paste(hits, collapse = ", "))
+  }
+  hits[1]
+}
+
+nm <- names(df_raw)
+col_map <- c(
+  date              = find_col(nm, "^Date$"),
+  day               = find_col(nm, "^Day$"),
+  country           = find_col(nm, "^Country$"),
+  swims             = find_col(nm, "^Swims$"),
+  beers_drank       = find_col(nm, "^Beers drank$"),
+  beers_bought_for  = find_col(nm, "^Beers bought for$"),
+  spend_accom       = find_col(nm, "accom$"),
+  spend_groceries   = find_col(nm, "groceries$"),
+  spend_eating_out  = find_col(nm, "eating/drinking out$"),
+  spend_boats       = find_col(nm, "boats$"),
+  spend_drinks      = find_col(nm, "drinks$"),
+  spend_gear        = find_col(nm, "gear$"),
+  distance_km       = find_col(nm, "^Distance - km$")
+)
+
+df <- df_raw[, col_map]
+names(df) <- names(col_map)
+
+df <- df %>%
+  filter(!is.na(date)) %>%           # drops blank rows / Table 1 debris below
+  mutate(
+    date = as.Date(date),
+    # Explicit numeric coercion matters here: a column with no non-blank
+    # values yet (e.g. no accommodation spend recorded so far) gets
+    # guessed as logical by read_csv, and replace_na(.x, 0) on a logical
+    # column silently produces FALSE instead of 0.
+    across(starts_with("spend_"), ~ replace_na(as.numeric(.x), 0)),
+    beers_drank = replace_na(as.numeric(beers_drank), 0),
+    beers_bought_for = replace_na(as.numeric(beers_bought_for), 0),
+    swims = replace_na(as.numeric(swims), 0),
+    distance_km = replace_na(as.numeric(distance_km), 0)
+  ) %>%
+  arrange(date)
+```
+
+`r nrow(df)` days logged, `r min(df$date)` to `r max(df$date)`.
+
+## Derived columns
+
+7-day averages use a right-aligned window that shortens at the start of the
+trip (day 3's "7-day average" is really just the average of days 1–3) —
+matching the convention already used in the spreadsheet.
+
+```{r derive}
+roll_mean_right <- function(x, width = 7) {
+  vapply(seq_along(x), function(i) mean(x[max(1, i - width + 1):i]), numeric(1))
+}
+
+df <- df %>%
+  mutate(
+    spend_total             = spend_accom + spend_groceries + spend_eating_out +
+                               spend_boats + spend_drinks + spend_gear,
+    swims_7day_avg          = roll_mean_right(swims),
+    distance_7day_avg       = roll_mean_right(distance_km),
+    spend_7day_avg          = roll_mean_right(spend_total),
+    distance_cumulative     = cumsum(distance_km),
+    swims_cumulative        = cumsum(swims),
+    spend_cumulative        = cumsum(spend_total),
+    beers_drank_total       = cumsum(beers_drank),
+    beers_bought_for_total  = cumsum(beers_bought_for)
+  )
+```
+
+## Headline numbers
+
+These get written out as JSON for the site's stat cards, so the numbers on
+the page match this report exactly.
+
+```{r summary}
+summary_stats <- list(
+  total_days              = nrow(df),
+  date_start               = as.character(min(df$date)),
+  date_end                  = as.character(max(df$date)),
+  total_distance_km          = round(sum(df$distance_km), 1),
+  avg_distance_km              = round(mean(df$distance_km), 1),
+  var_distance                  = var(df$distance_km),
+  total_swims                    = sum(df$swims),
+  total_spend                      = round(sum(df$spend_total), 2),
+  avg_spend_per_day                  = round(mean(df$spend_total), 2),
+  total_beers_drank                    = sum(df$beers_drank),
+  total_beers_bought_for                 = sum(df$beers_bought_for),
+  spend_by_category = list(
+    accom      = round(sum(df$spend_accom), 2),
+    groceries   = round(sum(df$spend_groceries), 2),
+    eating_out   = round(sum(df$spend_eating_out), 2),
+    boats         = round(sum(df$spend_boats), 2),
+    drinks         = round(sum(df$spend_drinks), 2),
+    gear            = round(sum(df$spend_gear), 2)
+  ),
+  generated_at = as.character(Sys.time())
+)
+
+print(var_distance)
+
+write_json(summary_stats, JSON_PATH, auto_unbox = TRUE, pretty = TRUE)
+```
+
+| Metric | Value |
+|---|---:|
+| Total distance | `r summary_stats$total_distance_km` km |
+| Average per day | `r summary_stats$avg_distance_km` km |
+| Total swims | `r summary_stats$total_swims` |
+| Total spend | £`r summary_stats$total_spend` |
+| Average spend / day | £`r summary_stats$avg_spend_per_day` |
+
+## Distance
+
+```{r chart-setup}
+site_theme <- theme_minimal(base_size = 13) +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold"),
+    plot.background = element_rect(fill = "white", colour = NA)
+  )
+
+COL_DISTANCE <- "#2f7f93"
+COL_SPEND    <- "#f89406"
+COL_SWIMS    <- "#62c462"
+```
+
+```{r chart-distance}
+p_distance <- ggplot(df, aes(x = date)) +
+  geom_col(aes(y = distance_km), fill = COL_DISTANCE, alpha = 0.35) +
+  geom_line(aes(y = distance_7day_avg), colour = COL_DISTANCE, linewidth = 1.1) +
+  labs(title = "Distance walked per day", x = NULL, y = "km",
+       caption = "Line = 7-day average") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "distance_over_time.png"), p_distance,
+       width = 9, height = 4.5, dpi = 200)
+print(p_distance)
+```
+
+```{r chart-cumulative}
+p_cumulative <- ggplot(df, aes(x = date, y = distance_cumulative)) +
+  geom_area(fill = COL_DISTANCE, alpha = 0.25) +
+  geom_line(colour = COL_DISTANCE, linewidth = 1.1) +
+  labs(title = "Cumulative distance", x = NULL, y = "km") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "cumulative_distance.png"), p_cumulative,
+       width = 9, height = 4.5, dpi = 200)
+print(p_cumulative)
+```
+
+```{r chart-histogram}
+breaks <- seq(0, max(40, ceiling(max(df$distance_km) / 5) * 5), by = 3)
+
+p_hist <- ggplot(df, aes(x = distance_km)) +
+  geom_histogram(breaks = breaks, fill = COL_DISTANCE, colour = "white") +
+  labs(title = "Daily distance distribution", x = "km", y = "days") +
+  stat_function(fun=dnorm, args = list(mean=avg_distance_km, sd=1)) +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "distance_histogram.png"), p_hist,
+       width = 9, height = 4.5, dpi = 200)
+print(p_hist)
+```
+
+## Spend
+
+```{r chart-spend}
+spend_cat <- tibble(
+  category = c("Accommodation", "Groceries", "Eating/drinking out",
+               "Boats", "Drinks", "Gear"),
+  total = c(sum(df$spend_accom), sum(df$spend_groceries), sum(df$spend_eating_out),
+            sum(df$spend_boats), sum(df$spend_drinks), sum(df$spend_gear))
+) 
+
+p_spend <- ggplot(spend_cat, aes(x = reorder(category, total), y = total)) +
+  geom_point() +
+  geom_segment(aes(x=reorder(category, total), xend=reorder(category, total), y=0, yend=total)) +
+  geom_text(aes(label = dollar(total, prefix = "£")), hjust = -0.1, size = 3.5) +
+  coord_flip(clip = "off") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  labs(title = "Spend by category", x = NULL, y = "£") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "spend_breakdown.png"), p_spend,
+       width = 9, height = 4.5, dpi = 200)
+print(p_spend)
+```
+
+```{r chart-cumulative}
+c_cumulative <- ggplot(df, aes(x = date, y = spend_cumulative)) +
+  geom_area(fill = COL_SPEND, alpha = 0.25) +
+  geom_line(colour = COL_SPEND, linewidth = 1.1) +
+  labs(title = "Cumulative spending", x = NULL, y = "£") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "cumulative_spend.png"), c_cumulative,
+       width = 9, height = 4.5, dpi = 200)
+print(c_cumulative)
+```
+
+## Swims
+
+```{r chart-swims}
+p_swims <- ggplot(df, aes(x = date)) +
+  geom_col(aes(y = swims), fill = COL_SWIMS, alpha = 0.35) +
+  geom_line(aes(y = swims_7day_avg), colour = COL_SWIMS, linewidth = 1.1) +
+  labs(title = "Swims per day", x = NULL, y = "swims",
+       caption = "Line = 7-day average") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "swims_over_time.png"), p_swims,
+       width = 9, height = 4.5, dpi = 200)
+print(p_swims)
+```
+
+```{r chart-cumulative}
+s_cumulative <- ggplot(df, aes(x = date, y = swims_cumulative)) +
+  geom_area(fill = COL_SWIMS, alpha = 0.25) +
+  geom_line(colour = COL_SWIMS, linewidth = 1.1) +
+  labs(title = "Cumulative swims", x = NULL, y = "swims") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "cumulative_swims.png"), s_cumulative,
+       width = 9, height = 4.5, dpi = 200)
+print(s_cumulative)
+```
+```{r}
+library(httr)
+library(jsonlite)
+library(dplyr)
+
+my_spots_json <- read_json("/Users/tomdefraja/Documents/Website/tomdefraja.github.io/data/spots.json")
+
+library(purrr)
+
+camp_coords <- map_dfr(my_spots_json, ~ tibble(
+  name = .x$name,
+  date = .x$date,
+  lat  = .x$lat,
+  lng  = .x$lng
+))
+
+get_sst_history <- function(name, lat, lng, campdate) {
+  url <- "https://marine-api.open-meteo.com/v1/marine"
+  
+  resp <- GET(url, query = list(
+    latitude = lat,
+    longitude = lng,
+    hourly = "sea_surface_temperature",
+    start_date = campdate,
+    end_date = campdate,
+    timezone = "auto"
+  ))
+  
+  data <- fromJSON(content(resp, "text", encoding = "UTF-8"))
+  
+  if (!is.null(data$error) && isTRUE(data$error)) {
+    warning(paste0("API error for '", name, "' (", campdate, "): ", data$reason))
+    return(tibble(name = name, date = as.Date(campdate), sst_mean = NA_real_))
+  }
+  
+  df <- data.frame(
+    datetime = as.POSIXct(data$hourly$time, format = "%Y-%m-%dT%H:%M", tz = "UTC"),
+    sst = data$hourly$sea_surface_temperature
+  )
+  
+  df %>%
+    mutate(date = as.Date(datetime)) %>%
+    group_by(date) %>%
+    summarise(sst_mean = mean(sst, na.rm = TRUE), .groups = "drop") %>%
+    mutate(name = name, .before = 1)
+}
+
+sst_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i) {
+  get_sst_history(
+    camp_coords$name[i],
+    camp_coords$lat[i],
+    camp_coords$lng[i],
+    camp_coords$date[i]
+  )
+}))
+
+```
+```{r}
+p_swims <- ggplot(sst_history, aes(x = date)) +
+  geom_line(aes(y = sst_mean), colour = COL_SWIMS, linewidth = 1.1) +
+  labs(title = "Daily water temperature", x = NULL, y = "Celcius") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "water_temp.png"), p_swims,
+       width = 9, height = 4.5, dpi = 200)
+print(p_swims)
+```
+
+---
+
+*Rendered automatically by GitHub Actions whenever `data/walk_stats.csv` is
+updated — see `.github/workflows/render_stats.yml`. Edit this file directly
+to add or change charts; the site pulls the images and`
+`data/walk_stats_summary.json` this produces, not this rendered page.*

@@ -1,4 +1,122 @@
 [
-  {"lat": 50.334125, "lng": -4.639218}
+  {
+    "name": "The Gribbin",
+    "description": "The Gribbin w/ Kobe",
+    "date": "2026-07-17",
+    "lat": 50.316972,
+    "lng": -4.6731301,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Amanda’s",
+    "description": "Hammock night at Amanda’s",
+    "date": "2026-07-17",
+    "lat": 50.220453,
+    "lng": -4.8905879,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Callum’s",
+    "description": "",
+    "date": "2026-07-18",
+    "lat": 50.155856,
+    "lng": -5.0949662,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Bosahan Cove",
+    "description": "",
+    "date": "2026-07-20",
+    "lat": 50.094684,
+    "lng": -5.1143025,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Sculpture Park",
+    "description": "",
+    "date": "2026-07-21",
+    "lat": 50.015889,
+    "lng": -5.0994401,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Trevedden",
+    "description": "Airbnb from Ellie",
+    "date": "2026-07-23",
+    "lat": 49.999285,
+    "lng": -5.1929,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Porthleven",
+    "description": "",
+    "date": "2026-07-23",
+    "lat": 50.090356,
+    "lng": -5.3316916,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Penzance",
+    "description": "",
+    "date": "2026-07-24",
+    "lat": 50.108057,
+    "lng": -5.5556731,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Pendower",
+    "description": "With Lydia",
+    "date": "2026-07-25",
+    "lat": 50.035704,
+    "lng": -5.6740477,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Portheras",
+    "description": "",
+    "date": "2026-07-26",
+    "lat": 50.163481,
+    "lng": -5.6589415,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "St Ives",
+    "description": "At Rob and Alice’s with Ruphus, Woodie, Heathie, Birdie",
+    "date": "2026-07-27",
+    "lat": 50.207245,
+    "lng": -5.4795483,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Portreath",
+    "description": "Steve and Alex’s summerhouse",
+    "date": "2026-07-29",
+    "lat": 50.261137,
+    "lng": -5.2202411,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  }
 ]
-

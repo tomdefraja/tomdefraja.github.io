@@ -1,24 +1,20 @@
 ---
-title: 'A Trip on the Congo'
+title: 'A Trip on the Congo River'
 date: 2025-11-15
 permalink: /blogs/Congoboat/
 modified: 2026-08-01
 location: 'Congo'
+excerpt: 'An account of just under a week spent travelling by boat around the Congo River'
 published: true
-country: Congo
+country: Republic of Congo
 author:
   - name: Tom De Fraja
     pic: /images/profile.jpeg
-# photographers:
-#   - name: Tom De Fraja
-#     pic: /images/profile.jpeg
-#   - name: Antoine Goldsborough
-#     pic: /images/profile-antoine.jpg
 type: bike
 tags:
   - Bikes
   - Africa
-  - Cameroon
+  - Congo
 ---
 
 Oyo - Mossaka

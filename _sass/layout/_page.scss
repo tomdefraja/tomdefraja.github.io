@@ -54,7 +54,6 @@
     margin-top: -0.5em;
     margin-bottom: -0.5em;
     color: var(--global-bg-color-dark);
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.271);  // keeps text legible over any image
   }
 }
 
@@ -72,7 +71,6 @@
   // background: var(--global-bg-color);
   padding: 0.5em 0.5em;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.519);  // keeps text legible over any image
 }
 
 .page__subtitle {
@@ -198,7 +196,6 @@
     .page__lead,
     .btn {
       color: #fff;
-      text-shadow: 1px 1px 4px rgba(#000, 0.5);
       text-align: center;
     }
 

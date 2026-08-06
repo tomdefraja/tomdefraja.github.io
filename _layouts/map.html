@@ -111,6 +111,28 @@ layout: default
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
+
+  fetch('{{ "/data/spots.json" | relative_url }}')
+    .then(function (r) {
+      console.log("spots response:", r.status);
+      return r.json();
+    })
+    .then(function (spots) {
+      console.log("spots:", spots);
+
+      spots.forEach(function (spot) {
+        L.circleMarker([spot.lat, spot.lng], {
+          radius: 7,
+          fillColor: spot.categoryHex,
+          color: '#fff',
+          weight: 2,
+          fillOpacity: 0.95
+        }).addTo(map);
+      });
+    })
+    .catch(function (err) {
+      console.error("Could not load spots:", err);
+    });
 </script>
 
 

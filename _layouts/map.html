@@ -52,6 +52,16 @@ layout: default
     </div>
   </section>
 
+  <section class="stats-category">
+    <h3 class="stats-category__title">Coastal distance</h3>
+    <div class="stats-charts">
+      <iframe src="{{ '/images/stats/coastal_map.html' | relative_url }}" 
+        width="100%" height="500" style="border:none;"></iframe>
+    </div>
+    <div class="stats-charts">
+      <img src="{{ '/images/stats/coastal_distance.png' | relative_url }}" alt="Distance walked along the coast" loading="lazy">
+    </div>
+
   <p class="stats-section__footnote">
     Generated automatically from the trip log.
     <!-- <a href="{{ '/assets/reports/walk_stats.html' | relative_url }}">See the full R report &rarr;</a> -->
@@ -101,7 +111,7 @@ layout: default
 </script>
 
 
-<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
+<!-- <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 
 <script>
   console.log("Leaflet:", typeof L);
@@ -133,10 +143,10 @@ layout: default
     .catch(function (err) {
       console.error("Could not load spots:", err);
     });
-</script>
+</script> -->
 
 
-<!-- Leaflet JS then map initialisation after the div exists
+<!-- Leaflet JS then map initialisation after the div exists -->
 <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 <script>
   var map = L.map('map').setView([50.2, -5.1], 9); // fallback: west Cornwall
@@ -223,4 +233,4 @@ layout: default
     .catch(function (err) {
       console.error('Could not load camp spots:', err);
     });
-</script> -->
+</script>

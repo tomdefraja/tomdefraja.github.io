@@ -426,15 +426,14 @@ library(leaflet)
 library(dplyr)
 library(XML)
 
-uk_coastline <- read_sf("../data/uk_simple.shp") |> st_transform(27700)
+uk_coastline <- read_sf("../data/uk_lowtide_simple.shp") |> st_transform(27700)
 coast_union <- st_union(uk_coastline)
 
-gpx_parsed <- htmlTreeParse(file = "data/coastal_walk.gpx", useInternalNodes = TRUE)
-coords <- xpathSApply(doc = gpx_parsed, path = "//trkpt", fun = xmlAttrs)
-
-df_gpx <- data.frame(
-  lat = as.numeric(coords["lat", ]),
-  lon = as.numeric(coords["lon", ])
+gpx_parsed <- htmlTreeParse(file = "../data/coastal_walk.gpx", useInternalNodes = TRUE)
+coords <- xpathSApply(doc = gpx_parsed, path = "//trkpt", fun = xmlAttrs) 
+df_gpx <- data.frame( 
+  lat = as.numeric(coords["lat", ]), 
+  lon = as.numeric(coords["lon", ]) 
 )
 
 gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>

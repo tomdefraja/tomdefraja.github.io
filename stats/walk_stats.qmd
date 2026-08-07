@@ -135,7 +135,6 @@ summary_stats <- list(
   date_end                  = as.character(max(df$date)),
   total_distance_km          = round(sum(df$distance_km), 1),
   avg_distance_km              = round(mean(df$distance_km), 1),
-  var_distance                  = var(df$distance_km),
   total_swims                    = sum(df$swims),
   total_spend                      = round(sum(df$spend_total), 2),
   avg_spend_per_day                  = round(mean(df$spend_total), 2),
@@ -152,7 +151,6 @@ summary_stats <- list(
   generated_at = as.character(Sys.time())
 )
 
-print(var_distance)
 
 write_json(summary_stats, JSON_PATH, auto_unbox = TRUE, pretty = TRUE)
 ```
@@ -206,12 +204,26 @@ print(p_cumulative)
 ```
 
 ```{r chart-histogram}
-breaks <- seq(0, max(40, ceiling(max(df$distance_km) / 5) * 5), by = 3)
+bin_width <- 3
+breaks <- seq(0, max(40, ceiling(max(df$distance_km) / bin_width) * bin_width), by = bin_width)
+
+dist_mean <- mean(df$distance_km)
+dist_sd   <- sd(df$distance_km)
 
 p_hist <- ggplot(df, aes(x = distance_km)) +
   geom_histogram(breaks = breaks, fill = COL_DISTANCE, colour = "white") +
-  labs(title = "Daily distance distribution", x = "km", y = "days") +
-  stat_function(fun=dnorm, args = list(mean=avg_distance_km, sd=1)) +
+  # dnorm() returns a density (area under curve = 1), but the histogram
+  # bars are counts -- multiplying by n() * bin_width puts the curve on
+  # the same y-axis as the bars instead of flattening it near zero.
+  stat_function(
+    fun = function(x) dnorm(x, mean = dist_mean, sd = dist_sd) * nrow(df) * bin_width,
+    colour = "black", linewidth = 0
+  ) +
+  labs(
+    title = "Daily distance distribution", x = "km", y = "days",
+    caption = paste0("Normal curve: mean = ", round(dist_mean, 1),
+                      " km, sd = ", round(dist_sd, 1), " km")
+  ) +
   site_theme
 
 ggsave(file.path(IMG_DIR, "distance_histogram.png"), p_hist,
@@ -281,7 +293,8 @@ ggsave(file.path(IMG_DIR, "cumulative_swims.png"), s_cumulative,
        width = 9, height = 4.5, dpi = 200)
 print(s_cumulative)
 ```
-```{r}
+
+```{r sea_temperatures}
 library(httr)
 library(jsonlite)
 library(dplyr)
@@ -348,6 +361,123 @@ ggsave(file.path(IMG_DIR, "water_temp.png"), p_swims,
        width = 9, height = 4.5, dpi = 200)
 print(p_swims)
 ```
+
+
+```{r}
+get_weather_history <- function(name, lat, lng, campdate) {
+  url <- "https://archive-api.open-meteo.com/v1/archive"
+  
+  resp <- GET(url, query = list(
+    latitude = lat,
+    longitude = lng,
+    hourly = "temperature_2m,precipitation",
+    start_date = campdate,
+    end_date = campdate,
+    timezone = "auto"
+  ))
+  
+  data <- fromJSON(content(resp, "text", encoding = "UTF-8"))
+  
+  if (!is.null(data$error) && isTRUE(data$error)) {
+    warning(paste0("API error for '", name, "' (", campdate, "): ", data$reason))
+    return(tibble(name = name, date = as.Date(campdate), temp_mean = NA_real_, precip_total = NA_real_))
+  }
+  
+  df <- data.frame(
+    datetime = as.POSIXct(data$hourly$time, format = "%Y-%m-%dT%H:%M", tz = "UTC"),
+    temp = data$hourly$temperature_2m,
+    precip = data$hourly$precipitation
+  )
+  
+  
+  df %>%
+    mutate(date = as.Date(datetime)) %>%
+    group_by(date) %>%
+    summarise(
+      temp_mean = mean(temp[8:20], na.rm = TRUE),
+      precip_total = sum(precip, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(name = name, .before = 1)
+}
+
+weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i) {
+  get_weather_history(
+    camp_coords$name[i],
+    camp_coords$lat[i],
+    camp_coords$lng[i],
+    camp_coords$date[i]
+  )
+}))
+
+print(weather_history)
+```
+
+## Coastal proximity
+
+```{r}
+#| label: coast-distance-setup
+#| echo: false
+#| message: false
+#| warning: false
+
+library(sf)
+library(leaflet)
+library(dplyr)
+library(XML)
+
+uk_coastline <- read_sf("../data/uk_simple.shp") |> st_transform(27700)
+coast_union <- st_union(uk_coastline)
+
+gpx_parsed <- htmlTreeParse(file = "data/coastal_walk.gpx", useInternalNodes = TRUE)
+coords <- xpathSApply(doc = gpx_parsed, path = "//trkpt", fun = xmlAttrs)
+
+df_gpx <- data.frame(
+  lat = as.numeric(coords["lat", ]),
+  lon = as.numeric(coords["lon", ])
+)
+
+gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>
+  st_transform(27700)
+
+df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
+```
+
+```{r}
+#| label: coast-distance-map
+#| echo: false
+#| message: false
+#| warning: false
+#| out-width: "100%"
+
+n <- nrow(df_gpx)
+
+segments_sf <- st_sf(
+  dist = pmax((df_gpx$dist_to_coast_m[-n] + df_gpx$dist_to_coast_m[-1]) / 2, 1),
+  geometry = st_sfc(
+    lapply(1:(n - 1), function(i) {
+      st_linestring(rbind(
+        c(df_gpx$lon[i],     df_gpx$lat[i]),
+        c(df_gpx$lon[i + 1], df_gpx$lat[i + 1])
+      ))
+    }),
+    crs = 4326
+  )
+)
+
+pal <- colorNumeric(palette = "viridis", domain = log10(segments_sf$dist))
+
+leaflet(segments_sf) |>
+  addTiles() |>
+  addPolylines(color = ~pal(log10(dist)), weight = 4, opacity = 0.9) |>
+  addLegend(
+    pal = pal, values = ~log10(dist),
+    title = "Distance to coast (m)",
+    labFormat = labelFormat(transform = function(x) round(10^x))
+  )
+```
+
+Want to try this with your own walk? [Try the interactive tool](/tools/coastal-distance-mapper.html){.button}
 
 ---
 

@@ -299,7 +299,7 @@ library(httr)
 library(jsonlite)
 library(dplyr)
 
-my_spots_json <- read_json("/Users/tomdefraja/Documents/Website/tomdefraja.github.io/data/spots.json")
+my_spots_json <- read_json("../data/spots.json")
 
 library(purrr)
 

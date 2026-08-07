@@ -3,7 +3,7 @@ name: Convert KMZ to JSON
 on:
   push:
     paths:
-      - 'data/camps.kmz'  # only runs when you upload a new kmz
+      - 'data/camps.kmz'
 
 jobs:
   convert:

@@ -1,0 +1,56 @@
+name: Render walk stats
+
+on:
+  push:
+    paths:
+      - 'data/walk_stats.csv'
+      - 'stats/walk_stats.qmd'
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system libraries (needed by sf/XML packages)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgdal-dev libgeos-dev libproj-dev libudunits2-dev libxml2-dev
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install R packages
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::readr
+            any::dplyr
+            any::tidyr
+            any::ggplot2
+            any::jsonlite
+            any::scales
+            any::httr
+            any::purrr
+            any::sf
+            any::leaflet
+            any::XML
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Render stats report
+        run: quarto render stats/walk_stats.qmd
+
+      - name: Commit generated outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add images/stats data/walk_stats_summary.json stats/walk_stats.html
+          git diff --staged --quiet || git commit -m "Re-render walk stats"
+          git push

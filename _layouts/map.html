@@ -249,7 +249,7 @@ layout: default
           rows +=
             '<div class="map-legend__row">' +
               '<span class="map-legend__swatch" style="background:' + hex + '"></span>' +
-              label +
+              escapeHtml(label) +
             '</div>';
         });
 

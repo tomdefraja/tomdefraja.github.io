@@ -239,15 +239,24 @@ layout: default
 
       map.fitBounds(group.getBounds().pad(0.2));
 
-      var testControl = L.control({ position: 'bottomright' });
+      var legend = L.control({ position: 'bottomright' });
 
-      testControl.onAdd = function () {
-        var div = L.DomUtil.create('div');
-        div.innerHTML = 'Test legend';
+      legend.onAdd = function () {
+        var div = L.DomUtil.create('div', 'map-legend');
+        var rows = '';
+
+        categoriesSeen.forEach(function (hex, label) {
+          rows +=
+            '<div class="map-legend__row">' +
+              label +
+            '</div>';
+        });
+
+        div.innerHTML = rows;
         return div;
       };
 
-      testControl.addTo(map);
+      legend.addTo(map);
 
       console.log("categories:", categoriesSeen);
 

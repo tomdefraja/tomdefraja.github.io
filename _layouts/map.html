@@ -193,6 +193,7 @@ layout: default
       console.log("spots:", spots);
 
       var markers = [];
+      var categoriesSeen = new Map();
 
       spots.forEach(function (spot) {
 
@@ -225,6 +226,9 @@ layout: default
         marker.bindPopup(popupHtml);
         marker.addTo(map);
         markers.push(marker);
+        if (!categoriesSeen.has(spot.category)) {
+          categoriesSeen.set(spot.category, spot.categoryHex);
+        }
       });
 
       console.log("markers:", markers.length);
@@ -234,6 +238,8 @@ layout: default
       console.log("bounds:", group.getBounds());
 
       map.fitBounds(group.getBounds().pad(0.2));
+
+      console.log("categories:", categoriesSeen);
 
     })
     .catch(function (err) {

@@ -145,9 +145,95 @@ layout: default
     });
 </script> -->
 
+<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
+
+<script>
+  console.log("Leaflet:", typeof L);
+
+  var map = L.map('map').setView([50.2, -5.1], 9);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, function (c) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[c];
+    });
+  }
+
+  function formatDate(isoDate) {
+    if (!isoDate) return '';
+
+    var d = new Date(isoDate + 'T00:00:00');
+
+    if (isNaN(d)) return '';
+
+    return d.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  fetch('{{ "/data/spots.json" | relative_url }}')
+    .then(function (r) {
+      console.log("spots response:", r.status);
+      return r.json();
+    })
+    .then(function (spots) {
+
+      console.log("spots:", spots);
+
+      spots.forEach(function (spot) {
+
+        var marker = L.circleMarker([spot.lat, spot.lng], {
+          radius: 7,
+          fillColor: spot.categoryHex,
+          color: '#fff',
+          weight: 2,
+          fillOpacity: 0.95
+        });
+
+        var dateLabel = formatDate(spot.date);
+
+        var popupHtml =
+          '<div class="camp-popup">' +
+            '<span class="camp-popup__category">' +
+              escapeHtml(spot.category) +
+            '</span>' +
+            '<h4>' + escapeHtml(spot.name) + '</h4>' +
+            (dateLabel
+              ? '<p class="camp-popup__date">' + dateLabel + '</p>'
+              : '') +
+            (spot.description
+              ? '<p class="camp-popup__desc">' +
+                  escapeHtml(spot.description) +
+                '</p>'
+              : '') +
+          '</div>';
+
+        marker.bindPopup(popupHtml);
+
+        marker.addTo(map);
+      });
+
+    })
+    .catch(function (err) {
+      console.error("Could not load spots:", err);
+    });
+</script>
+
 
 <!-- Leaflet JS then map initialisation after the div exists -->
-<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
+<!-- <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 <script>
   var map = L.map('map').setView([50.2, -5.1], 9); // fallback: west Cornwall
 
@@ -233,4 +319,4 @@ layout: default
     .catch(function (err) {
       console.error('Could not load camp spots:', err);
     });
-</script>
+</script> -->

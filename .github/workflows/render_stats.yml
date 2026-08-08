@@ -5,6 +5,7 @@ on:
     paths:
       - 'data/walk_stats.csv'
       - 'stats/walk_stats.qmd'
+      - 'data/spots.json'
 
 jobs:
   render:

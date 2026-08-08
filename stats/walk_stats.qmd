@@ -425,7 +425,6 @@ print(p_weather)
 ## Coastal proximity
 
 ```{r coastal-distance-setup}
-#| label: coast-distance-setup
 #| echo: false
 #| message: false
 #| warning: false
@@ -452,7 +451,6 @@ df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
 ```
 
 ```{r coastal-distance-map}
-#| label: coast-distance-map
 #| echo: false
 #| message: false
 #| warning: false

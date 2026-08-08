@@ -192,6 +192,8 @@ layout: default
 
       console.log("spots:", spots);
 
+      var markers = [];
+
       spots.forEach(function (spot) {
 
         var marker = L.circleMarker([spot.lat, spot.lng], {
@@ -221,9 +223,17 @@ layout: default
           '</div>';
 
         marker.bindPopup(popupHtml);
-
         marker.addTo(map);
+        markers.push(marker);
       });
+
+      console.log("markers:", markers.length);
+
+      var group = L.featureGroup(markers);
+
+      console.log("bounds:", group.getBounds());
+
+      map.fitBounds(group.getBounds().pad(0.2));
 
     })
     .catch(function (err) {

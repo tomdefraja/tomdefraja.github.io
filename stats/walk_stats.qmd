@@ -191,7 +191,7 @@ ggsave(file.path(IMG_DIR, "distance_over_time.png"), p_distance,
 print(p_distance)
 ```
 
-```{r chart-cumulative}
+```{r chart-cumulative-distance}
 p_cumulative <- ggplot(df, aes(x = date, y = distance_cumulative)) +
   geom_area(fill = COL_DISTANCE, alpha = 0.25) +
   geom_line(colour = COL_DISTANCE, linewidth = 1.1) +
@@ -255,7 +255,7 @@ ggsave(file.path(IMG_DIR, "spend_breakdown.png"), p_spend,
 print(p_spend)
 ```
 
-```{r chart-cumulative}
+```{r chart-cumulative-spend}
 c_cumulative <- ggplot(df, aes(x = date, y = spend_cumulative)) +
   geom_area(fill = COL_SPEND, alpha = 0.25) +
   geom_line(colour = COL_SPEND, linewidth = 1.1) +
@@ -282,7 +282,7 @@ ggsave(file.path(IMG_DIR, "swims_over_time.png"), p_swims,
 print(p_swims)
 ```
 
-```{r chart-cumulative}
+```{r chart-cumulative-swims}
 s_cumulative <- ggplot(df, aes(x = date, y = swims_cumulative)) +
   geom_area(fill = COL_SWIMS, alpha = 0.25) +
   geom_line(colour = COL_SWIMS, linewidth = 1.1) +
@@ -351,7 +351,8 @@ sst_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i) {
 }))
 
 ```
-```{r}
+
+```{r chart-daily-water-temp}
 p_swims <- ggplot(sst_history, aes(x = date)) +
   geom_line(aes(y = sst_mean), colour = COL_SWIMS, linewidth = 1.1) +
   labs(title = "Daily water temperature", x = NULL, y = "Celcius") +
@@ -363,7 +364,7 @@ print(p_swims)
 ```
 
 
-```{r}
+```{r weather-history}
 get_weather_history <- function(name, lat, lng, campdate) {
   url <- "https://archive-api.open-meteo.com/v1/archive"
   
@@ -410,12 +411,20 @@ weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i)
   )
 }))
 
-print(weather_history)
+p_weather <- ggplot(weather_history, aes(x = date)) +
+  geom_line(aes(y = temp_mean), colour = COL_SWIMS, linewidth = 1.1) +
+  geom_line(aes(y = precip_total), colour = COL_SWIMS, linewidth = 1.1) +
+  labs(title = "weather", x = NULL, y = "temperature") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
+       width = 9, height = 4.5, dpi = 200)
+print(p_weather)
 ```
 
 ## Coastal proximity
 
-```{r}
+```{r coastal-distance-setup}
 #| label: coast-distance-setup
 #| echo: false
 #| message: false
@@ -442,7 +451,7 @@ gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>
 df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
 ```
 
-```{r}
+```{r coastal-distance-map}
 #| label: coast-distance-map
 #| echo: false
 #| message: false
@@ -466,7 +475,7 @@ segments_sf <- st_sf(
 
 pal <- colorNumeric(palette = "viridis", domain = log10(segments_sf$dist))
 
-leaflet(segments_sf) |>
+m <- leaflet(segments_sf) |>
   addTiles() |>
   addPolylines(color = ~pal(log10(dist)), weight = 4, opacity = 0.9) |>
   addLegend(
@@ -474,6 +483,24 @@ leaflet(segments_sf) |>
     title = "Distance to coast (m)",
     labFormat = labelFormat(transform = function(x) round(10^x))
   )
+
+htmlwidgets::saveWidget(m, file.path(IMG_DIR, "coastal_map.html"), selfcontained = TRUE)
+
+m
+```
+
+```{r coastal-distance-plot}
+df_gpx$point_index <- seq_len(nrow(df_gpx))
+
+p_coastal_dist <- ggplot(df_gpx, aes(x = point_index, y = dist_to_coast_m)) +
+  geom_line(colour = COL_SWIMS, linewidth = 0.5) + 
+  scale_y_continuous(trans='log10') +
+  labs(title = "Distance to coast along the walk", x = "Track point", y = "Distance (m)") +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "coastal_distance.png"), p_coastal_dist,
+       width = 9, height = 4.5, dpi = 200)
+print(p_coastal_dist)
 ```
 
 Want to try this with your own walk? [Try the interactive tool](/tools/coastal-distance-mapper.html){.button}

@@ -81,7 +81,7 @@ names(df) <- names(col_map)
 df <- df %>%
   filter(!is.na(date)) %>%           # drops blank rows / Table 1 debris below
   mutate(
-    date = as.Date(date),
+    date = as.Date(date, format = "%d %b %Y"),
     # Explicit numeric coercion matters here: a column with no non-blank
     # values yet (e.g. no accommodation spend recorded so far) gets
     # guessed as logical by read_csv, and replace_na(.x, 0) on a logical

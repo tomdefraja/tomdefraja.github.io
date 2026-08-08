@@ -60,19 +60,19 @@ find_col <- function(names_vec, pattern) {
 
 nm <- names(df_raw)
 col_map <- c(
-  date              = find_col(nm, "^Date$"),
-  day               = find_col(nm, "^Day$"),
-  country           = find_col(nm, "^Country$"),
-  swims             = find_col(nm, "^Swims$"),
-  beers_drank       = find_col(nm, "^Beers drank$"),
-  beers_bought_for  = find_col(nm, "^Beers bought for$"),
-  spend_accom       = find_col(nm, "accom$"),
-  spend_groceries   = find_col(nm, "groceries$"),
-  spend_eating_out  = find_col(nm, "eating/drinking out$"),
-  spend_boats       = find_col(nm, "boats$"),
-  spend_drinks      = find_col(nm, "drinks$"),
-  spend_gear        = find_col(nm, "gear$"),
-  distance_km       = find_col(nm, "^Distance - km$")
+  date              = find_col(nm, "date$"),
+  day               = find_col(nm, "day$"),
+  country           = find_col(nm, "country$"),
+  swims             = find_col(nm, "swims$"),
+  beers_drank       = find_col(nm, "beers_drank$"),
+  beers_bought_for  = find_col(nm, "beers_bought_for$"),
+  spend_accom       = find_col(nm, "£_accom$"),
+  spend_groceries   = find_col(nm, "£_groceries$"),
+  spend_eating_out  = find_col(nm, "£_eord_out$"),
+  spend_boats       = find_col(nm, "£_boats$"),
+  spend_drinks      = find_col(nm, "£_alcohol$"),
+  spend_gear        = find_col(nm, "£_gear$"),
+  distance_km       = find_col(nm, "distance_km$")
 )
 
 df <- df_raw[, col_map]

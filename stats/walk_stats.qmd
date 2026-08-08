@@ -39,9 +39,9 @@ formula being right.
 
 ```{r read-data}
 raw_lines <- read_lines(CSV_PATH)
-header_row <- which(startsWith(raw_lines, "Date,"))[1]
+header_row <- which(startsWith(raw_lines, "date,"))[1]
 if (is.na(header_row)) {
-  stop("Could not find a header row starting with 'Date' in ", CSV_PATH)
+  stop("Could not find a header row starting with 'date' in ", CSV_PATH)
 }
 
 df_raw <- read_csv(CSV_PATH, skip = header_row - 1, show_col_types = FALSE)

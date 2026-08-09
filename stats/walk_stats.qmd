@@ -176,6 +176,9 @@ site_theme <- theme_minimal(base_size = 13) +
 COL_DISTANCE <- "#2f7f93"
 COL_SPEND    <- "#f89406"
 COL_SWIMS    <- "#62c462"
+COL_SWIMS_light    <- "#61f79e"
+COL_SWIMS_dark    <- "#62c462"
+COL_SWIMS_darker    <- "#199462"
 ```
 
 ```{r chart-distance}
@@ -412,9 +415,14 @@ weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i)
 }))
 
 p_weather <- ggplot(weather_history, aes(x = date)) +
-  geom_line(aes(y = temp_mean), colour = COL_SWIMS, linewidth = 1.1) +
-  geom_line(aes(y = precip_total), colour = COL_SWIMS, linewidth = 1.1) +
-  labs(title = "weather", x = NULL, y = "temperature") +
+  geom_line(aes(y = temp_mean), colour = COL_SWIMS_light, linewidth = 1.1) +
+  geom_line(aes(y = precip_total), colour = COL_SWIMS_dark, linewidth = 1.1) +
+  geom_line(data = sst_history, aes(x = date, y = sst_mean), colour = COL_SWIMS_darker, linewidth = 1.1) +
+  scale_y_continuous(
+    name = "Temperature (°C)",
+    sec.axis = sec_axis(~ . / scale_factor, name = "Precipitation (mm)")
+  ) +
+  labs(title = "Weather", x = NULL, y = "temperature") +
   site_theme
 
 ggsave(file.path(IMG_DIR, "weather.png"), p_weather,

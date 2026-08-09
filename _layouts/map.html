@@ -48,7 +48,6 @@ layout: default
     <div class="stats-charts">
       <img src="{{ '/images/stats/swims_over_time.png' | relative_url }}" alt="Swims per day, with 7-day average" loading="lazy">
       <img src="{{ '/images/stats/cumulative_swims.png' | relative_url }}" alt="Cumulative swims over the trip" loading="lazy">
-      <img src="{{ '/images/stats/water_temp.png' | relative_url }}" alt="Water temperature over the trip" loading="lazy">
       <img src="{{ '/images/stats/weather.png' | relative_url }}" alt="Weather conditions over the trip" loading="lazy">
     </div>
   </section>
@@ -146,7 +145,7 @@ layout: default
     });
 </script> -->
 
-<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
+<!-- <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 
 <script>
   console.log("Leaflet:", typeof L);
@@ -266,18 +265,16 @@ layout: default
     .catch(function (err) {
       console.error("Could not load spots:", err);
     });
-</script>
+</script> -->
 
 
 <!-- Leaflet JS then map initialisation after the div exists -->
-<!-- <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 <script>
   var map = L.map('map').setView([50.2, -5.1], 9); // fallback: west Cornwall
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
   function escapeHtml(str) {
@@ -356,4 +353,4 @@ layout: default
     .catch(function (err) {
       console.error('Could not load camp spots:', err);
     });
-</script> -->
+</script>

@@ -10,7 +10,7 @@
   <metadata>
     <name>coastal_walk</name>
     <author><name>Tom</name></author>
-    <bounds minlat="49.95892809460234" minlon="-5.7152384131222664" maxlat="50.33232066632318" maxlon="-4.7571171085256534"/>
+    <bounds minlat="49.95892809460234" minlon="-5.7152384131222664" maxlat="50.83811945468187" maxlon="-4.7571171085256534"/>
   </metadata>
   <trk>
     <name>coastal_walk</name>
@@ -51137,12 +51137,6 @@
       <trkpt lat="50.26058172801832" lon="-5.2928571428571347">
         <ele>19</ele>
       </trkpt>
-      <trkpt lat="50.26064783857408" lon="-5.2928214779520557">
-        <ele>16</ele>
-      </trkpt>
-      <trkpt lat="50.26064783857408" lon="-5.2928214779520557">
-        <ele>16</ele>
-      </trkpt>
       <trkpt lat="50.26065420560749" lon="-5.2928180431050844">
         <ele>16</ele>
       </trkpt>
@@ -51161,8 +51155,17 @@
       <trkpt lat="50.26078485599849" lon="-5.2925586496280674">
         <ele>12</ele>
       </trkpt>
-      <trkpt lat="50.26077971085552" lon="-5.2924969079124695">
+      <trkpt lat="50.26077818043106" lon="-5.2924785428189889">
         <ele>12</ele>
+      </trkpt>
+      <trkpt lat="50.69870444841979" lon="-5.175921012814336">
+        <ele>0</ele>
+      </trkpt>
+      <trkpt lat="50.56267172409096" lon="-5.3946834597374531">
+        <ele>0</ele>
+      </trkpt>
+      <trkpt lat="50.83811945468187" lon="-5.3397709354758263">
+        <ele>0</ele>
       </trkpt>
     </trkseg>
   </trk>

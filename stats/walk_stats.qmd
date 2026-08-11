@@ -414,21 +414,34 @@ weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i)
   )
 }))
 
+# Guard against a zero-precip period causing a divide-by-zero
+max_temp   <- max(weather_history$temp_mean, na.rm = TRUE)
+max_precip <- max(weather_history$precip_total, na.rm = TRUE)
+sec_formula <- as.formula(paste0("~ . / ", scale_factor))
+
 p_weather <- ggplot(weather_history, aes(x = date)) +
-  geom_line(aes(y = temp_mean), colour = COL_SWIMS_light, linewidth = 1.1) +
-  geom_line(aes(y = precip_total), colour = COL_SWIMS_dark, linewidth = 1.1) +
-  geom_line(data = sst_history, aes(x = date, y = sst_mean), colour = COL_SWIMS_darker, linewidth = 1.1) +
+  geom_line(aes(y = temp_mean, colour = "Air temp"), linewidth = 1.1) +
+  geom_line(aes(y = precip_total * scale_factor, colour = "Precipitation"), linewidth = 1.1) +
+  geom_line(data = sst_history, aes(x = date, y = sst_mean, colour = "Sea temp"), linewidth = 1.1) +
   scale_y_continuous(
     name = "Temperature (°C)",
-    sec.axis = sec_axis(~ . / scale_factor, name = "Precipitation (mm)")
+    sec.axis = sec_axis(sec_formula, name = "Precipitation (mm)")
   ) +
-  labs(title = "Weather", x = NULL, y = "temperature") +
-  site_theme
+  scale_colour_manual(
+    name = NULL,
+    values = c(
+      "Air temp"      = COL_SWIMS_light,
+      "Precipitation" = COL_SWIMS_dark,
+      "Sea temp"      = COL_SWIMS_darker
+    )
+  ) +
+  labs(title = "Weather", x = NULL) +
+  site_theme +
+  theme(legend.position = "top")
 
 ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
        width = 9, height = 4.5, dpi = 200)
 print(p_weather)
-```
 
 ## Coastal proximity
 

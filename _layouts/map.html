@@ -24,6 +24,37 @@ layout: default
   <h2 class="stats-section__title">Trip stats</h2>
 
   <section class="stats-category">
+    <h3 class="stats-category__title">Swims & Weather</h3>
+    <h4 class="stats-section__content">
+      Weather data is from the <a href="https://archive-api.open-meteo.com/v1/archive" target="_blank">Open-Meteo Archive API</a> and follows where I was on the given day.
+    </h4>
+    <div class="stats-category__stats" data-category="swims"></div>
+    <div class="stats-charts">
+      <img src="{{ '/images/stats/swims_over_time.png' | relative_url }}" alt="Swims per day, with 7-day average" loading="lazy">
+      <img src="{{ '/images/stats/weather.png' | relative_url }}" alt="Weather conditions over the trip" loading="lazy">
+      <picture class="stats-charts__wide">
+        <source media="(min-width: 641px)" srcset="{{ '/images/stats/swims_vs_weather_wide.png' | relative_url }}">
+        <img src="{{ '/images/stats/swims_vs_weather_stacked.png' | relative_url }}" alt="Scatter plots of swims against air temperature, sea temperature, and precipitation, with regression lines" loading="lazy">
+      </picture>
+    </div>
+  </section>
+
+  <section class="stats-category">
+    <h3 class="stats-category__title">Coastal distance</h3>
+    <h4 class="stats-section__content">
+      This map shows how far I was from the coastline at each point on the walk, calculated at low tide. This was calculated using the <a href="https://geoportal.statistics.gov.uk/datasets/591803c2a3b94804a3d7895cc127d7c0_0/explore?location=55.340024%2C-3.313841%2C5.00" target="_blank">Countries (December 2025) Boundaries UK BFE</a>.
+    </h4>
+    <div class="stats-charts">
+      <iframe src="{{ '/images/stats/coastal_map.html' | relative_url }}" 
+        width="100%" height="500" style="border:none;"></iframe>
+    </div>
+    <div class="stats-charts">
+      <img src="{{ '/images/stats/coastal_distance_and_sd.png' | relative_url }}" alt="Distance from the coastline, and a rolling average with standard deviation" loading="lazy">
+      <img src="{{ '/images/stats/coastal_distance_histogram_log.png' | relative_url }}" alt="Distribution of coastal distances" loading="lazy">
+    </div>
+
+
+  <section class="stats-category">
     <h3 class="stats-category__title">Distance</h3>
     <div class="stats-category__stats" data-category="distance"></div>
     <div class="stats-charts">
@@ -41,27 +72,6 @@ layout: default
       <img src="{{ '/images/stats/cumulative_spend.png' | relative_url }}" alt="Cumulative spend over the trip" loading="lazy">
     </div>
   </section>
-
-  <section class="stats-category">
-    <h3 class="stats-category__title">Swims</h3>
-    <div class="stats-category__stats" data-category="swims"></div>
-    <div class="stats-charts">
-      <img src="{{ '/images/stats/swims_over_time.png' | relative_url }}" alt="Swims per day, with 7-day average" loading="lazy">
-      <img src="{{ '/images/stats/cumulative_swims.png' | relative_url }}" alt="Cumulative swims over the trip" loading="lazy">
-      <img src="{{ '/images/stats/weather.png' | relative_url }}" alt="Weather conditions over the trip" loading="lazy">
-    </div>
-  </section>
-
-  <section class="stats-category">
-    <h3 class="stats-category__title">Coastal distance</h3>
-    <div class="stats-charts">
-      <iframe src="{{ '/images/stats/coastal_map.html' | relative_url }}" 
-        width="100%" height="500" style="border:none;"></iframe>
-    </div>
-    <div class="stats-charts">
-      <img src="{{ '/images/stats/coastal_distance_and_sd.png' | relative_url }}" alt="Distance from the coastline, and a rolling average with standard deviation" loading="lazy">
-      <img src="{{ '/images/stats/coastal_distance_histogram_log.png' | relative_url }}" alt="Distribution of coastal distances" loading="lazy">
-    </div>
 
   <p class="stats-section__footnote">
     Generated automatically from the trip log.

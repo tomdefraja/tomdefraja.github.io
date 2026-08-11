@@ -19,7 +19,7 @@ library(tidyr)
 library(ggplot2)
 library(jsonlite)
 library(scales)
-library(patchwork) 
+library(patchwork)
 
 # This document is executed with its own folder (stats/) as the working
 # directory, which is Quarto/knitr's default -- hence the "../" prefixes.
@@ -118,6 +118,7 @@ df <- df %>%
     spend_total             = spend_accom + spend_groceries + spend_eating_out +
                                spend_boats + spend_drinks + spend_gear,
     swims_7day_avg          = roll_mean_right(swims),
+    swims_3day_avg          = roll_mean_right(swims, 3),
     distance_7day_avg       = roll_mean_right(distance_km),
     spend_7day_avg          = roll_mean_right(spend_total),
     distance_cumulative     = cumsum(distance_km),
@@ -281,7 +282,7 @@ print(c_cumulative)
 p_swims <- ggplot(df, aes(x = date)) +
   geom_col(aes(y = swims), fill = COL_SWIMS, alpha = 0.35) +
   geom_line(aes(y = swims_7day_avg), colour = COL_SWIMS, linewidth = 1.1) +
-  labs(title = "Swims per day", x = NULL, y = "swims",
+  labs(title = "Swims per day, and 7 day rolling average", x = NULL, y = "swims",
        caption = "Line = 7-day average") +
   site_theme
 
@@ -290,17 +291,17 @@ ggsave(file.path(IMG_DIR, "swims_over_time.png"), p_swims,
 print(p_swims)
 ```
 
-```{r chart-cumulative-swims}
-s_cumulative <- ggplot(df, aes(x = date, y = swims_cumulative)) +
-  geom_area(fill = COL_SWIMS, alpha = 0.25) +
-  geom_line(colour = COL_SWIMS, linewidth = 1.1) +
-  labs(title = "Cumulative swims", x = NULL, y = "swims") +
-  site_theme
-
-ggsave(file.path(IMG_DIR, "cumulative_swims.png"), s_cumulative,
-       width = 9, height = 4.5, dpi = 200)
-print(s_cumulative)
-```
+# ```{r chart-cumulative-swims}
+# s_cumulative <- ggplot(df, aes(x = date, y = swims_cumulative)) +
+#   geom_area(fill = COL_SWIMS, alpha = 0.25) +
+#   geom_line(colour = COL_SWIMS, linewidth = 1.1) +
+#   labs(title = "Cumulative swims", x = NULL, y = "swims") +
+#   site_theme
+# 
+# ggsave(file.path(IMG_DIR, "cumulative_swims.png"), s_cumulative,
+#        width = 9, height = 4.5, dpi = 200)
+# print(s_cumulative)
+# ```
 
 ```{r sea_temperatures}
 library(httr)
@@ -311,12 +312,20 @@ my_spots_json <- read_json("../data/spots.json")
 
 library(purrr)
 
-camp_coords <- map_dfr(my_spots_json, ~ tibble(
-  name = .x$name,
-  date = .x$date,
-  lat  = .x$lat,
-  lng  = .x$lng
-))
+camp_coords <- map_dfr(my_spots_json, ~ {
+  
+  # Extract number of nights from description
+  nights <- stringr::str_extract(.x$description, "(?<=nights=)\\d+")
+  nights <- ifelse(is.na(nights), 1, as.integer(nights))
+  
+  tibble(
+    name = .x$name,
+    date = as.Date(.x$date) + 0:(nights - 1),
+    lat  = .x$lat,
+    lng  = .x$lng,
+    nights = nights
+  )
+})
 
 get_sst_history <- function(name, lat, lng, campdate) {
   url <- "https://marine-api.open-meteo.com/v1/marine"
@@ -358,17 +367,6 @@ sst_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i) {
   )
 }))
 
-```
-
-```{r chart-daily-water-temp}
-p_swims <- ggplot(sst_history, aes(x = date)) +
-  geom_line(aes(y = sst_mean), colour = COL_SWIMS, linewidth = 1.1) +
-  labs(title = "Daily water temperature", x = NULL, y = "Celcius") +
-  site_theme
-
-ggsave(file.path(IMG_DIR, "water_temp.png"), p_swims,
-       width = 9, height = 4.5, dpi = 200)
-print(p_swims)
 ```
 
 
@@ -449,13 +447,78 @@ p_weather <- ggplot(weather_history, aes(x = date)) +
 ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
        width = 9, height = 4.5, dpi = 200)
 print(p_weather)
+```
 
-## Coastal proximity
 
-```{r coastal-distance-setup}
+```{r chart-swims-weather-correlation}
+weather_history <- weather_history %>%
+  left_join(sst_history %>% select(date, sst = sst_mean), by = "date") %>%
+  left_join(df %>% select(date, swims, swims_avg = swims_7day_avg), by = "date")
+
+weather_history$sst <- sst_history$sst_mean
+weather_history$swims <- df$swims
+weather_history$swims_avg <- df$swims_3day_avg
+
+
+df_corr <- weather_history %>%
+  select(swims, temp_mean, sst, precip_total) %>%
+  pivot_longer(cols = c(temp_mean, sst, precip_total),
+               names_to = "variable", values_to = "value") %>%
+  mutate(variable = factor(recode(variable,
+    temp_mean    = "Air temp (°C)",
+    sst          = "Sea temp (°C)",
+    precip_total = "Precipitation (mm)"
+  ), levels = c("Air temp (°C)", "Sea temp (°C)", "Precipitation (mm)")))
+
+cor_labels <- df_corr %>%
+  filter(!is.na(value), !is.na(swims)) %>%
+  group_by(variable) %>%
+  summarise(
+    r = cor(swims, value, use = "complete.obs"),
+    x = min(value, na.rm = TRUE),
+    y = max(swims, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(label = paste0("r = ", round(r, 2)))
+
+variable_colours <- c(
+  "Air temp (°C)"      = COL_SWIMS_light,
+  "Sea temp (°C)"      = COL_SWIMS_darker,
+  "Precipitation (mm)" = COL_SWIMS_dark
+)
+
+build_swims_weather_plot <- function(ncol_facets = NULL, nrow_facets = NULL) {
+  ggplot(df_corr, aes(x = value, y = swims, colour = variable)) +
+    geom_jitter(height = 0.15, width = 0, alpha = 0.45, size = 2.6) +
+    geom_smooth(method = "lm", se = TRUE, colour = "black", linewidth = 0.6) +
+    geom_text(data = cor_labels, aes(x = x, y = y, label = label),
+              hjust = 0, vjust = 1, size = 3.2, colour = "grey30", inherit.aes = FALSE) +
+    facet_wrap(~variable, scales = "free_x", ncol = ncol_facets, nrow = nrow_facets) +
+    scale_colour_manual(values = variable_colours, guide = "none") +
+    labs(x = NULL, y = "Number of swims", title = "Swims vs weather conditions") +
+    site_theme
+}
+
+p_swims_weather_wide    <- build_swims_weather_plot(nrow_facets = 1)
+p_swims_weather_stacked <- build_swims_weather_plot(ncol_facets = 1)
+
+ggsave(file.path(IMG_DIR, "swims_vs_weather_wide.png"), p_swims_weather_wide,
+       width = 18, height = 4.5, dpi = 200)
+ggsave(file.path(IMG_DIR, "swims_vs_weather_stacked.png"), p_swims_weather_stacked,
+       width = 4.5, height = 10, dpi = 220)
+
+print(p_swims_weather_wide)
+print(p_swims_weather_stacked)
+```
+
+
+```{r coastal-distance-map}
 #| echo: false
 #| message: false
 #| warning: false
+#| out-width: "100%"
+
+## Coastal proximity
 
 library(sf)
 library(leaflet)
@@ -476,13 +539,6 @@ gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>
   st_transform(27700)
 
 df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
-```
-
-```{r coastal-distance-map}
-#| echo: false
-#| message: false
-#| warning: false
-#| out-width: "100%"
 
 n <- nrow(df_gpx)
 
@@ -515,31 +571,10 @@ htmlwidgets::saveWidget(m, file.path(IMG_DIR, "coastal_map.html"), selfcontained
 m
 ```
 
-```{r coastal-distance-plot}
-df_gpx$point_index <- seq_len(nrow(df_gpx))
-
-smooth_factor <- 10
-number_of_points <- length(df_gpx$point_index)
-
-rolling_mean_coast_dist <- roll_mean_right(df_gpx$dist_to_coast_m, ceiling(number_of_points/smooth_factor))
-rolling_sd_coast_dist <- roll_sd_right(df_gpx$dist_to_coast_m, ceiling(number_of_points/smooth_factor))
-
-p_coastal_dist <- ggplot(df_gpx, aes(x = point_index)) +
-  geom_line(aes(y = dist_to_coast_m), colour = COL_SWIMS, linewidth = 0.5) + 
-  geom_line(aes(y = rolling_mean_coast_dist), colour = "black", linewidth = 0.5) +
-  geom_line(aes(y = rolling_sd_coast_dist), colour = "blue", linewidth = 0.5) +
-  scale_y_continuous(trans='log10') +
-  labs(title = "Distance to coast along the walk", x = "Track point", y = "Distance (m)") +
-  site_theme
-
-ggsave(file.path(IMG_DIR, "coastal_distance.png"), p_coastal_dist,
-       width = 9, height = 4.5, dpi = 200)
-print(p_coastal_dist)
-```
 
 ```{r coast_dist_sd}
 df_gpx$point_index <- seq_len(nrow(df_gpx))
-smooth_factor <- 30
+smooth_factor <- 7
 window <- max(2, ceiling(nrow(df_gpx) / smooth_factor))  # guard against width < 2
 
 df_gpx$roll_mean_coast_dist <- roll_mean_right(df_gpx$dist_to_coast_m, window)
@@ -564,7 +599,7 @@ p_coastal_dist <- ggplot(df_gpx, aes(x = point_index)) +
               alpha = 0.2, colour = NA, show.legend = FALSE) +
   geom_line(aes(y = dist_to_coast_m, colour = "Raw"), linewidth = 0.4, alpha = 0.6) +
   geom_line(aes(y = roll_mean_coast_dist, colour = "Rolling mean"), linewidth = 0.6) +
-  scale_colour_manual(values = c("Raw" = COL_SWIMS, "Rolling mean" = "black")) +
+  scale_colour_manual(values = c("Raw" = COL_SWIMS, "Rolling mean" = COL_SWIMS_darker)) +
   scale_fill_manual(values = c("±1 SD" = "steelblue")) +
   scale_y_continuous(trans = "log10") +
   labs(title = "Distance to the coast, and standard deviation", x = "Track point", y = "Distance (m)",
@@ -581,42 +616,42 @@ print(p_coastal_dist)
 
 
 ```{r coast_dist_distribution}
-bin_width_coast <- 1
+library(patchwork)
 
-log_base <- 10
-
-logspace <- function( d1, d2, n) exp(log(log_base)*seq(d1, d2, length.out=n))
-
-breaks_coast_log <- logspace(log(min(df_gpx$dist_to_coast_m), log_base),log(max(df_gpx$dist_to_coast_m), log_base),100)
-
+dist_positive <- df_gpx$dist_to_coast_m[df_gpx$dist_to_coast_m > 0]
+breaks_coast_log <- 10^seq(log10(min(dist_positive)), log10(max(dist_positive)), length.out = 150)
 
 p_hist_1 <- ggplot(df_gpx, aes(x = dist_to_coast_m)) +
-  geom_density(breaks = breaks_coast_log, fill = COL_DISTANCE, colour = "black") +
-  # dnorm() returns a density (area under curve = 1), but the histogram
-  # bars are counts -- multiplying by n() * bin_width puts the curve on
-  # the same y-axis as the bars instead of flattening it near zero.
-  scale_x_log10()+
-  labs(
-    title = "Coastal distance distribution", x = "Distance", y = "Number of Points"
-  ) +
+  geom_histogram(breaks = breaks_coast_log, fill = COL_DISTANCE, alpha = 0.6, colour = COL_DISTANCE, linewidth = 0.2) +
+  scale_x_log10(breaks = c(1, 10, 100, 1000), labels = c("1", "10", "100", "1000")) +
+  labs(title = "Coastal distance distribution", x = "Distance (m)", y = "Number of points") +
   site_theme
 
-p_qqplot <- ggplot(mapping = aes(sample=log10(df_gpx$dist_to_coast_m[df_gpx$dist_to_coast_m > 0]))) +
-  geom_qq() + 
-  geom_qq_line(color=2) +
-  labs(title="Normal Q-Q Plot") +    ## add title
-  theme_bw() +                       ## remove gray background
-  theme(panel.grid=element_blank())  ## remove grid
+p_qqplot <- ggplot(mapping = aes(sample = log10(dist_positive))) +
+  geom_qq(shape = 1, size = 0.5, stroke = 0.3, colour = "grey40", alpha = 0.6) +
+  geom_qq_line(colour = "red", linewidth = 0.3) +
+  labs(title = "Normal Q-Q", x = NULL, y = NULL) +
+  theme_bw(base_size = 7) +
+  theme(
+    panel.grid = element_blank(),
+    plot.title = element_text(size = 7, colour = "grey40"),
+    axis.text = element_text(size = 5, colour = "grey50"),
+    axis.ticks = element_line(linewidth = 0.2, colour = "grey70"),
+    #panel.border = element_rect(colour = "grey80", linewidth = 0.3),
+    #plot.background = element_rect(fill = "white", colour = "grey80", linewidth = 0.3),
+    plot.margin = margin(4, 4, 4, 4)
+  )
 
-p_double_plot <- p_hist_1 + p_qqplot
+p_combined <- p_hist_1 +
+  inset_element(p_qqplot, left = 0.05, bottom = 0.35, right = 0.42, top = 0.88)
 
-ggsave(file.path(IMG_DIR, "coastal_distance_histogram_log.png"), p_hist,
+ggsave(file.path(IMG_DIR, "coastal_distance_histogram_log.png"), p_combined,
        width = 9, height = 4.5, dpi = 200)
-print(p_double_plot)
+print(p_combined)
 ```
 ```{r}
 df_coastal <- df
-bin_width_coast <- 10
+bin_width_coast <- 1
 breaks_coast <- seq(0, ceiling(max(df_gpx$dist_to_coast_m) / bin_width_coast) * bin_width_coast, by = bin_width_coast)
 
 dist_mean <- mean(df$distance_km)
@@ -630,6 +665,7 @@ p_hist <- ggplot(df_gpx, aes(x = dist_to_coast_m)) +
   labs(
     title = "Coastal distance distribution", x = "km", y = "days"
   ) +
+  coord_cartesian(ylim = c(0, 10)) +
   site_theme
 
 ggsave(file.path(IMG_DIR, "coastal_distance_histogram.png"), p_hist,

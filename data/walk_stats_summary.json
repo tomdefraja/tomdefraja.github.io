@@ -1,21 +1,21 @@
 {
-  "total_days": 16,
+  "total_days": 14,
   "date_start": "2026-07-16",
-  "date_end": "2026-08-12",
-  "total_distance_km": 311.2,
-  "avg_distance_km": 19.4,
-  "total_swims": 48,
-  "total_spend": 209.97,
-  "avg_spend_per_day": 13.12,
+  "date_end": "2026-07-29",
+  "total_distance_km": 250.2,
+  "avg_distance_km": 17.9,
+  "total_swims": 38,
+  "total_spend": 134.97,
+  "avg_spend_per_day": 9.64,
   "total_beers_drank": 15.5,
   "total_beers_bought_for": 10.5,
   "spend_by_category": {
-    "accom": 75,
+    "accom": 0,
     "groceries": 28.32,
     "eating_out": 42.15,
     "boats": 24.55,
     "drinks": 39.95,
     "gear": 0
   },
-  "generated_at": "2026-08-11 16:10:44.692428"
+  "generated_at": "2026-08-11 22:37:13.312095"
 }

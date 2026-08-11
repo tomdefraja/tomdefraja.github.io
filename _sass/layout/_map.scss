@@ -132,6 +132,12 @@
   margin-bottom: 1rem;
 }
 
+.stats-section__content {
+  font-family: $global-font-family;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
 .stats-section__footnote {
   margin-top: 1rem;
   font-size: $type-size-7;
@@ -175,6 +181,11 @@
     height: auto;
     border-radius: 2px;
   }
+}
+
+.stats-charts__wide {
+  grid-column: 1 / -1;
+  display: block; // <picture> has no block-level default, so this keeps it filling its grid cell cleanly
 }
 
 @media (max-width: 640px) {

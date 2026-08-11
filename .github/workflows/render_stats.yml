@@ -3,12 +3,15 @@ name: Render walk stats
 on:
   push:
     paths:
-      - 'data/walk_stats.csv'
       - 'stats/walk_stats.qmd'
-      - 'data/spots.json'
+  workflow_run:
+    workflows: ["Convert KMZ to JSON"]
+    types:
+      - completed
 
 jobs:
   render:
+    if: github.event_name == 'push' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: write

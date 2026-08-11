@@ -3,7 +3,7 @@ name: Convert KMZ to JSON
 on:
   push:
     paths:
-      - 'data/camps.kmz'
+      - 'data/coastal_walk.gpx'
 
 jobs:
   convert:

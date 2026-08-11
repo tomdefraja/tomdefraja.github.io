@@ -19,6 +19,7 @@ library(tidyr)
 library(ggplot2)
 library(jsonlite)
 library(scales)
+library(patchwork) 
 
 # This document is executed with its own folder (stats/) as the working
 # directory, which is Quarto/knitr's default -- hence the "../" prefixes.
@@ -106,6 +107,10 @@ matching the convention already used in the spreadsheet.
 ```{r derive}
 roll_mean_right <- function(x, width = 7) {
   vapply(seq_along(x), function(i) mean(x[max(1, i - width + 1):i]), numeric(1))
+}
+
+roll_sd_right <- function(x, width = 7) {
+  vapply(seq_along(x), function(i) sd(x[max(1, i - width + 1):i]), numeric(1))
 }
 
 df <- df %>%
@@ -513,8 +518,16 @@ m
 ```{r coastal-distance-plot}
 df_gpx$point_index <- seq_len(nrow(df_gpx))
 
-p_coastal_dist <- ggplot(df_gpx, aes(x = point_index, y = dist_to_coast_m)) +
-  geom_line(colour = COL_SWIMS, linewidth = 0.5) + 
+smooth_factor <- 10
+number_of_points <- length(df_gpx$point_index)
+
+rolling_mean_coast_dist <- roll_mean_right(df_gpx$dist_to_coast_m, ceiling(number_of_points/smooth_factor))
+rolling_sd_coast_dist <- roll_sd_right(df_gpx$dist_to_coast_m, ceiling(number_of_points/smooth_factor))
+
+p_coastal_dist <- ggplot(df_gpx, aes(x = point_index)) +
+  geom_line(aes(y = dist_to_coast_m), colour = COL_SWIMS, linewidth = 0.5) + 
+  geom_line(aes(y = rolling_mean_coast_dist), colour = "black", linewidth = 0.5) +
+  geom_line(aes(y = rolling_sd_coast_dist), colour = "blue", linewidth = 0.5) +
   scale_y_continuous(trans='log10') +
   labs(title = "Distance to coast along the walk", x = "Track point", y = "Distance (m)") +
   site_theme
@@ -523,6 +536,109 @@ ggsave(file.path(IMG_DIR, "coastal_distance.png"), p_coastal_dist,
        width = 9, height = 4.5, dpi = 200)
 print(p_coastal_dist)
 ```
+
+```{r coast_dist_sd}
+df_gpx$point_index <- seq_len(nrow(df_gpx))
+smooth_factor <- 30
+window <- max(2, ceiling(nrow(df_gpx) / smooth_factor))  # guard against width < 2
+
+df_gpx$roll_mean_coast_dist <- roll_mean_right(df_gpx$dist_to_coast_m, window)
+df_gpx$roll_sd_coast_dist   <- roll_sd_right(df_gpx$dist_to_coast_m, window)
+
+eps <- 0.5  # keeps the ribbon's lower bound off zero for the log10 axis
+#df_gpx$roll_lower <- pmax(df_gpx$roll_mean_coast_dist - df_gpx$roll_sd_coast_dist, eps)
+#df_gpx$roll_upper <- df_gpx$roll_mean_coast_dist + df_gpx$roll_sd_coast_dist
+
+# trying with log means and sd
+log_dist <- log10(pmax(df_gpx$dist_to_coast_m, eps))
+roll_mean_log <- roll_mean_right(log_dist, window)
+roll_sd_log   <- roll_sd_right(log_dist, window)
+
+df_gpx$roll_mean_coast_dist <- 10^roll_mean_log
+df_gpx$roll_lower <- 10^(roll_mean_log - roll_sd_log)
+df_gpx$roll_upper <- 10^(roll_mean_log + roll_sd_log)
+
+
+p_coastal_dist <- ggplot(df_gpx, aes(x = point_index)) +
+  geom_ribbon(aes(ymin = roll_lower, ymax = roll_upper, fill = "±1 SD"),
+              alpha = 0.2, colour = NA, show.legend = FALSE) +
+  geom_line(aes(y = dist_to_coast_m, colour = "Raw"), linewidth = 0.4, alpha = 0.6) +
+  geom_line(aes(y = roll_mean_coast_dist, colour = "Rolling mean"), linewidth = 0.6) +
+  scale_colour_manual(values = c("Raw" = COL_SWIMS, "Rolling mean" = "black")) +
+  scale_fill_manual(values = c("±1 SD" = "steelblue")) +
+  scale_y_continuous(trans = "log10") +
+  labs(title = "Distance to the coast, and standard deviation", x = "Track point", y = "Distance (m)",
+       colour = NULL, fill = NULL) +
+  site_theme +
+  theme(legend.position = c(0.8, 0.2),
+        legend.spacing.y = unit(-0.5, 'cm'),
+        legend.background = element_rect(fill = "white"))
+
+ggsave(file.path(IMG_DIR, "coastal_distance_and_sd.png"), p_coastal_dist,
+       width = 9, height = 4.5, dpi = 200)
+print(p_coastal_dist)
+```
+
+
+```{r coast_dist_distribution}
+bin_width_coast <- 1
+
+log_base <- 10
+
+logspace <- function( d1, d2, n) exp(log(log_base)*seq(d1, d2, length.out=n))
+
+breaks_coast_log <- logspace(log(min(df_gpx$dist_to_coast_m), log_base),log(max(df_gpx$dist_to_coast_m), log_base),100)
+
+
+p_hist_1 <- ggplot(df_gpx, aes(x = dist_to_coast_m)) +
+  geom_density(breaks = breaks_coast_log, fill = COL_DISTANCE, colour = "black") +
+  # dnorm() returns a density (area under curve = 1), but the histogram
+  # bars are counts -- multiplying by n() * bin_width puts the curve on
+  # the same y-axis as the bars instead of flattening it near zero.
+  scale_x_log10()+
+  labs(
+    title = "Coastal distance distribution", x = "Distance", y = "Number of Points"
+  ) +
+  site_theme
+
+p_qqplot <- ggplot(mapping = aes(sample=log10(df_gpx$dist_to_coast_m[df_gpx$dist_to_coast_m > 0]))) +
+  geom_qq() + 
+  geom_qq_line(color=2) +
+  labs(title="Normal Q-Q Plot") +    ## add title
+  theme_bw() +                       ## remove gray background
+  theme(panel.grid=element_blank())  ## remove grid
+
+p_double_plot <- p_hist_1 + p_qqplot
+
+ggsave(file.path(IMG_DIR, "coastal_distance_histogram_log.png"), p_hist,
+       width = 9, height = 4.5, dpi = 200)
+print(p_double_plot)
+```
+```{r}
+df_coastal <- df
+bin_width_coast <- 10
+breaks_coast <- seq(0, ceiling(max(df_gpx$dist_to_coast_m) / bin_width_coast) * bin_width_coast, by = bin_width_coast)
+
+dist_mean <- mean(df$distance_km)
+dist_sd   <- sd(df$distance_km)
+
+p_hist <- ggplot(df_gpx, aes(x = dist_to_coast_m)) +
+  geom_histogram(breaks = breaks_coast, fill = COL_DISTANCE, colour = "black") +
+  # dnorm() returns a density (area under curve = 1), but the histogram
+  # bars are counts -- multiplying by n() * bin_width puts the curve on
+  # the same y-axis as the bars instead of flattening it near zero.
+  labs(
+    title = "Coastal distance distribution", x = "km", y = "days"
+  ) +
+  site_theme
+
+ggsave(file.path(IMG_DIR, "coastal_distance_histogram.png"), p_hist,
+       width = 9, height = 4.5, dpi = 200)
+print(p_hist)
+
+```
+
+
 
 Want to try this with your own walk? [Try the interactive tool](/tools/coastal-distance-mapper.html){.button}
 

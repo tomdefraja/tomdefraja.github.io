@@ -44,6 +44,7 @@ jobs:
             any::sf
             any::leaflet
             any::XML
+            any::patchwork
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2

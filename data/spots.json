@@ -118,5 +118,25 @@
     "color": "red",
     "category": "Hosted",
     "categoryHex": "#e53935"
+  },
+  {
+    "name": "Test",
+    "description": "",
+    "date": "2026-08-11",
+    "lat": 51.789475,
+    "lng": -3.0124401,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Heath",
+    "description": "",
+    "date": "2026-08-11",
+    "lat": 52.41592,
+    "lng": -3.4446733,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
   }
 ]

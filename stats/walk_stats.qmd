@@ -417,6 +417,8 @@ weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i)
 # Guard against a zero-precip period causing a divide-by-zero
 max_temp   <- max(weather_history$temp_mean, na.rm = TRUE)
 max_precip <- max(weather_history$precip_total, na.rm = TRUE)
+scale_factor <- if (max_precip > 0) max_temp / max_precip else 1
+
 sec_formula <- as.formula(paste0("~ . / ", scale_factor))
 
 p_weather <- ggplot(weather_history, aes(x = date)) +

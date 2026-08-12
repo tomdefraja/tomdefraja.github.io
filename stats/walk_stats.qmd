@@ -110,10 +110,17 @@ gap_ranges <- df %>%
 add_date_breaks <- function(p, gap_ranges) {
   if (nrow(gap_ranges) == 0) return(p)
   breaks_list <- lapply(seq_len(nrow(gap_ranges)), function(i) {
-    scale_x_break(c(gap_ranges$gap_start[i], gap_ranges$gap_end[i]), scales = "free")
+    print(c(gap_ranges$gap_start[i], gap_ranges$gap_end[i]))
+    scale_x_break(c(gap_ranges$gap_start[i], gap_ranges$gap_end[i]), scales = "fixed")
   })
-  Reduce(`+`, breaks_list, .init = p)
+  Reduce(`+`, breaks_list, init = p)
 }
+
+tick_breaks <- seq(
+  min(df$date),
+  max(df$date),
+  by = 3
+)
 ```
 
 
@@ -234,14 +241,42 @@ COL_SWIMS_darker    <- "#199462"
 ```
 
 ```{r chart-distance}
-p_distance <- ggplot(df, aes(x = date)) +
+p_distance_unbroken <- ggplot(df, aes(x = date)) +
   geom_col(aes(y = distance_km), fill = COL_DISTANCE, alpha = 0.35) +
   geom_line(aes(y = distance_7day_avg), colour = COL_DISTANCE, linewidth = 1.1) +
+  geom_vline(
+    xintercept = as.numeric(gap_ranges$gap_start)+0.7,
+    linetype = "dashed",
+    linewidth = 0.5,
+    colour = alpha("gray30",0.5)
+  ) +
+  geom_vline(
+    xintercept = as.numeric(gap_ranges$gap_end)-0.05,
+    linetype = "dashed",
+    linewidth = 0.5,
+    colour = alpha("gray30",0.5)
+  ) +
   labs(title = "Distance walked per day", x = NULL, y = "km",
        caption = "Line = 7-day average") +
   site_theme
 
-p_distance <- add_trip_gaps(p_distance, df)
+p_dist_broken <- add_date_breaks(p_distance_unbroken, gap_ranges)
+
+p_distance <- p_dist_broken +
+  scale_x_continuous(
+    breaks = tick_breaks,
+    labels = function(x) {
+      format(as.Date(x, origin = "1970-01-01"), "%d %b")
+    }
+  ) +
+  theme(
+    axis.text.x.bottom = element_text(
+      angle = 45,
+      hjust = 0,
+      vjust = 0
+    ),
+    axis.text.x.top = element_blank()
+  )
 
 ggsave(file.path(IMG_DIR, "distance_over_time.png"), p_distance,
        width = 9, height = 4.5, dpi = 200)
@@ -249,44 +284,66 @@ print(p_distance)
 ```
 
 ```{r chart-cumulative-distance}
-p_cumulative <- ggplot(df, aes(x = date, y = distance_cumulative)) +
+p_cumulative_unbroken <- ggplot(df, aes(x = date, y = distance_cumulative)) +
   geom_area(fill = COL_DISTANCE, alpha = 0.25) +
   geom_line(colour = COL_DISTANCE, linewidth = 1.1) +
   labs(title = "Cumulative distance", x = NULL, y = "km") +
   site_theme
+
+p_cumu_broken <- add_date_breaks(p_cumulative_unbroken, gap_ranges)
+
+p_cumulative <- p_cumu_broken +
+  scale_x_continuous(
+    breaks = tick_breaks,
+    labels = function(x) {
+      format(as.Date(x, origin = "1970-01-01"), "%d %b")
+    }
+  ) +
+  theme(
+    axis.text.x.bottom = element_text(
+      angle = 45,
+      hjust = 0,
+      vjust = 0
+    ),
+    axis.text.x.top = element_blank()
+  )
+
 
 ggsave(file.path(IMG_DIR, "cumulative_distance.png"), p_cumulative,
        width = 9, height = 4.5, dpi = 200)
 print(p_cumulative)
 ```
 
-```{r chart-histogram}
+```{r dist-histogram}
 bin_width <- 3
 breaks <- seq(0, max(40, ceiling(max(df$distance_km) / bin_width) * bin_width), by = bin_width)
 
-dist_mean <- mean(df$distance_km)
-dist_sd   <- sd(df$distance_km)
-
-p_hist <- ggplot(df, aes(x = distance_km)) +
-  geom_histogram(breaks = breaks, fill = COL_DISTANCE, colour = "white") +
-  # dnorm() returns a density (area under curve = 1), but the histogram
-  # bars are counts -- multiplying by n() * bin_width puts the curve on
-  # the same y-axis as the bars instead of flattening it near zero.
-  stat_function(
-    fun = function(x) dnorm(x, mean = dist_mean, sd = dist_sd) * nrow(df) * bin_width,
-    colour = "black", linewidth = 0
-  ) +
-  labs(
-    title = "Daily distance distribution", x = "km", y = "days",
-    caption = paste0("Normal curve: mean = ", round(dist_mean, 1),
-                      " km, sd = ", round(dist_sd, 1), " km")
-  ) +
+p_dist_no_qq <- ggplot(df, aes(x = distance_km)) +
+  geom_histogram(breaks = breaks, fill = COL_DISTANCE, alpha = 0.6, colour = COL_DISTANCE, linewidth = 0.2) +
+  labs(title = "Distance distribution", x = "Distance (km)", y = "Frequency") +
   site_theme
 
-ggsave(file.path(IMG_DIR, "distance_histogram.png"), p_hist,
+p_dist_qqplot <- ggplot(mapping = aes(sample = df$distance_km)) +
+  geom_qq(shape = 1, size = 0.5, stroke = 0.3, colour = "grey40", alpha = 0.6) +
+  geom_qq_line(colour = "red", linewidth = 0.3) +
+  labs(title = "Normal Q-Q", x = NULL, y = NULL) +
+  theme_bw(base_size = 7) +
+  theme(
+    panel.grid = element_blank(),
+    plot.title = element_text(size = 7, colour = "grey40"),
+    axis.text = element_text(size = 5, colour = "grey50"),
+    axis.ticks = element_line(linewidth = 0.2, colour = "grey70"),
+    plot.margin = margin(4, 4, 4, 4)
+  )
+
+p_dist_yes_qq <- p_dist_no_qq +
+  inset_element(p_dist_qqplot, left = 0.05, bottom = 0.55, right = 0.37, top = 0.95)
+
+ggsave(file.path(IMG_DIR, "distance_histogram.png"), p_dist_yes_qq,
        width = 9, height = 4.5, dpi = 200)
-print(p_hist)
+print(p_dist_yes_qq)
 ```
+
 
 ## Spend
 
@@ -327,12 +384,37 @@ print(c_cumulative)
 ## Swims
 
 ```{r chart-swims}
-p_swims <- ggplot(df, aes(x = date)) +
+p_swims_unbroken <- ggplot(df, aes(x = date)) +
   geom_col(aes(y = swims), fill = COL_SWIMS, alpha = 0.35) +
+  geom_vline(
+    xintercept = as.numeric(gap_ranges$gap_start)+0.7,
+    linetype = "dashed",
+    linewidth = 0.5,
+    colour = alpha("gray30",0.5)
+  ) +
+  geom_vline(
+    xintercept = as.numeric(gap_ranges$gap_end)-0.05,
+    linetype = "dashed",
+    linewidth = 0.5,
+    colour = alpha("gray30",0.5)
+  ) +
   geom_line(aes(y = swims_7day_avg), colour = COL_SWIMS, linewidth = 1.1) +
   labs(title = "Swims per day, and 7 day rolling average", x = NULL, y = "swims",
        caption = "Line = 7-day average") +
   site_theme
+
+p_swims_broken <- add_date_breaks(p_swims_unbroken, gap_ranges)
+
+p_swims <- p_swims_broken +
+  scale_x_continuous(
+    breaks = tick_breaks,
+    labels = function(x) {
+      format(as.Date(x, origin = "1970-01-01"), "%d %b")
+    }
+  ) +
+  theme(
+    axis.text.x.top = element_blank()
+  )
 
 ggsave(file.path(IMG_DIR, "swims_over_time.png"), p_swims,
        width = 9, height = 4.5, dpi = 200)
@@ -487,7 +569,7 @@ temp_ribbon <- weather_history %>%
   select(date, air = temp_mean_smooth) %>%
   inner_join(sst_history %>% select(date, sea = sst_mean_smooth), by = "date")
 
-p_weather <- ggplot(weather_history, aes(x = date)) +
+p_weather_unbroken <- ggplot(weather_history, aes(x = date)) +
   geom_col(aes(y = precip_total * scale_factor), fill = COL_SWIMS_dark, alpha = 0.25, width = 1) +
   geom_ribbon(data = temp_ribbon, aes(x = date, ymin = pmin(air, sea), ymax = pmax(air, sea)),
               fill = COL_SWIMS, alpha = 0.15, inherit.aes = FALSE) +
@@ -495,6 +577,18 @@ p_weather <- ggplot(weather_history, aes(x = date)) +
   geom_line(aes(y = temp_mean_smooth, colour = "Air temp"), linewidth = 1.1) +
   geom_line(data = sst_history, aes(x = date, y = sst_mean), colour = COL_SWIMS_darker, linewidth = 0.4, alpha = 0.4) +
   geom_line(data = sst_history, aes(x = date, y = sst_mean_smooth, colour = "Sea temp"), linewidth = 1.1) +
+  geom_vline(
+    xintercept = as.numeric(gap_ranges$gap_start)+0.7,
+    linetype = "dashed",
+    linewidth = 0.5,
+    colour = alpha("gray30",0.5)
+  ) +
+  geom_vline(
+    xintercept = as.numeric(gap_ranges$gap_end)-0.05,
+    linetype = "dashed",
+    linewidth = 0.5,
+    colour = alpha("gray30",0.5)
+  ) +
   geom_rug(data = swim_days, aes(x = date), sides = "b", colour = COL_SWIMS_dark, alpha = 0.6, linewidth = 0.4, inherit.aes = FALSE) +
   scale_y_continuous(
     name = "Temperature (°C)",
@@ -511,93 +605,25 @@ p_weather <- ggplot(weather_history, aes(x = date)) +
         legend.background = element_rect(fill = alpha("white",0.7), colour = NA)
         )
 
+p_weather_broken <- add_date_breaks(p_weather_unbroken, gap_ranges)
+
+p_weather <- p_weather_broken +
+  scale_x_continuous(
+    breaks = tick_breaks,
+    labels = function(x) {
+      format(as.Date(x, origin = "1970-01-01"), "%d %b")
+    }
+  ) +
+  theme(
+    axis.text.x.top = element_blank()
+  )
+
+
 ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
        width = 9, height = 4.5, dpi = 200)
 print(p_weather)
 ```
 
-
-```{r weather-history}
-get_weather_history <- function(name, lat, lng, campdate) {
-  url <- "https://archive-api.open-meteo.com/v1/archive"
-  
-  resp <- GET(url, query = list(
-    latitude = lat,
-    longitude = lng,
-    hourly = "temperature_2m,precipitation",
-    start_date = campdate,
-    end_date = campdate,
-    timezone = "auto"
-  ))
-  
-  data <- fromJSON(content(resp, "text", encoding = "UTF-8"))
-  
-  if (!is.null(data$error) && isTRUE(data$error)) {
-    warning(paste0("API error for '", name, "' (", campdate, "): ", data$reason))
-    return(tibble(name = name, date = as.Date(campdate), temp_mean = NA_real_, precip_total = NA_real_))
-  }
-  
-  df <- data.frame(
-    datetime = as.POSIXct(data$hourly$time, format = "%Y-%m-%dT%H:%M", tz = "UTC"),
-    temp = data$hourly$temperature_2m,
-    precip = data$hourly$precipitation
-  )
-  
-  
-  df %>%
-    mutate(date = as.Date(datetime)) %>%
-    group_by(date) %>%
-    summarise(
-      temp_mean = mean(temp[8:20], na.rm = TRUE),
-      precip_total = sum(precip, na.rm = TRUE),
-      .groups = "drop"
-    ) %>%
-    mutate(name = name, .before = 1)
-}
-
-weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i) {
-  get_weather_history(
-    camp_coords$name[i],
-    camp_coords$lat[i],
-    camp_coords$lng[i],
-    camp_coords$date[i]
-  )
-}))
-
-# Guard against a zero-precip period causing a divide-by-zero
-max_temp   <- max(weather_history$temp_mean, na.rm = TRUE)
-max_precip <- max(weather_history$precip_total, na.rm = TRUE)
-scale_factor <- if (max_precip > 0) max_temp / max_precip else 1
-
-sec_formula <- as.formula(paste0("~ . / ", scale_factor))
-
-p_weather <- ggplot(weather_history, aes(x = date)) +
-  geom_line(aes(y = temp_mean, colour = "Air temp"), linewidth = 1.1) +
-  geom_line(aes(y = precip_total * scale_factor, colour = "Precipitation"), linewidth = 1.1) +
-  geom_line(data = sst_history, aes(x = date, y = sst_mean, colour = "Sea temp"), linewidth = 1.1) +
-  scale_y_continuous(
-    name = "Temperature (°C)",
-    sec.axis = sec_axis(sec_formula, name = "Precipitation (mm)")
-  ) +
-  scale_colour_manual(
-    name = NULL,
-    values = c(
-      "Air temp"      = COL_SWIMS_light,
-      "Precipitation" = COL_SWIMS_dark,
-      "Sea temp"      = COL_SWIMS_darker
-    )
-  ) +
-  labs(title = "Weather", x = NULL) +
-  site_theme +
-  theme(legend.position = c(0.8, 0.2),
-        legend.spacing.y = unit(-0.5, 'cm'),
-        legend.background = element_rect(fill = alpha("white",0.7), colour = NA)
-        )
-
-ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
-       width = 9, height = 4.5, dpi = 200)
-print(p_weather)
-```
 
 
 ```{r chart-swims-weather-correlation}

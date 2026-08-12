@@ -20,6 +20,9 @@ library(ggplot2)
 library(jsonlite)
 library(scales)
 library(patchwork)
+library(sf)
+library(leaflet)
+library(XML)
 
 # This document is executed with its own folder (stats/) as the working
 # directory, which is Quarto/knitr's default -- hence the "../" prefixes.
@@ -417,6 +420,102 @@ weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i)
   )
 }))
 
+
+max_temp   <- max(c(weather_history$temp_mean, sst_history$sst_mean), na.rm = TRUE)
+max_precip <- max(weather_history$precip_total, na.rm = TRUE)
+scale_factor <- if (max_precip > 0) max_temp / max_precip else 1
+sec_formula <- as.formula(paste0("~ . / ", scale_factor))
+
+weather_history <- weather_history %>%
+  arrange(date) %>%
+  mutate(temp_mean_smooth = roll_mean_right(temp_mean))
+
+sst_history <- sst_history %>%
+  arrange(date) %>%
+  mutate(sst_mean_smooth = roll_mean_right(sst_mean))
+
+# swim days, for the rug at the bottom
+swim_days <- df %>% filter(swims > 0) %>% select(date)
+
+# air/sea temp on the same date grid, for the ribbon between them
+temp_ribbon <- weather_history %>%
+  select(date, air = temp_mean_smooth) %>%
+  inner_join(sst_history %>% select(date, sea = sst_mean_smooth), by = "date")
+
+p_weather <- ggplot(weather_history, aes(x = date)) +
+  geom_col(aes(y = precip_total * scale_factor), fill = COL_SWIMS_dark, alpha = 0.25, width = 1) +
+  geom_ribbon(data = temp_ribbon, aes(x = date, ymin = pmin(air, sea), ymax = pmax(air, sea)),
+              fill = COL_SWIMS, alpha = 0.15, inherit.aes = FALSE) +
+  geom_line(aes(y = temp_mean), colour = COL_SWIMS_light, linewidth = 0.4, alpha = 0.4) +
+  geom_line(aes(y = temp_mean_smooth, colour = "Air temp"), linewidth = 1.1) +
+  geom_line(data = sst_history, aes(x = date, y = sst_mean), colour = COL_SWIMS_darker, linewidth = 0.4, alpha = 0.4) +
+  geom_line(data = sst_history, aes(x = date, y = sst_mean_smooth, colour = "Sea temp"), linewidth = 1.1) +
+  geom_rug(data = swim_days, aes(x = date), sides = "b", colour = COL_SWIMS_dark, alpha = 0.6, linewidth = 0.4, inherit.aes = FALSE) +
+  scale_y_continuous(
+    name = "Temperature (°C)",
+    sec.axis = sec_axis(sec_formula, name = "Precipitation (mm)")
+  ) +
+  scale_colour_manual(
+    name = NULL,
+    values = c("Air temp" = COL_SWIMS_light, "Sea temp" = COL_SWIMS_darker)
+  ) +
+  labs(title = "Weather", subtitle = "Tick marks along the bottom mark swim days", x = NULL) +
+  site_theme +
+  theme(legend.position = "top")
+
+ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
+       width = 9, height = 4.5, dpi = 200)
+print(p_weather)
+```
+
+
+```{r weather-history}
+get_weather_history <- function(name, lat, lng, campdate) {
+  url <- "https://archive-api.open-meteo.com/v1/archive"
+  
+  resp <- GET(url, query = list(
+    latitude = lat,
+    longitude = lng,
+    hourly = "temperature_2m,precipitation",
+    start_date = campdate,
+    end_date = campdate,
+    timezone = "auto"
+  ))
+  
+  data <- fromJSON(content(resp, "text", encoding = "UTF-8"))
+  
+  if (!is.null(data$error) && isTRUE(data$error)) {
+    warning(paste0("API error for '", name, "' (", campdate, "): ", data$reason))
+    return(tibble(name = name, date = as.Date(campdate), temp_mean = NA_real_, precip_total = NA_real_))
+  }
+  
+  df <- data.frame(
+    datetime = as.POSIXct(data$hourly$time, format = "%Y-%m-%dT%H:%M", tz = "UTC"),
+    temp = data$hourly$temperature_2m,
+    precip = data$hourly$precipitation
+  )
+  
+  
+  df %>%
+    mutate(date = as.Date(datetime)) %>%
+    group_by(date) %>%
+    summarise(
+      temp_mean = mean(temp[8:20], na.rm = TRUE),
+      precip_total = sum(precip, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(name = name, .before = 1)
+}
+
+weather_history <- do.call(rbind, lapply(seq_len(nrow(camp_coords)), function(i) {
+  get_weather_history(
+    camp_coords$name[i],
+    camp_coords$lat[i],
+    camp_coords$lng[i],
+    camp_coords$date[i]
+  )
+}))
+
 # Guard against a zero-precip period causing a divide-by-zero
 max_temp   <- max(weather_history$temp_mean, na.rm = TRUE)
 max_precip <- max(weather_history$precip_total, na.rm = TRUE)
@@ -518,13 +617,6 @@ print(p_swims_weather_stacked)
 #| warning: false
 #| out-width: "100%"
 
-## Coastal proximity
-
-library(sf)
-library(leaflet)
-library(dplyr)
-library(XML)
-
 uk_coastline <- read_sf("../data/uk_lowtide_simple.shp") |> st_transform(27700)
 coast_union <- st_union(uk_coastline)
 
@@ -599,15 +691,16 @@ p_coastal_dist <- ggplot(df_gpx, aes(x = point_index)) +
               alpha = 0.2, colour = NA, show.legend = FALSE) +
   geom_line(aes(y = dist_to_coast_m, colour = "Raw"), linewidth = 0.4, alpha = 0.6) +
   geom_line(aes(y = roll_mean_coast_dist, colour = "Rolling mean"), linewidth = 0.6) +
-  scale_colour_manual(values = c("Raw" = COL_SWIMS, "Rolling mean" = COL_SWIMS_darker)) +
+  scale_colour_manual(values = c("Raw" = COL_SWIMS, "Rolling mean and standard deviation" = COL_SWIMS_darker)) +
   scale_fill_manual(values = c("±1 SD" = "steelblue")) +
   scale_y_continuous(trans = "log10") +
-  labs(title = "Distance to the coast, and standard deviation", x = "Track point", y = "Distance (m)",
+  labs(title = "Distance to the coast", x = "Track point", y = "Distance (m)",
        colour = NULL, fill = NULL) +
   site_theme +
   theme(legend.position = c(0.8, 0.2),
         legend.spacing.y = unit(-0.5, 'cm'),
-        legend.background = element_rect(fill = "white"))
+        legend.background = element_rect(fill = "white")
+        )
 
 ggsave(file.path(IMG_DIR, "coastal_distance_and_sd.png"), p_coastal_dist,
        width = 9, height = 4.5, dpi = 200)
@@ -674,6 +767,23 @@ print(p_hist)
 
 ```
 
+```{r}
+plot(1, type = 'n')
+
+legend(0.8,1.4,legend=c("CU","SL","SU","L","F"),lty=c(1,1,1,1,1),
+       pch=rep(22,5),
+       pt.cex=6.8,cex=1.5,
+       col=c(NA,NA,NA,NA,NA),        
+       pt.bg=adjustcolor(c('red','blue','green','orange','grey'), alpha.f = .5),
+       bty='n', horiz=T, lwd=c(2,2,2,2,2), x.intersp=0.5)
+
+legend(0.8,1.4,legend=c("CU","SL","SU","L","F"),lty=c(1,1,1,1,1),
+       pch=c("\u2B1A","\u2B1A",NA,NA,NA),
+       pt.cex=4,cex=1.5,
+       col=c("red","blue","green","orange","grey47"),        
+       pt.bg=adjustcolor(c('red','blue','green','orange','grey'), alpha.f = .5),
+       bty='n', horiz=T, lwd=c(2,2,2,2,2), x.intersp=0.5)
+```
 
 
 Want to try this with your own walk? [Try the interactive tool](/tools/coastal-distance-mapper.html){.button}

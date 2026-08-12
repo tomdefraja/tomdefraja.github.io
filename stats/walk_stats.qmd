@@ -87,8 +87,6 @@ df <- df %>%
   mutate(
     date = as.Date(date, format = "%d %b %Y"),
     across(starts_with("spend_"), ~ replace_na(as.numeric(.x), 0)),
-    beers_drank = replace_na(as.numeric(beers_drank), 0),
-    beers_bought_for = replace_na(as.numeric(beers_bought_for), 0),
     swims = replace_na(as.numeric(swims), 0),
     distance_km = replace_na(as.numeric(distance_km), 0)
   ) %>%
@@ -175,8 +173,6 @@ df <- df %>%
     distance_cumulative     = cumsum(distance_km),
     swims_cumulative        = cumsum(swims),
     spend_cumulative        = cumsum(spend_total),
-    beers_drank_total       = cumsum(beers_drank),
-    beers_bought_for_total  = cumsum(beers_bought_for)
   )
 ```
 
@@ -196,8 +192,6 @@ summary_stats <- list(
   avg_swims_per_day               =round(mean(df$swims),1),
   total_spend                      = round(sum(df$spend_total), 2),
   avg_spend_per_day                  = round(mean(df$spend_total), 2),
-  total_beers_drank                    = sum(df$beers_drank),
-  total_beers_bought_for                 = sum(df$beers_bought_for),
   spend_by_category = list(
     accom      = round(sum(df$spend_accom), 2),
     groceries   = round(sum(df$spend_groceries), 2),
@@ -709,6 +703,7 @@ df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
 
 summary_stats$avg_coastal_distance_m <- round(mean(df_gpx$dist_to_coast_m),1)
 summary_stats$max_coastal_distance_m <- round(max(df_gpx$dist_to_coast_m),1)
+write_json(summary_stats, JSON_PATH, auto_unbox = TRUE, pretty = TRUE)
 
 n <- nrow(df_gpx)
 

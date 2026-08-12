@@ -1,16 +1,16 @@
-date,day,country,swims,beers_drank,beers_bought_for,£_accom,£_groceries,£_eord_out,£_boats,£_alcohol,£_gear,distance_km
-16 Jul 2026,1,England,1,0,0,,,,,,,11.1
-17 Jul 2026,2,England,4,0,0,,,17,,,,29.76
-18 Jul 2026,3,England,3,5,4,,,,17.55,21.15,,18.4
-19 Jul 2026,4,England,1,2,2,,,,,,,0
-20 Jul 2026,5,England,2,0,0,,,10.65,7,,,19.4
-21 Jul 2026,6,England,5,0.5,0.5,,6.11,,,,,20
-22 Jul 2026,7,England,2,2,0,,10.02,,,,,10.4
-23 Jul 2026,8,England,4,3.5,2.5,,,,,11.8,,32.7
-24 Jul 2026,9,England,5,0,0,,,,,,,23.3
-25 Jul 2026,10,England,4,0,0,,5.5,,,,,19.1
-26 Jul 2026,11,England,1,0,0,,,,,,,22.7
-27 Jul 2026,12,England,2,0,0,,2.55,,,,,22.4
-28 Jul 2026,13,England,1,0,0,,,4.5,,,,0
-29 Jul 2026,14,England,3,2.5,1.5,,4.14,10,,7,,20.9
-13 Aug 2026,15,England,3,2.5,1.5,,4.14,10,,7,,40.9
+date,day,country,swims,cornish_bought,cornish_for,devon_bought,devon_for,wales_bought,wales_for,guinness_bought,guinness_for,murphys_bought,murphys_for,beamish_bought,beamish_for,£_accom,£_groceries,£_eord_out,£_boats,£_alcohol,£_gear,distance_km
+16 Jul 2026,1,England,1,,,,,,,,,,,,,,,,,,,11.1
+17 Jul 2026,2,England,4,,,,,,,,,,,,,,,17,,,,29.76
+18 Jul 2026,3,England,3,1,5,,,,,,,,,,,,,,17.55,21.15,,18.4
+19 Jul 2026,4,England,1,,2,,,,,,,,,,,,,,,,,0
+20 Jul 2026,5,England,2,,,,,,,,,,,,,,,10.65,7,,,19.4
+21 Jul 2026,6,England,5,,0.5,,,,,,,,,,,,6.11,,,,,20
+22 Jul 2026,7,England,2,2,0,,,,,,,,,,,,10.02,,,,,10.4
+23 Jul 2026,8,England,4,1,2.5,,,,,,,,,,,,,,,11.8,,32.7
+24 Jul 2026,9,England,5,,,,,,,,,,,,,,,,,,,23.3
+25 Jul 2026,10,England,4,,,,,,,,,,,,,,5.5,,,,,19.1
+26 Jul 2026,11,England,1,,,,,,,,,,,,,,,,,,,22.7
+27 Jul 2026,12,England,2,,,,,,,,,,,,,,2.55,,,,,22.4
+28 Jul 2026,13,England,1,,,,,,,,,,,,,,,4.5,,,,0
+29 Jul 2026,14,England,3,1,1.5,,,,,,,,,,,,4.14,10,,7,,20.9
+13 Aug 2026,15,England,,,,,,,,,,,,,,,,,,,,

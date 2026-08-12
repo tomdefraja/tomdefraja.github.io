@@ -5,6 +5,7 @@
   "total_distance_km": 291.1,
   "avg_distance_km": 19.4,
   "total_swims": 41,
+  "avg_swims_per_day": 2.7,
   "total_spend": 156.11,
   "avg_spend_per_day": 10.41,
   "total_beers_drank": 18,
@@ -17,5 +18,7 @@
     "drinks": 46.95,
     "gear": 0
   },
-  "generated_at": "2026-08-12 13:03:24.89975"
+  "generated_at": "2026-08-12 23:51:32.164853",
+  "avg_coastal_distance_m": 136.3,
+  "max_coastal_distance_m": 1577.9
 }

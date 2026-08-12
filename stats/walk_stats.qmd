@@ -70,8 +70,6 @@ col_map <- c(
   day               = find_col(nm, "day$"),
   country           = find_col(nm, "country$"),
   swims             = find_col(nm, "swims$"),
-  beers_drank       = find_col(nm, "beers_drank$"),
-  beers_bought_for  = find_col(nm, "beers_bought_for$"),
   spend_accom       = find_col(nm, "£_accom$"),
   spend_groceries   = find_col(nm, "£_groceries$"),
   spend_eating_out  = find_col(nm, "£_eord_out$"),
@@ -195,6 +193,7 @@ summary_stats <- list(
   total_distance_km          = round(sum(df$distance_km), 1),
   avg_distance_km              = round(mean(df$distance_km), 1),
   total_swims                    = sum(df$swims),
+  avg_swims_per_day               =round(mean(df$swims),1),
   total_spend                      = round(sum(df$spend_total), 2),
   avg_spend_per_day                  = round(mean(df$spend_total), 2),
   total_beers_drank                    = sum(df$beers_drank),
@@ -589,7 +588,7 @@ p_weather_unbroken <- ggplot(weather_history, aes(x = date)) +
     linewidth = 0.5,
     colour = alpha("gray30",0.5)
   ) +
-  geom_rug(data = swim_days, aes(x = date), sides = "b", colour = COL_SWIMS_dark, alpha = 0.6, linewidth = 0.4, inherit.aes = FALSE) +
+  #geom_rug(data = swim_days, aes(x = date), sides = "b", colour = COL_SWIMS_dark, alpha = 0.6, linewidth = 0.4, inherit.aes = FALSE) +
   scale_y_continuous(
     name = "Temperature (°C)",
     sec.axis = sec_axis(sec_formula, name = "Precipitation (mm)")
@@ -598,12 +597,8 @@ p_weather_unbroken <- ggplot(weather_history, aes(x = date)) +
     name = NULL,
     values = c("Air temp" = COL_SWIMS_light, "Sea temp" = COL_SWIMS_darker)
   ) +
-  labs(title = "Weather", subtitle = "Tick marks along the bottom mark swim days", x = NULL) +
-  site_theme +
-  theme(legend.position = c(0.2, 0.2),
-        legend.spacing.y = unit(-0.5, 'cm'),
-        legend.background = element_rect(fill = alpha("white",0.7), colour = NA)
-        )
+  labs(title = "Weather", x = NULL) +
+  site_theme
 
 p_weather_broken <- add_date_breaks(p_weather_unbroken, gap_ranges)
 
@@ -614,9 +609,11 @@ p_weather <- p_weather_broken +
       format(as.Date(x, origin = "1970-01-01"), "%d %b")
     }
   ) +
+  labs(y = NULL) +
   theme(
-    axis.text.x.top = element_blank()
-  )
+    axis.text.x.top = element_blank(),
+    legend.position = "top"
+    )
 
 
 ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
@@ -632,12 +629,13 @@ weather_history <- weather_history %>%
   left_join(df %>% select(date, swims, swims_avg = swims_7day_avg), by = "date")
 
 weather_history$sst <- sst_history$sst_mean
-weather_history$swims <- df$swims
-weather_history$swims_avg <- df$swims_3day_avg
+# weather_history$swims <- df$swims
+# weather_history$swims_avg <- df$swims_3day_avg
 
+weather_history$input_swims <- df$swims
 
 df_corr <- weather_history %>%
-  select(swims, temp_mean, sst, precip_total) %>%
+  select(input_swims, temp_mean, sst, precip_total) %>%
   pivot_longer(cols = c(temp_mean, sst, precip_total),
                names_to = "variable", values_to = "value") %>%
   mutate(variable = factor(recode(variable,
@@ -647,12 +645,12 @@ df_corr <- weather_history %>%
   ), levels = c("Air temp (°C)", "Sea temp (°C)", "Precipitation (mm)")))
 
 cor_labels <- df_corr %>%
-  filter(!is.na(value), !is.na(swims)) %>%
+  filter(!is.na(value), !is.na(input_swims)) %>%
   group_by(variable) %>%
   summarise(
-    r = cor(swims, value, use = "complete.obs"),
+    r = cor(input_swims, value, use = "complete.obs"),
     x = min(value, na.rm = TRUE),
-    y = max(swims, na.rm = TRUE),
+    y = max(input_swims, na.rm = TRUE),
     .groups = "drop"
   ) %>%
   mutate(label = paste0("r = ", round(r, 2)))
@@ -664,8 +662,8 @@ variable_colours <- c(
 )
 
 build_swims_weather_plot <- function(ncol_facets = NULL, nrow_facets = NULL) {
-  ggplot(df_corr, aes(x = value, y = swims, colour = variable)) +
-    geom_jitter(height = 0.15, width = 0, alpha = 0.45, size = 2.6) +
+  ggplot(df_corr, aes(x = value, y = input_swims, colour = variable)) +
+    geom_point(height = 0.15, width = 0, alpha = 0.45, size = 2.6) +
     geom_smooth(method = "lm", se = TRUE, colour = "black", linewidth = 0.6) +
     geom_text(data = cor_labels, aes(x = x, y = y, label = label),
               hjust = 0, vjust = 1, size = 3.2, colour = "grey30", inherit.aes = FALSE) +
@@ -708,6 +706,9 @@ gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>
   st_transform(27700)
 
 df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
+
+summary_stats$avg_coastal_distance_m <- round(mean(df_gpx$dist_to_coast_m),1)
+summary_stats$max_coastal_distance_m <- round(max(df_gpx$dist_to_coast_m),1)
 
 n <- nrow(df_gpx)
 
@@ -826,30 +827,7 @@ ggsave(file.path(IMG_DIR, "coastal_distance_histogram_log.png"), p_combined,
        width = 9, height = 4.5, dpi = 200)
 print(p_combined)
 ```
-```{r}
-df_coastal <- df
-bin_width_coast <- 1
-breaks_coast <- seq(0, ceiling(max(df_gpx$dist_to_coast_m) / bin_width_coast) * bin_width_coast, by = bin_width_coast)
 
-dist_mean <- mean(df$distance_km)
-dist_sd   <- sd(df$distance_km)
-
-p_hist <- ggplot(df_gpx, aes(x = dist_to_coast_m)) +
-  geom_histogram(breaks = breaks_coast, fill = COL_DISTANCE, colour = "black") +
-  # dnorm() returns a density (area under curve = 1), but the histogram
-  # bars are counts -- multiplying by n() * bin_width puts the curve on
-  # the same y-axis as the bars instead of flattening it near zero.
-  labs(
-    title = "Coastal distance distribution", x = "km", y = "days"
-  ) +
-  coord_cartesian(ylim = c(0, 10)) +
-  site_theme
-
-ggsave(file.path(IMG_DIR, "coastal_distance_histogram.png"), p_hist,
-       width = 9, height = 4.5, dpi = 200)
-print(p_hist)
-
-```
 
 
 

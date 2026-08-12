@@ -44,6 +44,7 @@ layout: default
     <h4 class="stats-section__content">
       This map shows how far I was from the coastline at each point on the walk, calculated at low tide. This was calculated using the <a href="https://geoportal.statistics.gov.uk/datasets/591803c2a3b94804a3d7895cc127d7c0_0/explore?location=55.340024%2C-3.313841%2C5.00" target="_blank">Countries (December 2025) Boundaries UK BFE</a>.
     </h4>
+    <div class="stats-category__stats" data-category="coastal"></div>
     <div class="stats-charts">
       <iframe src="{{ '/images/stats/coastal_map.html' | relative_url }}" 
         width="100%" height="500" style="border:none;"></iframe>
@@ -93,7 +94,12 @@ layout: default
       { label: 'Avg. per day', key: 'avg_spend_per_day', prefix: '£' }
     ],
     swims: [
-      { label: 'Total swims', key: 'total_swims' }
+      { label: 'Total swims', key: 'total_swims' },
+      { label: 'Avg. per day', key: 'avg_swims_per_day' }
+    ],
+    coastal: [
+      { label: 'Avg. distance from coast', key: 'avg_coastal_distance_m', suffix: ' m' },
+      { label: 'Max. distance from coast', key: 'max_coastal_distance_m', suffix: ' m' }
     ]
   };
 

@@ -23,6 +23,8 @@ library(patchwork)
 library(sf)
 library(leaflet)
 library(XML)
+library(ggbreak)
+
 
 # This document is executed with its own folder (stats/) as the working
 # directory, which is Quarto/knitr's default -- hence the "../" prefixes.
@@ -86,18 +88,59 @@ df <- df %>%
   filter(!is.na(date)) %>%           # drops blank rows / Table 1 debris below
   mutate(
     date = as.Date(date, format = "%d %b %Y"),
-    # Explicit numeric coercion matters here: a column with no non-blank
-    # values yet (e.g. no accommodation spend recorded so far) gets
-    # guessed as logical by read_csv, and replace_na(.x, 0) on a logical
-    # column silently produces FALSE instead of 0.
     across(starts_with("spend_"), ~ replace_na(as.numeric(.x), 0)),
     beers_drank = replace_na(as.numeric(beers_drank), 0),
     beers_bought_for = replace_na(as.numeric(beers_bought_for), 0),
     swims = replace_na(as.numeric(swims), 0),
     distance_km = replace_na(as.numeric(distance_km), 0)
   ) %>%
-  arrange(date)
+  arrange(date) %>%
+  mutate(
+    trip_day   = row_number(),
+    gap_before = c(FALSE, diff(date) > 1)   # TRUE on the first day back after a break
+  )
 ```
+
+```{r create-ax-breaks}
+gap_ranges <- df %>%
+  mutate(prev_date = lag(date)) %>%
+  filter(gap_before) %>%
+  transmute(gap_start = prev_date + 1, gap_end = date - 1)
+
+add_date_breaks <- function(p, gap_ranges) {
+  if (nrow(gap_ranges) == 0) return(p)
+  breaks_list <- lapply(seq_len(nrow(gap_ranges)), function(i) {
+    scale_x_break(c(gap_ranges$gap_start[i], gap_ranges$gap_end[i]), scales = "free")
+  })
+  Reduce(`+`, breaks_list, .init = p)
+}
+```
+
+
+```{r create-axis-breaks}
+# shared date-labelled x-axis, reused across charts
+date_axis_breaks <- pretty(df$trip_day, n = 8)
+date_axis_breaks <- date_axis_breaks[date_axis_breaks >= 1 & date_axis_breaks <= nrow(df)]
+date_axis_labels <- format(df$date[date_axis_breaks], "%d %b")
+
+scale_x_trip_day <- function() {
+  scale_x_continuous(breaks = date_axis_breaks, labels = date_axis_labels)
+}
+
+# adds a dashed break marker + "//" wherever gap_before is TRUE
+add_trip_gaps <- function(p, df) {
+  gap_positions <- df$date[df$gap_before]
+  if (length(gap_positions) == 0) return(p)
+  p +
+    geom_vline(xintercept = gap_positions - 0.5, linetype = "dashed",
+               colour = "grey60", linewidth = 0.4) +
+    annotate("text", x = gap_positions - 0.5, y = -Inf, label = "//",
+             vjust = 1.4, size = 3.5, colour = "grey50", fontface = "bold") +
+    coord_cartesian(clip = "off") +
+    theme(plot.margin = margin(t = 5.5, r = 5.5, b = 18, l = 5.5))
+}
+```
+
 
 `r nrow(df)` days logged, `r min(df$date)` to `r max(df$date)`.
 
@@ -197,6 +240,8 @@ p_distance <- ggplot(df, aes(x = date)) +
   labs(title = "Distance walked per day", x = NULL, y = "km",
        caption = "Line = 7-day average") +
   site_theme
+
+p_distance <- add_trip_gaps(p_distance, df)
 
 ggsave(file.path(IMG_DIR, "distance_over_time.png"), p_distance,
        width = 9, height = 4.5, dpi = 200)
@@ -461,7 +506,10 @@ p_weather <- ggplot(weather_history, aes(x = date)) +
   ) +
   labs(title = "Weather", subtitle = "Tick marks along the bottom mark swim days", x = NULL) +
   site_theme +
-  theme(legend.position = "top")
+  theme(legend.position = c(0.2, 0.2),
+        legend.spacing.y = unit(-0.5, 'cm'),
+        legend.background = element_rect(fill = alpha("white",0.7), colour = NA)
+        )
 
 ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
        width = 9, height = 4.5, dpi = 200)
@@ -541,7 +589,10 @@ p_weather <- ggplot(weather_history, aes(x = date)) +
   ) +
   labs(title = "Weather", x = NULL) +
   site_theme +
-  theme(legend.position = "top")
+  theme(legend.position = c(0.8, 0.2),
+        legend.spacing.y = unit(-0.5, 'cm'),
+        legend.background = element_rect(fill = alpha("white",0.7), colour = NA)
+        )
 
 ggsave(file.path(IMG_DIR, "weather.png"), p_weather,
        width = 9, height = 4.5, dpi = 200)
@@ -686,20 +737,29 @@ df_gpx$roll_lower <- 10^(roll_mean_log - roll_sd_log)
 df_gpx$roll_upper <- 10^(roll_mean_log + roll_sd_log)
 
 
+draw_key_linebox <- function(data, params, size) {
+  grid::grobTree(
+    grid::rectGrob(gp = grid::gpar(fill = scales::alpha("steelblue", 0.3), col = NA)),
+    grid::segmentsGrob(x0 = 0, x1 = 1, y0 = 0.5, y1 = 0.5,
+                       gp = grid::gpar(col = data$colour, lwd = data$linewidth * .pt))
+  )
+}
+
 p_coastal_dist <- ggplot(df_gpx, aes(x = point_index)) +
   geom_ribbon(aes(ymin = roll_lower, ymax = roll_upper, fill = "±1 SD"),
               alpha = 0.2, colour = NA, show.legend = FALSE) +
-  geom_line(aes(y = dist_to_coast_m, colour = "Raw"), linewidth = 0.4, alpha = 0.6) +
-  geom_line(aes(y = roll_mean_coast_dist, colour = "Rolling mean"), linewidth = 0.6) +
-  scale_colour_manual(values = c("Raw" = COL_SWIMS, "Rolling mean and standard deviation" = COL_SWIMS_darker)) +
+  geom_line(aes(y = dist_to_coast_m, colour = "Raw"), linewidth = 0.4, alpha = 0.4) +
+  geom_line(aes(y = roll_mean_coast_dist, colour = "Rolling mean + sd"), linewidth = 0.6, key_glyph = draw_key_linebox) +
+  scale_colour_manual(values = c("Raw" = COL_SWIMS, "Rolling mean + sd" = COL_SWIMS_darker)) +
   scale_fill_manual(values = c("±1 SD" = "steelblue")) +
-  scale_y_continuous(trans = "log10") +
+  scale_y_continuous(trans = "log10")+
   labs(title = "Distance to the coast", x = "Track point", y = "Distance (m)",
        colour = NULL, fill = NULL) +
   site_theme +
+  coord_cartesian(ylim = c(1, NA)) +
   theme(legend.position = c(0.8, 0.2),
         legend.spacing.y = unit(-0.5, 'cm'),
-        legend.background = element_rect(fill = "white")
+        legend.background = element_rect(fill = alpha("white",0.7), colour = NA)
         )
 
 ggsave(file.path(IMG_DIR, "coastal_distance_and_sd.png"), p_coastal_dist,
@@ -709,8 +769,6 @@ print(p_coastal_dist)
 
 
 ```{r coast_dist_distribution}
-library(patchwork)
-
 dist_positive <- df_gpx$dist_to_coast_m[df_gpx$dist_to_coast_m > 0]
 breaks_coast_log <- 10^seq(log10(min(dist_positive)), log10(max(dist_positive)), length.out = 150)
 
@@ -723,7 +781,7 @@ p_hist_1 <- ggplot(df_gpx, aes(x = dist_to_coast_m)) +
 p_qqplot <- ggplot(mapping = aes(sample = log10(dist_positive))) +
   geom_qq(shape = 1, size = 0.5, stroke = 0.3, colour = "grey40", alpha = 0.6) +
   geom_qq_line(colour = "red", linewidth = 0.3) +
-  labs(title = "Normal Q-Q", x = NULL, y = NULL) +
+  labs(title = "LogNormal Q-Q", x = NULL, y = NULL) +
   theme_bw(base_size = 7) +
   theme(
     panel.grid = element_blank(),
@@ -767,23 +825,6 @@ print(p_hist)
 
 ```
 
-```{r}
-plot(1, type = 'n')
-
-legend(0.8,1.4,legend=c("CU","SL","SU","L","F"),lty=c(1,1,1,1,1),
-       pch=rep(22,5),
-       pt.cex=6.8,cex=1.5,
-       col=c(NA,NA,NA,NA,NA),        
-       pt.bg=adjustcolor(c('red','blue','green','orange','grey'), alpha.f = .5),
-       bty='n', horiz=T, lwd=c(2,2,2,2,2), x.intersp=0.5)
-
-legend(0.8,1.4,legend=c("CU","SL","SU","L","F"),lty=c(1,1,1,1,1),
-       pch=c("\u2B1A","\u2B1A",NA,NA,NA),
-       pt.cex=4,cex=1.5,
-       col=c("red","blue","green","orange","grey47"),        
-       pt.bg=adjustcolor(c('red','blue','green','orange','grey'), alpha.f = .5),
-       bty='n', horiz=T, lwd=c(2,2,2,2,2), x.intersp=0.5)
-```
 
 
 Want to try this with your own walk? [Try the interactive tool](/tools/coastal-distance-mapper.html){.button}

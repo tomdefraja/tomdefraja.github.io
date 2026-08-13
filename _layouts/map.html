@@ -80,82 +80,71 @@ layout: default
 </div>
 
 <script>
-  console.log("=== STATS SCRIPT STARTED ===");
-  // Each category section above has a data-category attribute; this maps
-  // that to which fields to pull out of walk_stats_summary.json and how
-  // to label/format them. Add a new category on the page and a matching
-  // entry here -- no other JS changes needed.
+  console.log("1: STATS SCRIPT STARTED");
+
+  console.log("2: ABOUT TO DEFINE CATEGORY_STATS");
+
   var CATEGORY_STATS = {
-    distance: [
-      { label: 'Total distance', key: 'total_distance_km', suffix: ' km' },
-      { label: 'Avg. per day', key: 'avg_distance_km', suffix: ' km' }
-    ],
-    spend: [
-      { label: 'Total spend', key: 'total_spend', prefix: '£' },
-      { label: 'Avg. per day', key: 'avg_spend_per_day', prefix: '£' }
-    ],
     swims: [
-      { label: 'Total swims', key: 'total_swims' },
-      { label: 'Avg. per day', key: 'avg_swims_per_day' }
+      { key: "total_swims", label: "Total swims" },
+      { key: "avg_swims_per_day", label: "Average swims per day" }
     ],
     coastal: [
-      { label: 'Avg. distance from coast', key: 'avg_coastal_distance_m', suffix: ' m' },
-      { label: 'Max. distance from coast', key: 'max_coastal_distance_m', suffix: ' m' }
+      { key: "coastal_swims", label: "Coastal swims" }
+    ],
+    distance: [
+      { key: "total_distance_km", label: "Total distance", suffix: " km" }
+    ],
+    spend: [
+      { key: "total_spend", label: "Total spend", prefix: "£" }
     ]
   };
 
-  console.log("=== STATS SCRIPT STARTED ===");
-  console.log("CATEGORY_STATS:", CATEGORY_STATS);
-  console.log("ABOUT TO FETCH");
+  console.log("3: CATEGORY_STATS DEFINED", CATEGORY_STATS);
+
+  console.log("4: ABOUT TO FETCH");
 
   fetch('{{ "/data/walk_stats_summary.json" | relative_url }}')
-    .then(function (r) {
-      console.log("STATS RESPONSE:", r.status, r.url);
+    .then(function(r) {
+      console.log("5: FETCH RESPONSE", r.status, r.url);
       return r.json();
     })
-    .then(function (s) {
-      console.log("STATS JSON:", s);
+    .then(function(s) {
+      console.log("6: JSON LOADED", s);
 
-      document.querySelectorAll('[data-category]').forEach(function (el) {
+      document.querySelectorAll('[data-category]').forEach(function(el) {
+        console.log("7: UPDATING", el.getAttribute('data-category'));
+
         var categoryName = el.getAttribute('data-category');
         var fields = CATEGORY_STATS[categoryName];
-        if (!fields) return;
 
-        el.innerHTML = fields.map(function (f) {
+        if (!fields) {
+          console.log("NO FIELDS FOR", categoryName);
+          return;
+        }
+
+        el.innerHTML = fields.map(function(f) {
           var value = s[f.key];
+
           if (value === undefined) return '';
-          var display = (f.prefix || '') + value + (f.suffix || '');
-          return '<p class="stat-line"><span class="stat-line__label">' +
-                f.label + ':</span> ' + display + '</p>';
+
+          return '<p class="stat-line">' +
+                 '<span class="stat-line__label">' +
+                 f.label +
+                 ':</span> ' +
+                 (f.prefix || '') +
+                 value +
+                 (f.suffix || '') +
+                 '</p>';
         }).join('');
       });
 
-      console.log("=== STATS FINISHED ===");
+      console.log("8: STATS FINISHED");
     })
-    .catch(function (err) {
-      console.error("STATS FETCH ERROR:", err);
+    .catch(function(err) {
+      console.error("FETCH ERROR:", err);
     });
 </script>
-
-  <!-- // fetch('{{ "/data/walk_stats_summary.json" | relative_url }}')
-  //   .then(function (r) { return r.json(); })
-  //   .then(function (s) {
-  //     document.querySelectorAll('[data-category]').forEach(function (el) {
-  //       var categoryName = el.getAttribute('data-category');
-  //       var fields = CATEGORY_STATS[categoryName];
-  //       if (!fields) return;
-
-  //       el.innerHTML = fields.map(function (f) {
-  //         var value = s[f.key];
-  //         if (value === undefined) return '';
-  //         var display = (f.prefix || '') + value + (f.suffix || '');
-  //         return '<p class="stat-line"><span class="stat-line__label">' + f.label + ':</span> ' + display + '</p>';
-  //       }).join('');
-  //     });
-  //   })
-  //   .catch(function (err) {
-  //     console.error('Could not load walk stats summary:', err);
-  //   }); -->
 
 <!-- <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 

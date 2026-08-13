@@ -68,8 +68,8 @@ layout: default
     <h3 class="stats-category__title">Spend</h3>
     <div class="stats-category__stats" data-category="spend"></div>
     <div class="stats-charts">
-      <img src="{{ '/images/stats/spend_breakdown.png' | relative_url }}" alt="Spend by category" loading="lazy">
-      <img src="{{ '/images/stats/cumulative_spend.png' | relative_url }}" alt="Cumulative spend over the trip" loading="lazy">
+      <img src="{{ '/images/stats/spend_by_region.png' | relative_url }}" alt="Spend by region" loading="lazy">
+      <img src="{{ '/images/stats/beers_by_brand.png' | relative_url }}" alt="Beers by brand, how many I bought and how many were bought for me, divided by category" loading="lazy">
     </div>
   </section>
 
@@ -80,10 +80,6 @@ layout: default
 </div>
 
 <script>
-  console.log("1: STATS SCRIPT STARTED");
-
-  console.log("2: ABOUT TO DEFINE CATEGORY_STATS");
-
   var CATEGORY_STATS = {
     swims: [
       { key: "total_swims", label: "Total swims" },
@@ -99,27 +95,17 @@ layout: default
       { key: "total_spend", label: "Total spend", prefix: "£" }
     ]
   };
-
-  console.log("3: CATEGORY_STATS DEFINED", CATEGORY_STATS);
-
-  console.log("4: ABOUT TO FETCH");
-
   fetch('{{ "/data/walk_stats_summary.json" | relative_url }}')
     .then(function(r) {
-      console.log("5: FETCH RESPONSE", r.status, r.url);
       return r.json();
     })
     .then(function(s) {
-      console.log("6: JSON LOADED", s);
-
       document.querySelectorAll('[data-category]').forEach(function(el) {
-        console.log("7: UPDATING", el.getAttribute('data-category'));
 
         var categoryName = el.getAttribute('data-category');
         var fields = CATEGORY_STATS[categoryName];
 
         if (!fields) {
-          console.log("NO FIELDS FOR", categoryName);
           return;
         }
 
@@ -138,8 +124,6 @@ layout: default
                  '</p>';
         }).join('');
       });
-
-      console.log("8: STATS FINISHED");
     })
     .catch(function(err) {
       console.error("FETCH ERROR:", err);

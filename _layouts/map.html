@@ -104,9 +104,18 @@ layout: default
     ]
   };
 
+  console.log("=== STATS SCRIPT STARTED ===");
+  console.log("CATEGORY_STATS:", CATEGORY_STATS);
+  console.log("ABOUT TO FETCH");
+
   fetch('{{ "/data/walk_stats_summary.json" | relative_url }}')
-    .then(function (r) { return r.json(); })
+    .then(function (r) {
+      console.log("STATS RESPONSE:", r.status, r.url);
+      return r.json();
+    })
     .then(function (s) {
+      console.log("STATS JSON:", s);
+
       document.querySelectorAll('[data-category]').forEach(function (el) {
         var categoryName = el.getAttribute('data-category');
         var fields = CATEGORY_STATS[categoryName];
@@ -116,15 +125,37 @@ layout: default
           var value = s[f.key];
           if (value === undefined) return '';
           var display = (f.prefix || '') + value + (f.suffix || '');
-          return '<p class="stat-line"><span class="stat-line__label">' + f.label + ':</span> ' + display + '</p>';
+          return '<p class="stat-line"><span class="stat-line__label">' +
+                f.label + ':</span> ' + display + '</p>';
         }).join('');
       });
+
+      console.log("=== STATS FINISHED ===");
     })
     .catch(function (err) {
-      console.error('Could not load walk stats summary:', err);
+      console.error("STATS FETCH ERROR:", err);
     });
 </script>
 
+  // fetch('{{ "/data/walk_stats_summary.json" | relative_url }}')
+  //   .then(function (r) { return r.json(); })
+  //   .then(function (s) {
+  //     document.querySelectorAll('[data-category]').forEach(function (el) {
+  //       var categoryName = el.getAttribute('data-category');
+  //       var fields = CATEGORY_STATS[categoryName];
+  //       if (!fields) return;
+
+  //       el.innerHTML = fields.map(function (f) {
+  //         var value = s[f.key];
+  //         if (value === undefined) return '';
+  //         var display = (f.prefix || '') + value + (f.suffix || '');
+  //         return '<p class="stat-line"><span class="stat-line__label">' + f.label + ':</span> ' + display + '</p>';
+  //       }).join('');
+  //     });
+  //   })
+  //   .catch(function (err) {
+  //     console.error('Could not load walk stats summary:', err);
+  //   });
 
 <!-- <script src="{{ '/assets/js/leaflet.js' | relative_url }}"></script>
 

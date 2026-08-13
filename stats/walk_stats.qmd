@@ -32,6 +32,8 @@ library(tibble)
 CSV_PATH   <- "../data/walk_stats.csv"
 IMG_DIR    <- "../images/stats"
 JSON_PATH  <- "../data/walk_stats_summary.json"
+GPX_PATH   <- "../data/coastal_walk.gpx"
+COAST_SF   <- "../data/uk_lowtide_simple.shp"
 
 dir.create(IMG_DIR, showWarnings = FALSE, recursive = TRUE)
 ```
@@ -70,7 +72,7 @@ nm <- names(df_raw)
 fixed_col_map <- c(
   date              = find_col(nm, "date$"),
   day               = find_col(nm, "day$"),
-  country           = find_col(nm, "country$"),
+  country           = find_col(nm, "county$"),
   swims             = find_col(nm, "swims$"),
   spend_accom       = find_col(nm, "£_accom$"),
   spend_groceries   = find_col(nm, "£_groceries$"),
@@ -105,6 +107,9 @@ df <- df_raw %>%
     gap_before = c(FALSE, diff(date) > 1)
   )
 
+gpx_parsed <- htmlTreeParse(GPX_PATH, useInternalNodes = TRUE)
+coords <- xpathSApply(doc = gpx_parsed, path = "//trkpt", fun = xmlAttrs) 
+
 df_gpx <- data.frame( 
   lat = as.numeric(coords["lat", ]), 
   lon = as.numeric(coords["lon", ]) 
@@ -112,6 +117,9 @@ df_gpx <- data.frame(
 
 gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>
   st_transform(27700)
+
+uk_coastline <- read_sf(COAST_SF) |> st_transform(27700)
+coast_union <- st_union(uk_coastline)
 
 df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
 
@@ -337,6 +345,92 @@ print(p_dist_yes_qq)
 
 
 ## Spend
+
+```{r spending-chart}
+region_order <- df %>%
+  distinct(country, .keep_all = TRUE) %>%
+  arrange(date) %>%
+  pull(country)
+
+spend_long <- df %>%
+  select(country, spend_accom, spend_groceries, spend_eating_out, spend_boats, spend_drinks, spend_gear) %>%
+  pivot_longer(-country, names_to = "category", values_to = "value") %>%
+  mutate(category = recode(category,
+    spend_accom = "Accommodation", spend_groceries = "Groceries",
+    spend_eating_out = "Eating out", spend_boats = "Boats",
+    spend_drinks = "Alcohol", spend_gear = "Gear"
+  ))
+
+region_category_totals <- spend_long %>%
+  group_by(country, category) %>%
+  summarise(value = sum(value, na.rm = TRUE), .groups = "drop") %>%
+  mutate(country = factor(country, levels = region_order))
+
+region_avg <- df %>%
+  count(country, name = "days_in_region") %>%
+  left_join(spend_long %>% group_by(country) %>% summarise(total_spend = sum(value, na.rm = TRUE), .groups = "drop"),
+            by = "country") %>%
+  mutate(avg_daily_spend = total_spend / days_in_region,
+         label = paste0("avg £", round(avg_daily_spend, 1), "/day"),
+         country = factor(country, levels = region_order))
+
+region_x_labels <- setNames(
+  paste0(region_avg$country, "\n(", region_avg$days_in_region, " days)"),
+  as.character(region_avg$country)
+)
+
+p_spend <- ggplot(region_category_totals, aes(x = country, y = value, fill = category)) +
+  geom_col(width = 0.65, colour = "white", linewidth = 0) +
+  geom_text(data = region_avg, aes(x = country, y = total_spend, label = label),
+            inherit.aes = FALSE, hjust = 0.5, vjust = -0.4, size = 3, colour = "grey30") +
+  scale_fill_viridis_d(name = NULL) +
+  scale_x_discrete(labels = region_x_labels) +
+  scale_y_continuous(labels = scales::label_currency(prefix = "£"), expand = expansion(mult = c(0, 0.2))) +
+  coord_cartesian(clip = "off") +
+  labs(title = "Spend by region", x = NULL, y = NULL) +
+  site_theme +
+  theme(legend.position = "bottom",
+        plot.margin = margin(t = 20, r = 15, b = 5.5, l = 5.5),
+        panel.grid.major.x = element_blank() ,
+        panel.grid.major.y = element_line( size=.1, color="black" )) +
+  guides(fill = guide_legend(nrow = 2))
+
+ggsave(file.path(IMG_DIR, "spend_by_region.png"), p_spend, width = 9, height = 5, dpi = 200)
+print(p_spend)
+```
+```{r beers-chart}
+beer_long <- df %>%
+  select(all_of(beer_cols)) %>%
+  pivot_longer(everything(), names_to = c("beer", "type"),
+               names_pattern = "(.*)_(bought|for)$", values_to = "value") %>%
+  mutate(
+    beer = tools::toTitleCase(beer),
+    type = recode(type, bought = "Drunk", `for` = "Bought for")
+  ) %>%
+  group_by(beer, type) %>%
+  summarise(value = sum(value, na.rm = TRUE), .groups = "drop")
+
+beer_order <- beer_long %>%
+  group_by(beer) %>%
+  summarise(total = sum(value), .groups = "drop") %>%
+  arrange(desc(total)) %>%
+  pull(beer)
+
+beer_long <- beer_long %>% mutate(beer = factor(beer, levels = beer_order))
+
+p_beers <- ggplot(beer_long, aes(x = beer, y = value, fill = type)) +
+  geom_col(width = 0.6, colour = "white", linewidth = 0.2) +
+  scale_fill_manual(values = c("Drunk" = COL_SWIMS_darker, "Bought for" = COL_SWIMS_light), name = NULL) +
+  labs(title = "Beers, by brand", x = NULL, y = "Number of beers") +
+  site_theme +
+  theme(legend.position = "bottom")
+
+ggsave(file.path(IMG_DIR, "beers_by_brand.png"), p_beers, width = 9, height = 5, dpi = 200)
+print(p_beers)
+```
+
+
+
 
 ```{r spend-chart}
 category_levels <- c("Accommodation", "Groceries", "Eating out", "Boats", "Alcohol", "Gear",
@@ -755,12 +849,6 @@ print(p_swims_weather_stacked)
 #| message: false
 #| warning: false
 #| out-width: "100%"
-
-uk_coastline <- read_sf("../data/uk_lowtide_simple.shp") |> st_transform(27700)
-coast_union <- st_union(uk_coastline)
-
-gpx_parsed <- htmlTreeParse(file = "../data/coastal_walk.gpx", useInternalNodes = TRUE)
-coords <- xpathSApply(doc = gpx_parsed, path = "//trkpt", fun = xmlAttrs) 
 
 n <- nrow(df_gpx)
 

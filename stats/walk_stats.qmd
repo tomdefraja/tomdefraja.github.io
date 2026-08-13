@@ -24,6 +24,7 @@ library(sf)
 library(leaflet)
 library(XML)
 library(ggbreak)
+library(tibble)
 
 
 # This document is executed with its own folder (stats/) as the working
@@ -65,7 +66,8 @@ find_col <- function(names_vec, pattern) {
 }
 
 nm <- names(df_raw)
-col_map <- c(
+
+fixed_col_map <- c(
   date              = find_col(nm, "date$"),
   day               = find_col(nm, "day$"),
   country           = find_col(nm, "country$"),
@@ -79,22 +81,41 @@ col_map <- c(
   distance_km       = find_col(nm, "distance_km$")
 )
 
-df <- df_raw[, col_map]
-names(df) <- names(col_map)
+# any column following the <brand>_bought / <brand>_for convention is picked
+# up automatically -- add a new beer to the CSV and it appears here with
+# no code changes needed
+beer_cols <- nm[grepl("_(bought|for)$", nm)]
 
-df <- df %>%
-  filter(!is.na(date)) %>%           # drops blank rows / Table 1 debris below
+df <- df_raw %>%
+  rename(!!!fixed_col_map) %>%
+  select(all_of(names(fixed_col_map)), all_of(beer_cols)) %>%
+  filter(!is.na(date)) %>%
   mutate(
     date = as.Date(date, format = "%d %b %Y"),
     across(starts_with("spend_"), ~ replace_na(as.numeric(.x), 0)),
+    across(all_of(beer_cols), ~ replace_na(as.numeric(.x), 0)),
     swims = replace_na(as.numeric(swims), 0),
-    distance_km = replace_na(as.numeric(distance_km), 0)
+    distance_km = replace_na(as.numeric(distance_km), 0),
+    beers_drank      = rowSums(across(matches("_bought$")), na.rm = TRUE),
+    beers_bought_for = rowSums(across(matches("_for$")), na.rm = TRUE)
   ) %>%
   arrange(date) %>%
   mutate(
     trip_day   = row_number(),
-    gap_before = c(FALSE, diff(date) > 1)   # TRUE on the first day back after a break
+    gap_before = c(FALSE, diff(date) > 1)
   )
+
+df_gpx <- data.frame( 
+  lat = as.numeric(coords["lat", ]), 
+  lon = as.numeric(coords["lon", ]) 
+)
+
+gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>
+  st_transform(27700)
+
+df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
+
+
 ```
 
 ```{r create-ax-breaks}
@@ -117,31 +138,6 @@ tick_breaks <- seq(
   max(df$date),
   by = 3
 )
-```
-
-
-```{r create-axis-breaks}
-# shared date-labelled x-axis, reused across charts
-date_axis_breaks <- pretty(df$trip_day, n = 8)
-date_axis_breaks <- date_axis_breaks[date_axis_breaks >= 1 & date_axis_breaks <= nrow(df)]
-date_axis_labels <- format(df$date[date_axis_breaks], "%d %b")
-
-scale_x_trip_day <- function() {
-  scale_x_continuous(breaks = date_axis_breaks, labels = date_axis_labels)
-}
-
-# adds a dashed break marker + "//" wherever gap_before is TRUE
-add_trip_gaps <- function(p, df) {
-  gap_positions <- df$date[df$gap_before]
-  if (length(gap_positions) == 0) return(p)
-  p +
-    geom_vline(xintercept = gap_positions - 0.5, linetype = "dashed",
-               colour = "grey60", linewidth = 0.4) +
-    annotate("text", x = gap_positions - 0.5, y = -Inf, label = "//",
-             vjust = 1.4, size = 3.5, colour = "grey50", fontface = "bold") +
-    coord_cartesian(clip = "off") +
-    theme(plot.margin = margin(t = 5.5, r = 5.5, b = 18, l = 5.5))
-}
 ```
 
 
@@ -192,6 +188,8 @@ summary_stats <- list(
   avg_swims_per_day               =round(mean(df$swims),1),
   total_spend                      = round(sum(df$spend_total), 2),
   avg_spend_per_day                  = round(mean(df$spend_total), 2),
+  avg_coastal_distance_m              = round(mean(df_gpx$dist_to_coast_m),1),
+  max_coastal_distance_m               = round(max(df_gpx$dist_to_coast_m),1),
   spend_by_category = list(
     accom      = round(sum(df$spend_accom), 2),
     groceries   = round(sum(df$spend_groceries), 2),
@@ -339,6 +337,78 @@ print(p_dist_yes_qq)
 
 
 ## Spend
+
+```{r spend-chart}
+category_levels <- c("Accommodation", "Groceries", "Eating out", "Boats", "Alcohol", "Gear",
+                      "Cornish", "Devon", "Somerset", "Wales", "Guinness", "Murphys", "Beamish")
+
+spend_totals <- df %>%
+  summarise(
+    Accommodation = sum(spend_accom, na.rm = TRUE),
+    Groceries     = sum(spend_groceries, na.rm = TRUE),
+    `Eating out`  = sum(spend_eating_out, na.rm = TRUE),
+    Boats         = sum(spend_boats, na.rm = TRUE),
+    Alcohol       = sum(spend_drinks, na.rm = TRUE),
+    Gear          = sum(spend_gear, na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "category", values_to = "value") %>%
+  mutate(bar = "Spend")
+
+beers_drunk_totals <- df %>%
+  summarise(
+    Cornish = sum(cornish_bought, na.rm = TRUE), 
+    Devon = sum(devon_bought, na.rm = TRUE),
+    Somerset = sum(somerset_bought, na.rn = TRUE),
+    Wales = sum(wales_bought, na.rm = TRUE), 
+    Guinness = sum(guinness_bought, na.rm = TRUE),
+    Murphys = sum(murphys_bought, na.rm = TRUE), 
+    Beamish = sum(beamish_bought, na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "category", values_to = "value") %>%
+  mutate(bar = "Beers drunk")
+
+beers_for_totals <- df %>%
+  summarise(
+    Cornish = sum(cornish_for, na.rm = TRUE) + sum(cornish_bought, na.rm = TRUE), 
+    Devon = sum(devon_for, na.rm = TRUE) + sum(devon_bought, na.rm = TRUE),
+    Somerset = sum(somerset_for, na.rm = TRUE) + sum(somerset_bought, na.rn = TRUE),
+    Wales = sum(wales_for, na.rm = TRUE) + sum(wales_bought, na.rm = TRUE), 
+    Guinness = sum(guinness_for, na.rm = TRUE) + sum(guinness_bought, na.rm = TRUE),
+    Murphys = sum(murphys_for, na.rm = TRUE) + sum(murphys_bought, na.rm = TRUE), 
+    Beamish = sum(beamish_for, na.rm = TRUE) + sum(beamish_bought, na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "category", values_to = "value") %>%
+  mutate(bar = "Beers bought for")
+
+bar_totals <- bind_rows(spend_totals, beers_drunk_totals, beers_for_totals) %>%
+  filter(value > 0) %>%
+  group_by(bar) %>%
+  mutate(bar_total = sum(value), pct = value / bar_total) %>%
+  ungroup() %>%
+  mutate(
+    category = factor(category, levels = category_levels),
+    bar_label = paste0(bar, " (", ifelse(bar == "Spend", paste0("£", round(bar_total)), round(bar_total)), ")"),
+    bar = factor(bar, levels = c("Beers bought for", "Beers drank", "Spend"))  # bottom-to-top order
+  )
+
+bar_label_lookup <- bar_totals %>% distinct(bar, bar_label) %>% deframe()
+
+p_spend_beers <- ggplot(bar_totals, aes(x = pct, y = bar, fill = category)) +
+  geom_col(width = 0.6, colour = "white", linewidth = 0.3) +
+  geom_text(aes(label = ifelse(pct > 0.05, category, "")),
+            position = position_stack(vjust = 0.5), size = 2.8, colour = "white") +
+  scale_x_continuous(labels = scales::percent, expand = c(0, 0)) +
+  scale_y_discrete(labels = bar_label_lookup) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(title = "Spend & beers, by category", x = NULL, y = NULL) +
+  site_theme +
+  theme(legend.position = "none", panel.grid.major.y = element_blank())
+
+ggsave(file.path(IMG_DIR, "spend_beers_breakdown.png"), p_spend_beers,
+       width = 9, height = 3.5, dpi = 200)
+print(p_spend_beers)
+```
+
 
 ```{r chart-spend}
 spend_cat <- tibble(
@@ -691,19 +761,6 @@ coast_union <- st_union(uk_coastline)
 
 gpx_parsed <- htmlTreeParse(file = "../data/coastal_walk.gpx", useInternalNodes = TRUE)
 coords <- xpathSApply(doc = gpx_parsed, path = "//trkpt", fun = xmlAttrs) 
-df_gpx <- data.frame( 
-  lat = as.numeric(coords["lat", ]), 
-  lon = as.numeric(coords["lon", ]) 
-)
-
-gpx_sf <- st_as_sf(df_gpx, coords = c("lon", "lat"), crs = 4326) |>
-  st_transform(27700)
-
-df_gpx$dist_to_coast_m <- as.numeric(st_distance(gpx_sf, coast_union))
-
-summary_stats$avg_coastal_distance_m <- round(mean(df_gpx$dist_to_coast_m),1)
-summary_stats$max_coastal_distance_m <- round(max(df_gpx$dist_to_coast_m),1)
-write_json(summary_stats, JSON_PATH, auto_unbox = TRUE, pretty = TRUE)
 
 n <- nrow(df_gpx)
 

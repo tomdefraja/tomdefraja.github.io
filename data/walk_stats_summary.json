@@ -8,6 +8,8 @@
   "avg_swims_per_day": 2.5,
   "total_spend": 134.97,
   "avg_spend_per_day": 9,
+  "avg_coastal_distance_m": 136.3,
+  "max_coastal_distance_m": 1577.9,
   "spend_by_category": {
     "accom": 0,
     "groceries": 28.32,
@@ -16,7 +18,5 @@
     "drinks": 39.95,
     "gear": 0
   },
-  "generated_at": "2026-08-12 23:11:27.896372",
-  "avg_coastal_distance_m": 136.3,
-  "max_coastal_distance_m": 1577.9
+  "generated_at": "2026-08-13 00:47:57.919869"
 }

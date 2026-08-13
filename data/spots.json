@@ -118,15 +118,5 @@
     "color": "red",
     "category": "Hosted",
     "categoryHex": "#e53935"
-  },
-  {
-    "name": "Portreath",
-    "description": "Steve and Alex’s summerhouse",
-    "date": "2026-08-13",
-    "lat": 50.261137,
-    "lng": -5.2202411,
-    "color": "red",
-    "category": "Hosted",
-    "categoryHex": "#e53935"
   }
 ]

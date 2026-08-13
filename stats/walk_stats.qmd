@@ -419,7 +419,7 @@ beer_order <- beer_long %>%
 beer_long <- beer_long %>% mutate(beer = factor(beer, levels = beer_order))
 
 p_beers <- ggplot(beer_long, aes(x = beer, y = value, fill = type)) +
-  geom_col(width = 0.6, colour = "white", linewidth = 0.2) +
+  geom_col(width = 0.6, colour = "white", linewidth = 0) +
   scale_fill_manual(values = c("Drunk" = COL_SWIMS_darker, "Bought for" = COL_SWIMS_light), name = NULL) +
   labs(title = "Beers, by brand", x = NULL, y = "Number of beers") +
   site_theme +

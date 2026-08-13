@@ -86,13 +86,16 @@ layout: default
       { key: "avg_swims_per_day", label: "Average swims per day" }
     ],
     coastal: [
-      { key: "coastal_swims", label: "Coastal swims" }
+      { key: "avg_coastal_distance_m", label: "Average distance from coast", suffix: " m"},
+      { key: "max_coastal_distance_m", label: "Maximum distance from coast", suffix: " m" }
     ],
     distance: [
-      { key: "total_distance_km", label: "Total distance", suffix: " km" }
+      { key: "total_distance_km", label: "Total distance", suffix: " km" },
+      { key: "avg_distance_km", label: "Average distance per day", suffix: " km" }
     ],
     spend: [
-      { key: "total_spend", label: "Total spend", prefix: "£" }
+      { key: "total_spend", label: "Total spend", prefix: "£" },
+      { key: "avg_spend_per_day", label: "Average spend per day", prefix: "£" }
     ]
   };
   fetch('{{ "/data/walk_stats_summary.json" | relative_url }}')

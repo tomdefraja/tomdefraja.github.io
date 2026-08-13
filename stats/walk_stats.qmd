@@ -429,115 +429,6 @@ ggsave(file.path(IMG_DIR, "beers_by_brand.png"), p_beers, width = 9, height = 5,
 print(p_beers)
 ```
 
-
-
-
-```{r spend-chart}
-category_levels <- c("Accommodation", "Groceries", "Eating out", "Boats", "Alcohol", "Gear",
-                      "Cornish", "Devon", "Somerset", "Wales", "Guinness", "Murphys", "Beamish")
-
-spend_totals <- df %>%
-  summarise(
-    Accommodation = sum(spend_accom, na.rm = TRUE),
-    Groceries     = sum(spend_groceries, na.rm = TRUE),
-    `Eating out`  = sum(spend_eating_out, na.rm = TRUE),
-    Boats         = sum(spend_boats, na.rm = TRUE),
-    Alcohol       = sum(spend_drinks, na.rm = TRUE),
-    Gear          = sum(spend_gear, na.rm = TRUE)
-  ) %>%
-  pivot_longer(everything(), names_to = "category", values_to = "value") %>%
-  mutate(bar = "Spend")
-
-beers_drunk_totals <- df %>%
-  summarise(
-    Cornish = sum(cornish_bought, na.rm = TRUE), 
-    Devon = sum(devon_bought, na.rm = TRUE),
-    Somerset = sum(somerset_bought, na.rn = TRUE),
-    Wales = sum(wales_bought, na.rm = TRUE), 
-    Guinness = sum(guinness_bought, na.rm = TRUE),
-    Murphys = sum(murphys_bought, na.rm = TRUE), 
-    Beamish = sum(beamish_bought, na.rm = TRUE)
-  ) %>%
-  pivot_longer(everything(), names_to = "category", values_to = "value") %>%
-  mutate(bar = "Beers drunk")
-
-beers_for_totals <- df %>%
-  summarise(
-    Cornish = sum(cornish_for, na.rm = TRUE) + sum(cornish_bought, na.rm = TRUE), 
-    Devon = sum(devon_for, na.rm = TRUE) + sum(devon_bought, na.rm = TRUE),
-    Somerset = sum(somerset_for, na.rm = TRUE) + sum(somerset_bought, na.rn = TRUE),
-    Wales = sum(wales_for, na.rm = TRUE) + sum(wales_bought, na.rm = TRUE), 
-    Guinness = sum(guinness_for, na.rm = TRUE) + sum(guinness_bought, na.rm = TRUE),
-    Murphys = sum(murphys_for, na.rm = TRUE) + sum(murphys_bought, na.rm = TRUE), 
-    Beamish = sum(beamish_for, na.rm = TRUE) + sum(beamish_bought, na.rm = TRUE)
-  ) %>%
-  pivot_longer(everything(), names_to = "category", values_to = "value") %>%
-  mutate(bar = "Beers bought for")
-
-bar_totals <- bind_rows(spend_totals, beers_drunk_totals, beers_for_totals) %>%
-  filter(value > 0) %>%
-  group_by(bar) %>%
-  mutate(bar_total = sum(value), pct = value / bar_total) %>%
-  ungroup() %>%
-  mutate(
-    category = factor(category, levels = category_levels),
-    bar_label = paste0(bar, " (", ifelse(bar == "Spend", paste0("£", round(bar_total)), round(bar_total)), ")"),
-    bar = factor(bar, levels = c("Beers bought for", "Beers drank", "Spend"))  # bottom-to-top order
-  )
-
-bar_label_lookup <- bar_totals %>% distinct(bar, bar_label) %>% deframe()
-
-p_spend_beers <- ggplot(bar_totals, aes(x = pct, y = bar, fill = category)) +
-  geom_col(width = 0.6, colour = "white", linewidth = 0.3) +
-  geom_text(aes(label = ifelse(pct > 0.05, category, "")),
-            position = position_stack(vjust = 0.5), size = 2.8, colour = "white") +
-  scale_x_continuous(labels = scales::percent, expand = c(0, 0)) +
-  scale_y_discrete(labels = bar_label_lookup) +
-  scale_fill_brewer(palette = "Paired") +
-  labs(title = "Spend & beers, by category", x = NULL, y = NULL) +
-  site_theme +
-  theme(legend.position = "none", panel.grid.major.y = element_blank())
-
-ggsave(file.path(IMG_DIR, "spend_beers_breakdown.png"), p_spend_beers,
-       width = 9, height = 3.5, dpi = 200)
-print(p_spend_beers)
-```
-
-
-```{r chart-spend}
-spend_cat <- tibble(
-  category = c("Accommodation", "Groceries", "Eating/drinking out",
-               "Boats", "Drinks", "Gear"),
-  total = c(sum(df$spend_accom), sum(df$spend_groceries), sum(df$spend_eating_out),
-            sum(df$spend_boats), sum(df$spend_drinks), sum(df$spend_gear))
-) 
-
-p_spend <- ggplot(spend_cat, aes(x = reorder(category, total), y = total)) +
-  geom_point() +
-  geom_segment(aes(x=reorder(category, total), xend=reorder(category, total), y=0, yend=total)) +
-  geom_text(aes(label = dollar(total, prefix = "£")), hjust = -0.1, size = 3.5) +
-  coord_flip(clip = "off") +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
-  labs(title = "Spend by category", x = NULL, y = "£") +
-  site_theme
-
-ggsave(file.path(IMG_DIR, "spend_breakdown.png"), p_spend,
-       width = 9, height = 4.5, dpi = 200)
-print(p_spend)
-```
-
-```{r chart-cumulative-spend}
-c_cumulative <- ggplot(df, aes(x = date, y = spend_cumulative)) +
-  geom_area(fill = COL_SPEND, alpha = 0.25) +
-  geom_line(colour = COL_SPEND, linewidth = 1.1) +
-  labs(title = "Cumulative spending", x = NULL, y = "£") +
-  site_theme
-
-ggsave(file.path(IMG_DIR, "cumulative_spend.png"), c_cumulative,
-       width = 9, height = 4.5, dpi = 200)
-print(c_cumulative)
-```
-
 ## Swims
 
 ```{r chart-swims}
@@ -577,18 +468,6 @@ ggsave(file.path(IMG_DIR, "swims_over_time.png"), p_swims,
        width = 9, height = 4.5, dpi = 200)
 print(p_swims)
 ```
-
-# ```{r chart-cumulative-swims}
-# s_cumulative <- ggplot(df, aes(x = date, y = swims_cumulative)) +
-#   geom_area(fill = COL_SWIMS, alpha = 0.25) +
-#   geom_line(colour = COL_SWIMS, linewidth = 1.1) +
-#   labs(title = "Cumulative swims", x = NULL, y = "swims") +
-#   site_theme
-# 
-# ggsave(file.path(IMG_DIR, "cumulative_swims.png"), s_cumulative,
-#        width = 9, height = 4.5, dpi = 200)
-# print(s_cumulative)
-# ```
 
 ```{r sea_temperatures}
 library(httr)

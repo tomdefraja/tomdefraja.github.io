@@ -1,4 +1,4 @@
-date,day,county,swims,cornish_bought,cornish_for,devon_bought,devon_for,somerset_bought,somerset_for,wales_bought,wales_for,guinness_bought,guinness_for,murphys_bought,murphys_for,beamish_bought,beamish_for,£_accom,£_groceries,£_eord_out,£_boats,£_alcohol,£_gear,distance_km
+date,day,county,swims,cornish_bought,cornish_for,devonian_bought,devonian_for,somerset_bought,somerset_for,welsh_bought,welsh_for,guinness_bought,guinness_for,murphys_bought,murphys_for,beamish_bought,beamish_for,£_accom,£_groceries,£_eord_out,£_boats,£_alcohol,£_gear,distance_km
 16 Jul 2026,1,Cornwall,1,,,0,0,,,0,0,0,0,0,0,0,0,,,,,,,11.1
 17 Jul 2026,2,Cornwall,4,,,,,,,,,,,,,,,,,17,,,,29.76
 18 Jul 2026,3,Cornwall,3,1,5,,,,,,,,,,,,,,,,17.55,21.15,,18.4
@@ -13,4 +13,4 @@ date,day,county,swims,cornish_bought,cornish_for,devon_bought,devon_for,somerset
 27 Jul 2026,12,Cornwall,2,,,,,,,,,,,,,,,,2.55,,,,,22.4
 28 Jul 2026,13,Cornwall,1,,,,,,,,,,,,,,,,,4.5,,,,0
 29 Jul 2026,14,Cornwall,3,1,1.5,,,,,,,,,,,,,,4.14,10,,7,,20.9
-13 Aug 2026,15,Cornwall,,,,,,,,,,,,,,,,,,,,,,
+13 Aug 2026,15,Devon,1,,,1,2,,,,,,,,,,,,5.20,,,6,,20

@@ -227,7 +227,7 @@ write_json(summary_stats, JSON_PATH, auto_unbox = TRUE, pretty = TRUE)
 site_theme <- theme_minimal(base_size = 13) +
   theme(
     panel.grid.minor = element_blank(),
-    plot.title = element_text(face = "bold"),
+    plot.title = element_blank(),
     plot.background = element_rect(fill = "white", colour = NA)
   )
 
@@ -329,7 +329,6 @@ p_dist_qqplot <- ggplot(mapping = aes(sample = df$distance_km)) +
   theme_bw(base_size = 7) +
   theme(
     panel.grid = element_blank(),
-    plot.title = element_text(size = 7, colour = "grey40"),
     axis.text = element_text(size = 5, colour = "grey50"),
     axis.ticks = element_line(linewidth = 0.2, colour = "grey70"),
     plot.margin = margin(4, 4, 4, 4)
@@ -423,7 +422,8 @@ p_beers <- ggplot(beer_long, aes(x = beer, y = value, fill = type)) +
   scale_fill_manual(values = c("Drunk" = COL_SWIMS_darker, "Bought for" = COL_SWIMS_light), name = NULL) +
   labs(title = "Beers, by brand", x = NULL, y = "Number of beers") +
   site_theme +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom"
+  )
 
 ggsave(file.path(IMG_DIR, "beers_by_brand.png"), p_beers, width = 9, height = 5, dpi = 200)
 print(p_beers)

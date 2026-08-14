@@ -30,8 +30,11 @@ layout: default
     </h4>
     <div class="stats-category__stats" data-category="swims"></div>
     <div class="stats-charts">
+      <h3 class=“stats-category__content”>Swims per day</h3>
       <img src="{{ '/images/stats/swims_over_time.png' | relative_url }}" alt="Swims per day, with 7-day average" loading="lazy">
+      <h3 class=“stats-category__content”>Weather, following the route</h3>
       <img src="{{ '/images/stats/weather.png' | relative_url }}" alt="Weather conditions over the trip" loading="lazy">
+      <h3 class=“stats-category__content”>Battling the elements</h3>
       <picture class="stats-charts__wide">
         <source media="(min-width: 641px)" srcset="{{ '/images/stats/swims_vs_weather_wide.png' | relative_url }}">
         <img src="{{ '/images/stats/swims_vs_weather_stacked.png' | relative_url }}" alt="Scatter plots of swims against air temperature, sea temperature, and precipitation, with regression lines" loading="lazy">
@@ -50,7 +53,9 @@ layout: default
         width="100%" height="500" style="border:none;"></iframe>
     </div>
     <div class="stats-charts">
+      <h3 class=“stats-category__content”>Distance to coast</h3>
       <img src="{{ '/images/stats/coastal_distance_and_sd.png' | relative_url }}" alt="Distance from the coastline, and a rolling average with standard deviation" loading="lazy">
+      <h3 class=“stats-category__content”>Coastal distance distribution</h3>
       <img src="{{ '/images/stats/coastal_distance_histogram_log.png' | relative_url }}" alt="Distribution of coastal distances" loading="lazy">
     </div>
   </section>
@@ -59,7 +64,9 @@ layout: default
     <h3 class="stats-category__title">Distance</h3>
     <div class="stats-category__stats" data-category="distance"></div>
     <div class="stats-charts">
+      <h3 class=“stats-category__content”>Distance walked per day</h3>
       <img src="{{ '/images/stats/distance_over_time.png' | relative_url }}" alt="Distance walked per day, with 7-day average" loading="lazy">
+      <h3 class=“stats-category__content”>Distribution of daily distance walked</h3>
       <img src="{{ '/images/stats/distance_histogram.png' | relative_url }}" alt="Distribution of daily distances walked" loading="lazy">
     </div>
   </section>
@@ -67,11 +74,13 @@ layout: default
   <section class="stats-category">
     <h3 class="stats-category__title">Spend</h3>
     <h4 class="stats-section__content">
-      Here I wanted to track my spending on this trip. I also wanted to see how much beer I was drinking, with a small ode to the generosity of people along the way.
+      Here I wanted to track my spending on this trip. I also wanted to see how much beer I was drinking, with a small nod to the generosity of people along the way.
     </h4>
     <div class="stats-category__stats" data-category="spend"></div>
     <div class="stats-charts">
+      <h3 class=“stats-category__content”>Spend by region</h3>
       <img src="{{ '/images/stats/spend_by_region.png' | relative_url }}" alt="Spend by region" loading="lazy">
+      <h3 class=“stats-category__content”>Beers, by brand/region</h3>
       <img src="{{ '/images/stats/beers_by_brand.png' | relative_url }}" alt="Beers by brand, how many I bought and how many were bought for me, divided by category" loading="lazy">
     </div>
   </section>

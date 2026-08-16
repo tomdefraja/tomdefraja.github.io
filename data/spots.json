@@ -125,8 +125,28 @@
     "date": "2026-08-13",
     "lat": 50.385928,
     "lng": -5.1142704,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Porthcothan",
+    "description": "With Auntie Sophie and co\nnights=2",
+    "date": "2026-08-14",
+    "lat": 50.50328,
+    "lng": -5.0284259,
     "color": "red",
     "category": "Hosted",
     "categoryHex": "#e53935"
+  },
+  {
+    "name": "Padstow",
+    "description": "",
+    "date": "2026-08-16",
+    "lat": 50.550976,
+    "lng": -4.9270797,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

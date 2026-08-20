@@ -148,5 +148,45 @@
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Tintagel",
+    "description": "",
+    "date": "2026-08-17",
+    "lat": 50.674094,
+    "lng": -4.744783,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Bude",
+    "description": "",
+    "date": "2026-08-18",
+    "lat": 50.840605,
+    "lng": -4.5547042,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Hartland",
+    "description": "At Lucy’s in Narnia",
+    "date": "2026-08-20",
+    "lat": 50.961176,
+    "lng": -4.5292172,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Peppercombe beach",
+    "description": "",
+    "date": "2026-08-20",
+    "lat": 50.999173,
+    "lng": -4.3000526,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

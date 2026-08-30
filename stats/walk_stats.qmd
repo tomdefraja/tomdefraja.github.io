@@ -663,13 +663,8 @@ print(p_weather)
 ```{r chart-swims-weather-correlation}
 weather_history <- weather_history %>%
   left_join(sst_history %>% select(date, sst = sst_mean), by = "date") %>%
-  left_join(df %>% select(date, swims, swims_avg = swims_7day_avg), by = "date")
-
-weather_history$sst <- sst_history$sst_mean
-# weather_history$swims <- df$swims
-# weather_history$swims_avg <- df$swims_3day_avg
-
-weather_history$input_swims <- df$swims
+  left_join(df %>% select(date, swims, swims_avg = swims_7day_avg), by = "date") %>%
+  left_join(df %>% select(date, input_swims = swims), by = "date")
 
 df_corr <- weather_history %>%
   select(input_swims, temp_mean, sst, precip_total) %>%

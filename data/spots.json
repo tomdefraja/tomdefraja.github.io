@@ -188,5 +188,85 @@
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Bideford bay",
+    "description": "Robbo and Gemma’s",
+    "date": "2026-08-21",
+    "lat": 51.101012,
+    "lng": -4.1492126,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Bull point",
+    "description": "",
+    "date": "2026-08-22",
+    "lat": 51.199058,
+    "lng": -4.1991027,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Lynton",
+    "description": "",
+    "date": "2026-08-23",
+    "lat": 51.227009,
+    "lng": -3.8813595,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Porlock",
+    "description": "",
+    "date": "2026-08-24",
+    "lat": 51.220098,
+    "lng": -3.6038259,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Quantoxhead",
+    "description": "",
+    "date": "2026-08-25",
+    "lat": 51.179426,
+    "lng": -3.2845059,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "My Position",
+    "description": "",
+    "date": "2026-08-26",
+    "lat": 51.254224,
+    "lng": -3.0111922,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Clevedon",
+    "description": "",
+    "date": "2026-08-27",
+    "lat": 51.454518,
+    "lng": -2.8445465,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Hannah’s",
+    "description": "",
+    "date": "2026-08-29",
+    "lat": 51.464471,
+    "lng": -2.5835143,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

@@ -662,14 +662,24 @@ print(p_weather)
 
 ```{r chart-swims-weather-correlation}
 weather_history <- weather_history %>%
-  left_join(sst_history %>% select(date, sst = sst_mean), by = "date") %>%
-  left_join(df %>% select(date, swims, swims_avg = swims_7day_avg), by = "date") %>%
-  left_join(df %>% select(date, raw_swims = swims), by = "date")
+  left_join(
+    sst_history %>% select(date, sst = sst_mean),
+    by = "date"
+  ) %>%
+  left_join(
+    df %>% select(date, swims, swims_7day_avg),
+    by = "date"
+  )
 
-input_swims <- df$swims_7day_avg
+input_swims <- "swims_7day_avg"
 
 df_corr <- weather_history %>%
-  select(input_swims, temp_mean, sst, precip_total) %>%
+  transmute(
+    input_swims = .data[[input_swims]],
+    temp_mean,
+    sst,
+    precip_total
+  ) %>%
   pivot_longer(cols = c(temp_mean, sst, precip_total),
                names_to = "variable", values_to = "value") %>%
   mutate(variable = factor(recode(variable,

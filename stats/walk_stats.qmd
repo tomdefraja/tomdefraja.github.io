@@ -315,7 +315,7 @@ print(p_cumulative)
 ```
 
 ```{r dist-histogram}
-bin_width <- 3
+bin_width <- 5
 breaks <- seq(0, max(40, ceiling(max(df$distance_km) / bin_width) * bin_width), by = bin_width)
 
 p_dist_no_qq <- ggplot(df, aes(x = distance_km)) +

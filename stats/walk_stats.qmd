@@ -74,6 +74,7 @@ fixed_col_map <- c(
   date              = find_col(nm, "date$"),
   day               = find_col(nm, "day$"),
   country           = find_col(nm, "county$"),
+  home_nation       = find_col(nm, "country$"),
   swims             = find_col(nm, "swims$"),
   spend_accom       = find_col(nm, "£_accom$"),
   spend_groceries   = find_col(nm, "£_groceries$"),
@@ -95,6 +96,7 @@ df <- df_raw %>%
   filter(!is.na(date)) %>%
   mutate(
     date = as.Date(date, format = "%d %b %Y"),
+    home_nation = factor(home_nation, levels = c("England", "Wales", "Ireland & NI", "Scotland")),
     across(starts_with("spend_"), ~ replace_na(as.numeric(.x), 0)),
     across(all_of(beer_cols), ~ replace_na(as.numeric(.x), 0)),
     swims = replace_na(as.numeric(swims), 0),
@@ -318,10 +320,20 @@ print(p_cumulative)
 bin_width <- 5
 breaks <- seq(0, max(40, ceiling(max(df$distance_km) / bin_width) * bin_width), by = bin_width)
 
-p_dist_no_qq <- ggplot(df, aes(x = distance_km)) +
-  geom_histogram(breaks = breaks, fill = COL_DISTANCE, alpha = 0.6, colour = COL_DISTANCE, linewidth = 0.2) +
+p_dist_no_qq <- ggplot(df, aes(x = distance_km, fill = home_nation)) +
+  geom_histogram(breaks = breaks, colour = "white", linewidth = 0.15, position = "stack") +
+  scale_fill_manual(
+    values = c(
+      "England"      = COL_DISTANCE,
+      "Wales"        = COL_SWIMS,
+      "Ireland & NI" = COL_SWIMS_darker,
+      "Scotland"     = COL_SPEND
+    ),
+    name = NULL
+  ) +
   labs(title = "Distance distribution", x = "Distance (km)", y = "Frequency") +
-  site_theme
+  site_theme +
+  theme(legend.position = "bottom")
 
 p_dist_qqplot <- ggplot(mapping = aes(sample = df$distance_km)) +
   geom_qq(shape = 1, size = 0.5, stroke = 0.3, colour = "grey40", alpha = 0.6) +

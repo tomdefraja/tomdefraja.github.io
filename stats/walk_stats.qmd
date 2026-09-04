@@ -666,7 +666,7 @@ weather_history <- weather_history %>%
   left_join(df %>% select(date, swims, swims_avg = swims_7day_avg), by = "date") %>%
   left_join(df %>% select(date, raw_swims = swims), by = "date")
 
-input_swims <- swims_avg
+input_swims <- swims_7day_avg
 
 df_corr <- weather_history %>%
   select(input_swims, temp_mean, sst, precip_total) %>%

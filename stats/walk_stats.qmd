@@ -736,7 +736,7 @@ build_swims_weather_plot <- function(ncol_facets = NULL, nrow_facets = NULL) {
       colour = "grey30",
       inherit.aes = FALSE
     ) +
-    facet_wrap(~variable, scales = "free_x", nrow = 1) +
+    facet_wrap(~variable, scales = "free_x", nrow = nrow_facets, ncol = ncol_facets) +
     ggh4x::facetted_pos_scales(
       x = list(
         variable == "Precipitation (mm)" ~ scale_x_continuous(trans = scales::pseudo_log_trans(sigma = 1))

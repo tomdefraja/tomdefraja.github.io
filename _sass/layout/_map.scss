@@ -171,6 +171,12 @@
 //   color: var(--global-text-color-light);
 // }
 
+.stats-chart {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .stats-charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));

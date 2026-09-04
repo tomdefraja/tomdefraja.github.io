@@ -250,7 +250,7 @@ p_distance_unbroken <- ggplot(df, aes(x = date)) +
     colour = alpha("gray30",0.5)
   ) +
   geom_vline(
-    xintercept = as.numeric(gap_ranges$gap_end)-0.05,
+    xintercept = as.numeric(gap_ranges$gap_start)+0.9,
     linetype = "dashed",
     linewidth = 0.5,
     colour = alpha("gray30",0.5)
@@ -667,11 +667,11 @@ weather_history <- weather_history %>%
     by = "date"
   ) %>%
   left_join(
-    df %>% select(date, swims, swims_7day_avg),
+    df %>% select(date, swims, swims_3day_avg),
     by = "date"
   )
 
-input_swims <- "swims_7day_avg"
+input_swims <- "swims_3day_avg"
 
 df_corr <- weather_history %>%
   transmute(

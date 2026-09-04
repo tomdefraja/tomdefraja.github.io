@@ -250,7 +250,7 @@ p_distance_unbroken <- ggplot(df, aes(x = date)) +
     colour = alpha("gray30",0.5)
   ) +
   geom_vline(
-    xintercept = as.numeric(gap_ranges$gap_end)-0.7,
+    xintercept = as.numeric(gap_ranges$gap_end)-0.8,
     linetype = "dashed",
     linewidth = 0.5,
     colour = alpha("gray30",0.5)
@@ -441,7 +441,7 @@ p_swims_unbroken <- ggplot(df, aes(x = date)) +
     colour = alpha("gray30",0.5)
   ) +
   geom_vline(
-    xintercept = as.numeric(gap_ranges$gap_end)-0.5,
+    xintercept = as.numeric(gap_ranges$gap_end)-0.8,
     linetype = "dashed",
     linewidth = 0.5,
     colour = alpha("gray30",0.5)
@@ -620,7 +620,7 @@ p_weather_unbroken <- ggplot(weather_history, aes(x = date)) +
     colour = alpha("gray30",0.5)
   ) +
   geom_vline(
-    xintercept = as.numeric(gap_ranges$gap_end)-0.25,
+    xintercept = as.numeric(gap_ranges$gap_end)-0.8,
     linetype = "dashed",
     linewidth = 0.5,
     colour = alpha("gray30",0.5)
@@ -723,10 +723,11 @@ build_swims_weather_plot <- function(ncol_facets = NULL, nrow_facets = NULL) {
       colour = "grey30",
       inherit.aes = FALSE
     ) +
-    facet_wrap(
-      ~variable,
-      scales = "free_x",
-      nrow = 1
+    facet_wrap(~variable, scales = "free_x", nrow = 1) +
+    ggh4x::facetted_pos_scales(
+      x = list(
+        variable == "Precipitation (mm)" ~ scale_x_continuous(trans = scales::pseudo_log_trans(sigma = 1))
+      )
     ) +
     scale_x_continuous(
       expand = expansion(mult = c(0.08, 0.08))

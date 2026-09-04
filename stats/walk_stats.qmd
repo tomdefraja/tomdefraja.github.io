@@ -25,6 +25,7 @@ library(leaflet)
 library(XML)
 library(ggbreak)
 library(tibble)
+library(ggh4x)
 
 
 # This document is executed with its own folder (stats/) as the working

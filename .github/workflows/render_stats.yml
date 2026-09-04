@@ -46,6 +46,7 @@ jobs:
             any::XML
             any::patchwork
             any::ggbreak
+            any::ggh4x
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2

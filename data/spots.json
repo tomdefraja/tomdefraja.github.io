@@ -278,5 +278,15 @@
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Caldicot",
+    "description": "",
+    "date": "2026-09-07",
+    "lat": 51.571223,
+    "lng": -2.7795905,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

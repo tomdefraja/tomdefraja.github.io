@@ -265,6 +265,16 @@
     "date": "2026-08-29",
     "lat": 51.464471,
     "lng": -2.5835143,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Severn bridge",
+    "description": "With lots of fleas",
+    "date": "2026-09-06",
+    "lat": 51.551318,
+    "lng": -2.669059,
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"

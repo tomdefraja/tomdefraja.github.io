@@ -288,5 +288,35 @@
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Newport",
+    "description": "",
+    "date": "2026-09-08",
+    "lat": 51.542851,
+    "lng": -2.9938319,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Penarth",
+    "description": "",
+    "date": "2026-09-10",
+    "lat": 51.41462,
+    "lng": -3.1725894,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Watch House Beach",
+    "description": "",
+    "date": "2026-09-10",
+    "lat": 51.384747,
+    "lng": -3.383197,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

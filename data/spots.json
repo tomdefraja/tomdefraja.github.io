@@ -314,9 +314,39 @@
     "description": "",
     "date": "2026-09-10",
     "lat": 51.384747,
-    "lng": -3.383197,
+    "lng": -3.3831971,
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Merthyr Mawr",
+    "description": "",
+    "date": "2026-09-11",
+    "lat": 51.474765,
+    "lng": -3.6386393,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Port Talbot",
+    "description": "",
+    "date": "2026-09-12",
+    "lat": 51.612806,
+    "lng": -3.8423836,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Swansea",
+    "description": "Ceraig’s (WS)",
+    "date": "2026-09-13",
+    "lat": 51.62032,
+    "lng": -3.9223477,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
   }
 ]

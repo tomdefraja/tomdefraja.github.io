@@ -344,9 +344,29 @@
     "description": "Ceraig’s (WS)",
     "date": "2026-09-13",
     "lat": 51.62032,
-    "lng": -3.9223477,
+    "lng": -3.9223476,
     "color": "red",
     "category": "Hosted",
     "categoryHex": "#e53935"
+  },
+  {
+    "name": "Pennard",
+    "description": "",
+    "date": "2026-09-14",
+    "lat": 51.560482,
+    "lng": -4.0683748,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Rhossili",
+    "description": "",
+    "date": "2026-09-15",
+    "lat": 51.562465,
+    "lng": -4.3057486,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

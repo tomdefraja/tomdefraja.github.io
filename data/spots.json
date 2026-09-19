@@ -368,5 +368,35 @@
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Llanrhidian Pill",
+    "description": "",
+    "date": "2026-09-16",
+    "lat": 51.625052,
+    "lng": -4.1619675,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Pembrey Forest",
+    "description": "",
+    "date": "2026-09-17",
+    "lat": 51.686398,
+    "lng": -4.3291298,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Ferryside",
+    "description": "",
+    "date": "2026-09-18",
+    "lat": 51.756274,
+    "lng": -4.3673577,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

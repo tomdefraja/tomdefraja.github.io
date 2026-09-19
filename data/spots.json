@@ -394,9 +394,19 @@
     "description": "",
     "date": "2026-09-18",
     "lat": 51.756274,
-    "lng": -4.3673577,
+    "lng": -4.3673576,
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "River Taf",
+    "description": "Farmers orchard",
+    "date": "2026-09-19",
+    "lat": 51.791935,
+    "lng": -4.4491046,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
   }
 ]

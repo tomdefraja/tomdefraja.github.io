@@ -404,9 +404,29 @@
     "description": "Farmers orchard",
     "date": "2026-09-19",
     "lat": 51.791935,
-    "lng": -4.4491046,
+    "lng": -4.4491047,
     "color": "red",
     "category": "Hosted",
     "categoryHex": "#e53935"
+  },
+  {
+    "name": "Marros Sands",
+    "description": "",
+    "date": "2026-09-20",
+    "lat": 51.735303,
+    "lng": -4.6326901,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Lydstep Point",
+    "description": "",
+    "date": "2026-09-21",
+    "lat": 51.645212,
+    "lng": -4.7563872,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

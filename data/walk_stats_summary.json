@@ -1,22 +1,22 @@
 {
-  "total_days": 44,
+  "total_days": 46,
   "date_start": "2026-07-16",
-  "date_end": "2026-09-19",
-  "total_distance_km": 1054.6,
-  "avg_distance_km": 24,
-  "total_swims": 75,
+  "date_end": "2026-09-21",
+  "total_distance_km": 1106.6,
+  "avg_distance_km": 24.1,
+  "total_swims": 79,
   "avg_swims_per_day": 1.7,
-  "total_spend": 450.16,
-  "avg_spend_per_day": 10.23,
-  "avg_coastal_distance_m": 1276.2,
+  "total_spend": 467.42,
+  "avg_spend_per_day": 10.16,
+  "avg_coastal_distance_m": 1303.1,
   "max_coastal_distance_m": 14689.3,
   "spend_by_category": {
     "accom": 0,
-    "groceries": 157.22,
-    "eating_out": 141.36,
+    "groceries": 169.03,
+    "eating_out": 146.81,
     "boats": 29.55,
     "drinks": 86.05,
     "gear": 35.98
   },
-  "generated_at": "2026-09-19 18:28:33.266684"
+  "generated_at": "2026-09-21 20:51:40.352026"
 }

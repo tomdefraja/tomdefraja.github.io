@@ -468,5 +468,65 @@
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Wellington",
+    "description": "",
+    "date": "2026-09-27",
+    "lat": 52.267238,
+    "lng": -6.7509865,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Aidan’s",
+    "description": "nights=2",
+    "date": "2026-09-28",
+    "lat": 52.396041,
+    "lng": -6.9423564,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Durrow and Stradbally Station",
+    "description": "",
+    "date": "2026-09-30",
+    "lat": 52.134142,
+    "lng": -7.5087404,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "The Old Still",
+    "description": "",
+    "date": "2026-10-01",
+    "lat": 52.008635,
+    "lng": -7.8186167,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Ballyannan Wood",
+    "description": "",
+    "date": "2026-10-02",
+    "lat": 51.900844,
+    "lng": -8.1788507,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Lee River",
+    "description": "",
+    "date": "2026-10-03",
+    "lat": 51.900933,
+    "lng": -8.5467143,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
   }
 ]

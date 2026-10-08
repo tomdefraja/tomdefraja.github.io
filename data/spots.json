@@ -524,7 +524,57 @@
     "description": "",
     "date": "2026-10-03",
     "lat": 51.900933,
-    "lng": -8.5467143,
+    "lng": -8.5467144,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Hazel",
+    "description": "",
+    "date": "2026-10-04",
+    "lat": 51.733479,
+    "lng": -8.6173379,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Ring Ruins",
+    "description": "",
+    "date": "2026-10-05",
+    "lat": 51.612422,
+    "lng": -8.8498124,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Trananaigh",
+    "description": "",
+    "date": "2026-10-06",
+    "lat": 51.559683,
+    "lng": -9.0708019,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Katie’s",
+    "description": "",
+    "date": "2026-10-08",
+    "lat": 51.539768,
+    "lng": -9.4694014,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Barely Cove",
+    "description": "",
+    "date": "2026-10-08",
+    "lat": 51.469763,
+    "lng": -9.7815316,
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"

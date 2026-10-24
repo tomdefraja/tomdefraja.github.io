@@ -564,7 +564,7 @@
     "description": "",
     "date": "2026-10-08",
     "lat": 51.539768,
-    "lng": -9.4694014,
+    "lng": -9.4694013,
     "color": "red",
     "category": "Hosted",
     "categoryHex": "#e53935"
@@ -578,5 +578,145 @@
     "color": "orange",
     "category": "Wild camp",
     "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Larna’s",
+    "description": "",
+    "date": "2026-10-09",
+    "lat": 51.609257,
+    "lng": -9.0978416,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Field",
+    "description": "",
+    "date": "2026-10-10",
+    "lat": 51.704229,
+    "lng": -9.4442348,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Adrigole",
+    "description": "",
+    "date": "2026-10-11",
+    "lat": 51.695838,
+    "lng": -9.7031696,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Castletownbere",
+    "description": "",
+    "date": "2026-10-12",
+    "lat": 51.640897,
+    "lng": -9.915272,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Ballydonegan Strand",
+    "description": "",
+    "date": "2026-10-13",
+    "lat": 51.633367,
+    "lng": -10.059836,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Lauragh",
+    "description": "",
+    "date": "2026-10-14",
+    "lat": 51.772676,
+    "lng": -9.7721218,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Kenmare",
+    "description": "",
+    "date": "2026-10-15",
+    "lat": 51.907046,
+    "lng": -9.5738573,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Carrauntoohil",
+    "description": "",
+    "date": "2026-10-16",
+    "lat": 51.999431,
+    "lng": -9.7426959,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Dermot & Seamus farm",
+    "description": "",
+    "date": "2026-10-17",
+    "lat": 52.125955,
+    "lng": -9.7534724,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Inch Beach",
+    "description": "",
+    "date": "2026-10-19",
+    "lat": 52.137391,
+    "lng": -9.9777181,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Úna’s",
+    "description": "night=2",
+    "date": "2026-10-20",
+    "lat": 52.151769,
+    "lng": -10.12056,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Dunquin",
+    "description": "",
+    "date": "2026-10-21",
+    "lat": 52.13591,
+    "lng": -10.456751,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Loughaconeera Shelter in Arraglen",
+    "description": "",
+    "date": "2026-10-22",
+    "lat": 52.267145,
+    "lng": -10.226398,
+    "color": "brown",
+    "category": "Brown",
+    "categoryHex": "#9e9e9e"
+  },
+  {
+    "name": "Paul’s",
+    "description": "",
+    "date": "2026-10-24",
+    "lat": 52.144038,
+    "lng": -10.268189,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
   }
 ]

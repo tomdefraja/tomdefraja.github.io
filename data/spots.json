@@ -711,10 +711,70 @@
   },
   {
     "name": "Paul’s",
-    "description": "",
+    "description": "nights=2",
     "date": "2026-10-24",
     "lat": 52.144038,
     "lng": -10.268189,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Dan’s",
+    "description": "",
+    "date": "2026-11-02",
+    "lat": 52.386928,
+    "lng": -9.4867535,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Sennen’s",
+    "description": "",
+    "date": "2026-11-02",
+    "lat": 52.616598,
+    "lng": -9.3793227,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Spanish point",
+    "description": "",
+    "date": "2026-11-04",
+    "lat": 52.848113,
+    "lng": -9.4474491,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Lisdoonvarna",
+    "description": "",
+    "date": "2026-11-04",
+    "lat": 53.026408,
+    "lng": -9.2950225,
+    "color": "orange",
+    "category": "Wild camp",
+    "categoryHex": "#fb8c00"
+  },
+  {
+    "name": "Toreen",
+    "description": "",
+    "date": "2026-11-05",
+    "lat": 53.16631,
+    "lng": -8.923615,
+    "color": "red",
+    "category": "Hosted",
+    "categoryHex": "#e53935"
+  },
+  {
+    "name": "Kyra",
+    "description": "",
+    "date": "2026-11-08",
+    "lat": 53.273069,
+    "lng": -9.0489714,
     "color": "red",
     "category": "Hosted",
     "categoryHex": "#e53935"
